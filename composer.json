@@ -1,0 +1,36 @@
+{
+    "name": "adserver-online/php-sdk",
+    "description": "Adserver.Online PHP SDK",
+    "keywords": [
+        "adserver.online",
+        "sdk",
+        "rest",
+        "api"
+    ],
+    "homepage": "https://adserver.online",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adserver.Online",
+            "homepage": "https://adserver.online"
+        }
+    ],
+    "support": {
+        "email": "support@adsrv.org",
+        "docs": "https://adserver.online/api"
+    },
+    "require": {
+        "php": ">=7.0",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "guzzlehttp/guzzle": "^6.2",
+        "symfony/cache": "^5.0"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "~2.6",
+        "friendsofphp/php-cs-fixer": "~2.12"
+    },
+    "autoload": {
+        "psr-4": { "Adserver\\" : "./src/" }
+    }
+}
