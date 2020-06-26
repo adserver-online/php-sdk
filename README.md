@@ -22,11 +22,5 @@ To install the SDK via [Composer](http://getcomposer.org/), execute the followin
 Download the files and include `autoload.php`:
 
 ```php
-require_once('/path/to/Adserver/vendor/autoload.php');
+require_once('vendor/autoload.php');
 ```
-
-## Getting Started
-
-Checkout examples folder in this repository. 
-
-You should copy ```config.dist.php``` to ```config.php``` and put your credentials into it.
