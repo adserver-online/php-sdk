@@ -1,6 +1,6 @@
 <?php
 /**
- * FormErrorResponse
+ * AdBannerZip
  *
  * PHP version 5
  *
@@ -27,14 +27,15 @@ use \Adserver\ObjectSerializer;
 use \ArrayAccess;
 
 /**
- * FormErrorResponse Class Doc Comment
+ * AdBannerZip Class Doc Comment
  *
  * @category Class
+ * @description Format-specific properties
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class FormErrorResponse implements ModelInterface, ArrayAccess
+class AdBannerZip implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -43,7 +44,7 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $openAPIModelName = 'FormErrorResponse';
+    protected static $openAPIModelName = 'AdBannerZip';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -51,7 +52,8 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $openAPITypes = [
-        'errors' => 'map[string,map[string,string[]]]'
+        'iddimension' => 'int',
+        'file' => 'string'
     ];
 
     /**
@@ -60,7 +62,8 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $openAPIFormats = [
-        'errors' => null
+        'iddimension' => null,
+        'file' => null
     ];
 
     /**
@@ -90,7 +93,8 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'errors' => 'errors'
+        'iddimension' => 'iddimension',
+        'file' => 'file'
     ];
 
     /**
@@ -99,7 +103,8 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'errors' => 'setErrors'
+        'iddimension' => 'setIddimension',
+        'file' => 'setFile'
     ];
 
     /**
@@ -108,7 +113,8 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'errors' => 'getErrors'
+        'iddimension' => 'getIddimension',
+        'file' => 'getFile'
     ];
 
     /**
@@ -171,7 +177,8 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['errors'] = isset($data['errors']) ? $data['errors'] : null;
+        $this->container['iddimension'] = isset($data['iddimension']) ? $data['iddimension'] : null;
+        $this->container['file'] = isset($data['file']) ? $data['file'] : null;
     }
 
     /**
@@ -183,9 +190,6 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
-        if ($this->container['errors'] === null) {
-            $invalidProperties[] = "'errors' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -202,25 +206,49 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets errors
+     * Gets iddimension
      *
-     * @return map[string,map[string,string[]]]
+     * @return int|null
      */
-    public function getErrors()
+    public function getIddimension()
     {
-        return $this->container['errors'];
+        return $this->container['iddimension'];
     }
 
     /**
-     * Sets errors
+     * Sets iddimension
      *
-     * @param map[string,map[string,string[]]] $errors errors
+     * @param int|null $iddimension Ad dimension ID
      *
      * @return $this
      */
-    public function setErrors($errors)
+    public function setIddimension($iddimension)
     {
-        $this->container['errors'] = $errors;
+        $this->container['iddimension'] = $iddimension;
+
+        return $this;
+    }
+
+    /**
+     * Gets file
+     *
+     * @return string|null
+     */
+    public function getFile()
+    {
+        return $this->container['file'];
+    }
+
+    /**
+     * Sets file
+     *
+     * @param string|null $file Base64 encoded file
+     *
+     * @return $this
+     */
+    public function setFile($file)
+    {
+        $this->container['file'] = $file;
 
         return $this;
     }

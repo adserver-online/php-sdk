@@ -1,6 +1,6 @@
 <?php
 /**
- * FormErrorResponse
+ * PubSiteRequest
  *
  * PHP version 5
  *
@@ -27,14 +27,14 @@ use \Adserver\ObjectSerializer;
 use \ArrayAccess;
 
 /**
- * FormErrorResponse Class Doc Comment
+ * PubSiteRequest Class Doc Comment
  *
  * @category Class
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class FormErrorResponse implements ModelInterface, ArrayAccess
+class PubSiteRequest implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -43,7 +43,7 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $openAPIModelName = 'FormErrorResponse';
+    protected static $openAPIModelName = 'PubSiteRequest';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -51,7 +51,10 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $openAPITypes = [
-        'errors' => 'map[string,map[string,string[]]]'
+        'name' => 'string',
+        'url' => 'string',
+        'idcategory' => 'int',
+        'isActive' => 'int'
     ];
 
     /**
@@ -60,7 +63,10 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $openAPIFormats = [
-        'errors' => null
+        'name' => null,
+        'url' => null,
+        'idcategory' => null,
+        'isActive' => null
     ];
 
     /**
@@ -90,7 +96,10 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'errors' => 'errors'
+        'name' => 'name',
+        'url' => 'url',
+        'idcategory' => 'idcategory',
+        'isActive' => 'is_active'
     ];
 
     /**
@@ -99,7 +108,10 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'errors' => 'setErrors'
+        'name' => 'setName',
+        'url' => 'setUrl',
+        'idcategory' => 'setIdcategory',
+        'isActive' => 'setIsActive'
     ];
 
     /**
@@ -108,7 +120,10 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'errors' => 'getErrors'
+        'name' => 'getName',
+        'url' => 'getUrl',
+        'idcategory' => 'getIdcategory',
+        'isActive' => 'getIsActive'
     ];
 
     /**
@@ -152,8 +167,23 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
         return self::$openAPIModelName;
     }
 
+    const IS_ACTIVE_0 = 0;
+    const IS_ACTIVE_1 = 1;
     
 
+    
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getIsActiveAllowableValues()
+    {
+        return [
+            self::IS_ACTIVE_0,
+            self::IS_ACTIVE_1,
+        ];
+    }
     
 
     /**
@@ -171,7 +201,10 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['errors'] = isset($data['errors']) ? $data['errors'] : null;
+        $this->container['name'] = isset($data['name']) ? $data['name'] : null;
+        $this->container['url'] = isset($data['url']) ? $data['url'] : null;
+        $this->container['idcategory'] = isset($data['idcategory']) ? $data['idcategory'] : null;
+        $this->container['isActive'] = isset($data['isActive']) ? $data['isActive'] : null;
     }
 
     /**
@@ -183,9 +216,23 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
-        if ($this->container['errors'] === null) {
-            $invalidProperties[] = "'errors' can't be null";
+        if ($this->container['name'] === null) {
+            $invalidProperties[] = "'name' can't be null";
         }
+        if ($this->container['url'] === null) {
+            $invalidProperties[] = "'url' can't be null";
+        }
+        if ($this->container['idcategory'] === null) {
+            $invalidProperties[] = "'idcategory' can't be null";
+        }
+        $allowedValues = $this->getIsActiveAllowableValues();
+        if (!is_null($this->container['isActive']) && !in_array($this->container['isActive'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value for 'isActive', must be one of '%s'",
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -202,25 +249,106 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets errors
+     * Gets name
      *
-     * @return map[string,map[string,string[]]]
+     * @return string
      */
-    public function getErrors()
+    public function getName()
     {
-        return $this->container['errors'];
+        return $this->container['name'];
     }
 
     /**
-     * Sets errors
+     * Sets name
      *
-     * @param map[string,map[string,string[]]] $errors errors
+     * @param string $name name
      *
      * @return $this
      */
-    public function setErrors($errors)
+    public function setName($name)
     {
-        $this->container['errors'] = $errors;
+        $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets url
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->container['url'];
+    }
+
+    /**
+     * Sets url
+     *
+     * @param string $url url
+     *
+     * @return $this
+     */
+    public function setUrl($url)
+    {
+        $this->container['url'] = $url;
+
+        return $this;
+    }
+
+    /**
+     * Gets idcategory
+     *
+     * @return int
+     */
+    public function getIdcategory()
+    {
+        return $this->container['idcategory'];
+    }
+
+    /**
+     * Sets idcategory
+     *
+     * @param int $idcategory idcategory
+     *
+     * @return $this
+     */
+    public function setIdcategory($idcategory)
+    {
+        $this->container['idcategory'] = $idcategory;
+
+        return $this;
+    }
+
+    /**
+     * Gets isActive
+     *
+     * @return int|null
+     */
+    public function getIsActive()
+    {
+        return $this->container['isActive'];
+    }
+
+    /**
+     * Sets isActive
+     *
+     * @param int|null $isActive isActive
+     *
+     * @return $this
+     */
+    public function setIsActive($isActive)
+    {
+        $allowedValues = $this->getIsActiveAllowableValues();
+        if (!is_null($isActive) && !in_array($isActive, $allowedValues, true)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value for 'isActive', must be one of '%s'",
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['isActive'] = $isActive;
 
         return $this;
     }

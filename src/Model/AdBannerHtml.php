@@ -1,6 +1,6 @@
 <?php
 /**
- * FormErrorResponse
+ * AdBannerHtml
  *
  * PHP version 5
  *
@@ -27,14 +27,15 @@ use \Adserver\ObjectSerializer;
 use \ArrayAccess;
 
 /**
- * FormErrorResponse Class Doc Comment
+ * AdBannerHtml Class Doc Comment
  *
  * @category Class
+ * @description Format-specific properties
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class FormErrorResponse implements ModelInterface, ArrayAccess
+class AdBannerHtml implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -43,7 +44,7 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $openAPIModelName = 'FormErrorResponse';
+    protected static $openAPIModelName = 'AdBannerHtml';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -51,7 +52,8 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $openAPITypes = [
-        'errors' => 'map[string,map[string,string[]]]'
+        'iddimension' => 'int',
+        'contentHtml' => 'string'
     ];
 
     /**
@@ -60,7 +62,8 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $openAPIFormats = [
-        'errors' => null
+        'iddimension' => null,
+        'contentHtml' => null
     ];
 
     /**
@@ -90,7 +93,8 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'errors' => 'errors'
+        'iddimension' => 'iddimension',
+        'contentHtml' => 'content_html'
     ];
 
     /**
@@ -99,7 +103,8 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'errors' => 'setErrors'
+        'iddimension' => 'setIddimension',
+        'contentHtml' => 'setContentHtml'
     ];
 
     /**
@@ -108,7 +113,8 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'errors' => 'getErrors'
+        'iddimension' => 'getIddimension',
+        'contentHtml' => 'getContentHtml'
     ];
 
     /**
@@ -171,7 +177,8 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['errors'] = isset($data['errors']) ? $data['errors'] : null;
+        $this->container['iddimension'] = isset($data['iddimension']) ? $data['iddimension'] : null;
+        $this->container['contentHtml'] = isset($data['contentHtml']) ? $data['contentHtml'] : null;
     }
 
     /**
@@ -183,9 +190,6 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
-        if ($this->container['errors'] === null) {
-            $invalidProperties[] = "'errors' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -202,25 +206,49 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets errors
+     * Gets iddimension
      *
-     * @return map[string,map[string,string[]]]
+     * @return int|null
      */
-    public function getErrors()
+    public function getIddimension()
     {
-        return $this->container['errors'];
+        return $this->container['iddimension'];
     }
 
     /**
-     * Sets errors
+     * Sets iddimension
      *
-     * @param map[string,map[string,string[]]] $errors errors
+     * @param int|null $iddimension Ad dimension ID
      *
      * @return $this
      */
-    public function setErrors($errors)
+    public function setIddimension($iddimension)
     {
-        $this->container['errors'] = $errors;
+        $this->container['iddimension'] = $iddimension;
+
+        return $this;
+    }
+
+    /**
+     * Gets contentHtml
+     *
+     * @return string|null
+     */
+    public function getContentHtml()
+    {
+        return $this->container['contentHtml'];
+    }
+
+    /**
+     * Sets contentHtml
+     *
+     * @param string|null $contentHtml HTML-content
+     *
+     * @return $this
+     */
+    public function setContentHtml($contentHtml)
+    {
+        $this->container['contentHtml'] = $contentHtml;
 
         return $this;
     }

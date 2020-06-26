@@ -1,6 +1,6 @@
 <?php
 /**
- * Ad
+ * AdvCampaignRequest
  *
  * PHP version 5
  *
@@ -27,14 +27,14 @@ use \Adserver\ObjectSerializer;
 use \ArrayAccess;
 
 /**
- * Ad Class Doc Comment
+ * AdvCampaignRequest Class Doc Comment
  *
  * @category Class
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class Ad implements ModelInterface, ArrayAccess
+class AdvCampaignRequest implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -43,7 +43,7 @@ class Ad implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Ad';
+    protected static $openAPIModelName = 'AdvCampaignRequest';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -51,15 +51,14 @@ class Ad implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $openAPITypes = [
-        'id' => 'int',
-        'idcampaign' => 'int',
         'name' => 'string',
-        'url' => 'string',
-        'status' => 'object',
-        'isActive' => 'bool',
-        'format' => 'object',
-        'createdAt' => 'string',
-        'updatedAt' => 'string'
+        'idcategory' => 'int',
+        'idrunstatus' => 'int',
+        'idpricemodel' => 'int',
+        'rate' => 'float',
+        'startAt' => 'string',
+        'finishAt' => 'string',
+        'timetargeting' => 'string'
     ];
 
     /**
@@ -68,15 +67,14 @@ class Ad implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $openAPIFormats = [
-        'id' => null,
-        'idcampaign' => null,
         'name' => null,
-        'url' => null,
-        'status' => null,
-        'isActive' => null,
-        'format' => null,
-        'createdAt' => null,
-        'updatedAt' => null
+        'idcategory' => null,
+        'idrunstatus' => null,
+        'idpricemodel' => null,
+        'rate' => null,
+        'startAt' => null,
+        'finishAt' => null,
+        'timetargeting' => null
     ];
 
     /**
@@ -106,15 +104,14 @@ class Ad implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'id' => 'id',
-        'idcampaign' => 'idcampaign',
         'name' => 'name',
-        'url' => 'url',
-        'status' => 'status',
-        'isActive' => 'is_active',
-        'format' => 'format',
-        'createdAt' => 'created_at',
-        'updatedAt' => 'updated_at'
+        'idcategory' => 'idcategory',
+        'idrunstatus' => 'idrunstatus',
+        'idpricemodel' => 'idpricemodel',
+        'rate' => 'rate',
+        'startAt' => 'start_at',
+        'finishAt' => 'finish_at',
+        'timetargeting' => 'timetargeting'
     ];
 
     /**
@@ -123,15 +120,14 @@ class Ad implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'id' => 'setId',
-        'idcampaign' => 'setIdcampaign',
         'name' => 'setName',
-        'url' => 'setUrl',
-        'status' => 'setStatus',
-        'isActive' => 'setIsActive',
-        'format' => 'setFormat',
-        'createdAt' => 'setCreatedAt',
-        'updatedAt' => 'setUpdatedAt'
+        'idcategory' => 'setIdcategory',
+        'idrunstatus' => 'setIdrunstatus',
+        'idpricemodel' => 'setIdpricemodel',
+        'rate' => 'setRate',
+        'startAt' => 'setStartAt',
+        'finishAt' => 'setFinishAt',
+        'timetargeting' => 'setTimetargeting'
     ];
 
     /**
@@ -140,15 +136,14 @@ class Ad implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'id' => 'getId',
-        'idcampaign' => 'getIdcampaign',
         'name' => 'getName',
-        'url' => 'getUrl',
-        'status' => 'getStatus',
-        'isActive' => 'getIsActive',
-        'format' => 'getFormat',
-        'createdAt' => 'getCreatedAt',
-        'updatedAt' => 'getUpdatedAt'
+        'idcategory' => 'getIdcategory',
+        'idrunstatus' => 'getIdrunstatus',
+        'idpricemodel' => 'getIdpricemodel',
+        'rate' => 'getRate',
+        'startAt' => 'getStartAt',
+        'finishAt' => 'getFinishAt',
+        'timetargeting' => 'getTimetargeting'
     ];
 
     /**
@@ -192,8 +187,25 @@ class Ad implements ModelInterface, ArrayAccess
         return self::$openAPIModelName;
     }
 
+    const IDRUNSTATUS_4010 = 4010;
+    const IDRUNSTATUS_4020 = 4020;
+    const IDRUNSTATUS_4030 = 4030;
     
 
+    
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getIdrunstatusAllowableValues()
+    {
+        return [
+            self::IDRUNSTATUS_4010,
+            self::IDRUNSTATUS_4020,
+            self::IDRUNSTATUS_4030,
+        ];
+    }
     
 
     /**
@@ -211,15 +223,14 @@ class Ad implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['id'] = isset($data['id']) ? $data['id'] : null;
-        $this->container['idcampaign'] = isset($data['idcampaign']) ? $data['idcampaign'] : null;
         $this->container['name'] = isset($data['name']) ? $data['name'] : null;
-        $this->container['url'] = isset($data['url']) ? $data['url'] : null;
-        $this->container['status'] = isset($data['status']) ? $data['status'] : null;
-        $this->container['isActive'] = isset($data['isActive']) ? $data['isActive'] : null;
-        $this->container['format'] = isset($data['format']) ? $data['format'] : null;
-        $this->container['createdAt'] = isset($data['createdAt']) ? $data['createdAt'] : null;
-        $this->container['updatedAt'] = isset($data['updatedAt']) ? $data['updatedAt'] : null;
+        $this->container['idcategory'] = isset($data['idcategory']) ? $data['idcategory'] : null;
+        $this->container['idrunstatus'] = isset($data['idrunstatus']) ? $data['idrunstatus'] : null;
+        $this->container['idpricemodel'] = isset($data['idpricemodel']) ? $data['idpricemodel'] : null;
+        $this->container['rate'] = isset($data['rate']) ? $data['rate'] : null;
+        $this->container['startAt'] = isset($data['startAt']) ? $data['startAt'] : null;
+        $this->container['finishAt'] = isset($data['finishAt']) ? $data['finishAt'] : null;
+        $this->container['timetargeting'] = isset($data['timetargeting']) ? $data['timetargeting'] : null;
     }
 
     /**
@@ -230,6 +241,14 @@ class Ad implements ModelInterface, ArrayAccess
     public function listInvalidProperties()
     {
         $invalidProperties = [];
+
+        $allowedValues = $this->getIdrunstatusAllowableValues();
+        if (!is_null($this->container['idrunstatus']) && !in_array($this->container['idrunstatus'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value for 'idrunstatus', must be one of '%s'",
+                implode("', '", $allowedValues)
+            );
+        }
 
         return $invalidProperties;
     }
@@ -245,54 +264,6 @@ class Ad implements ModelInterface, ArrayAccess
         return count($this->listInvalidProperties()) === 0;
     }
 
-
-    /**
-     * Gets id
-     *
-     * @return int|null
-     */
-    public function getId()
-    {
-        return $this->container['id'];
-    }
-
-    /**
-     * Sets id
-     *
-     * @param int|null $id id
-     *
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->container['id'] = $id;
-
-        return $this;
-    }
-
-    /**
-     * Gets idcampaign
-     *
-     * @return int|null
-     */
-    public function getIdcampaign()
-    {
-        return $this->container['idcampaign'];
-    }
-
-    /**
-     * Sets idcampaign
-     *
-     * @param int|null $idcampaign idcampaign
-     *
-     * @return $this
-     */
-    public function setIdcampaign($idcampaign)
-    {
-        $this->container['idcampaign'] = $idcampaign;
-
-        return $this;
-    }
 
     /**
      * Gets name
@@ -319,145 +290,178 @@ class Ad implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets url
+     * Gets idcategory
+     *
+     * @return int|null
+     */
+    public function getIdcategory()
+    {
+        return $this->container['idcategory'];
+    }
+
+    /**
+     * Sets idcategory
+     *
+     * @param int|null $idcategory idcategory
+     *
+     * @return $this
+     */
+    public function setIdcategory($idcategory)
+    {
+        $this->container['idcategory'] = $idcategory;
+
+        return $this;
+    }
+
+    /**
+     * Gets idrunstatus
+     *
+     * @return int|null
+     */
+    public function getIdrunstatus()
+    {
+        return $this->container['idrunstatus'];
+    }
+
+    /**
+     * Sets idrunstatus
+     *
+     * @param int|null $idrunstatus Run statuses:  * 4010 - running  * 4020 - paused  * 4030 - finished
+     *
+     * @return $this
+     */
+    public function setIdrunstatus($idrunstatus)
+    {
+        $allowedValues = $this->getIdrunstatusAllowableValues();
+        if (!is_null($idrunstatus) && !in_array($idrunstatus, $allowedValues, true)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value for 'idrunstatus', must be one of '%s'",
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['idrunstatus'] = $idrunstatus;
+
+        return $this;
+    }
+
+    /**
+     * Gets idpricemodel
+     *
+     * @return int|null
+     */
+    public function getIdpricemodel()
+    {
+        return $this->container['idpricemodel'];
+    }
+
+    /**
+     * Sets idpricemodel
+     *
+     * @param int|null $idpricemodel idpricemodel
+     *
+     * @return $this
+     */
+    public function setIdpricemodel($idpricemodel)
+    {
+        $this->container['idpricemodel'] = $idpricemodel;
+
+        return $this;
+    }
+
+    /**
+     * Gets rate
+     *
+     * @return float|null
+     */
+    public function getRate()
+    {
+        return $this->container['rate'];
+    }
+
+    /**
+     * Sets rate
+     *
+     * @param float|null $rate rate
+     *
+     * @return $this
+     */
+    public function setRate($rate)
+    {
+        $this->container['rate'] = $rate;
+
+        return $this;
+    }
+
+    /**
+     * Gets startAt
      *
      * @return string|null
      */
-    public function getUrl()
+    public function getStartAt()
     {
-        return $this->container['url'];
+        return $this->container['startAt'];
     }
 
     /**
-     * Sets url
+     * Sets startAt
      *
-     * @param string|null $url url
+     * @param string|null $startAt startAt
      *
      * @return $this
      */
-    public function setUrl($url)
+    public function setStartAt($startAt)
     {
-        $this->container['url'] = $url;
+        $this->container['startAt'] = $startAt;
 
         return $this;
     }
 
     /**
-     * Gets status
-     *
-     * @return object|null
-     */
-    public function getStatus()
-    {
-        return $this->container['status'];
-    }
-
-    /**
-     * Sets status
-     *
-     * @param object|null $status status
-     *
-     * @return $this
-     */
-    public function setStatus($status)
-    {
-        $this->container['status'] = $status;
-
-        return $this;
-    }
-
-    /**
-     * Gets isActive
-     *
-     * @return bool|null
-     */
-    public function getIsActive()
-    {
-        return $this->container['isActive'];
-    }
-
-    /**
-     * Sets isActive
-     *
-     * @param bool|null $isActive isActive
-     *
-     * @return $this
-     */
-    public function setIsActive($isActive)
-    {
-        $this->container['isActive'] = $isActive;
-
-        return $this;
-    }
-
-    /**
-     * Gets format
-     *
-     * @return object|null
-     */
-    public function getFormat()
-    {
-        return $this->container['format'];
-    }
-
-    /**
-     * Sets format
-     *
-     * @param object|null $format format
-     *
-     * @return $this
-     */
-    public function setFormat($format)
-    {
-        $this->container['format'] = $format;
-
-        return $this;
-    }
-
-    /**
-     * Gets createdAt
+     * Gets finishAt
      *
      * @return string|null
      */
-    public function getCreatedAt()
+    public function getFinishAt()
     {
-        return $this->container['createdAt'];
+        return $this->container['finishAt'];
     }
 
     /**
-     * Sets createdAt
+     * Sets finishAt
      *
-     * @param string|null $createdAt createdAt
+     * @param string|null $finishAt finishAt
      *
      * @return $this
      */
-    public function setCreatedAt($createdAt)
+    public function setFinishAt($finishAt)
     {
-        $this->container['createdAt'] = $createdAt;
+        $this->container['finishAt'] = $finishAt;
 
         return $this;
     }
 
     /**
-     * Gets updatedAt
+     * Gets timetargeting
      *
      * @return string|null
      */
-    public function getUpdatedAt()
+    public function getTimetargeting()
     {
-        return $this->container['updatedAt'];
+        return $this->container['timetargeting'];
     }
 
     /**
-     * Sets updatedAt
+     * Sets timetargeting
      *
-     * @param string|null $updatedAt updatedAt
+     * @param string|null $timetargeting timetargeting
      *
      * @return $this
      */
-    public function setUpdatedAt($updatedAt)
+    public function setTimetargeting($timetargeting)
     {
-        $this->container['updatedAt'] = $updatedAt;
+        $this->container['timetargeting'] = $timetargeting;
 
         return $this;
     }

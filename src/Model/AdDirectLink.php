@@ -1,6 +1,6 @@
 <?php
 /**
- * FormErrorResponse
+ * AdDirectLink
  *
  * PHP version 5
  *
@@ -27,14 +27,15 @@ use \Adserver\ObjectSerializer;
 use \ArrayAccess;
 
 /**
- * FormErrorResponse Class Doc Comment
+ * AdDirectLink Class Doc Comment
  *
  * @category Class
+ * @description Format-specific properties
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class FormErrorResponse implements ModelInterface, ArrayAccess
+class AdDirectLink implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -43,7 +44,7 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $openAPIModelName = 'FormErrorResponse';
+    protected static $openAPIModelName = 'AdDirectLink';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -51,7 +52,7 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $openAPITypes = [
-        'errors' => 'map[string,map[string,string[]]]'
+        'counterType' => 'string'
     ];
 
     /**
@@ -60,7 +61,7 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $openAPIFormats = [
-        'errors' => null
+        'counterType' => null
     ];
 
     /**
@@ -90,7 +91,7 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'errors' => 'errors'
+        'counterType' => 'counter_type'
     ];
 
     /**
@@ -99,7 +100,7 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'errors' => 'setErrors'
+        'counterType' => 'setCounterType'
     ];
 
     /**
@@ -108,7 +109,7 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'errors' => 'getErrors'
+        'counterType' => 'getCounterType'
     ];
 
     /**
@@ -152,8 +153,23 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
         return self::$openAPIModelName;
     }
 
+    const COUNTER_TYPE_IMPRESSIONS = 'impressions';
+    const COUNTER_TYPE_CLICKS = 'clicks';
     
 
+    
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getCounterTypeAllowableValues()
+    {
+        return [
+            self::COUNTER_TYPE_IMPRESSIONS,
+            self::COUNTER_TYPE_CLICKS,
+        ];
+    }
     
 
     /**
@@ -171,7 +187,7 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['errors'] = isset($data['errors']) ? $data['errors'] : null;
+        $this->container['counterType'] = isset($data['counterType']) ? $data['counterType'] : null;
     }
 
     /**
@@ -183,9 +199,14 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
-        if ($this->container['errors'] === null) {
-            $invalidProperties[] = "'errors' can't be null";
+        $allowedValues = $this->getCounterTypeAllowableValues();
+        if (!is_null($this->container['counterType']) && !in_array($this->container['counterType'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value for 'counterType', must be one of '%s'",
+                implode("', '", $allowedValues)
+            );
         }
+
         return $invalidProperties;
     }
 
@@ -202,25 +223,34 @@ class FormErrorResponse implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets errors
+     * Gets counterType
      *
-     * @return map[string,map[string,string[]]]
+     * @return string|null
      */
-    public function getErrors()
+    public function getCounterType()
     {
-        return $this->container['errors'];
+        return $this->container['counterType'];
     }
 
     /**
-     * Sets errors
+     * Sets counterType
      *
-     * @param map[string,map[string,string[]]] $errors errors
+     * @param string|null $counterType Counter type
      *
      * @return $this
      */
-    public function setErrors($errors)
+    public function setCounterType($counterType)
     {
-        $this->container['errors'] = $errors;
+        $allowedValues = $this->getCounterTypeAllowableValues();
+        if (!is_null($counterType) && !in_array($counterType, $allowedValues, true)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value for 'counterType', must be one of '%s'",
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['counterType'] = $counterType;
 
         return $this;
     }
