@@ -114,17 +114,17 @@ class PubReportsApi
      *
      * Publisher's RTB report
      *
-     * @param  string $dateBegin Beginning of date interval (required)
-     * @param  string $dateEnd Ending of date interval (required)
+     * @param  string $date_begin Beginning of date interval (required)
+     * @param  string $date_end Ending of date interval (required)
      * @param  string $timezone Time zone (optional)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\StatsCustomRtbItem[]|\Adserver\Model\FormErrorResponse
      */
-    public function pubGetCustomRtbReport($dateBegin, $dateEnd, $timezone = null)
+    public function pubGetCustomRtbReport($date_begin, $date_end, $timezone = null)
     {
-        list($response) = $this->pubGetCustomRtbReportWithHttpInfo($dateBegin, $dateEnd, $timezone);
+        list($response) = $this->pubGetCustomRtbReportWithHttpInfo($date_begin, $date_end, $timezone);
         return $response;
     }
 
@@ -133,17 +133,17 @@ class PubReportsApi
      *
      * Publisher's RTB report
      *
-     * @param  string $dateBegin Beginning of date interval (required)
-     * @param  string $dateEnd Ending of date interval (required)
+     * @param  string $date_begin Beginning of date interval (required)
+     * @param  string $date_end Ending of date interval (required)
      * @param  string $timezone Time zone (optional)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\StatsCustomRtbItem[]|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubGetCustomRtbReportWithHttpInfo($dateBegin, $dateEnd, $timezone = null)
+    public function pubGetCustomRtbReportWithHttpInfo($date_begin, $date_end, $timezone = null)
     {
-        $request = $this->pubGetCustomRtbReportRequest($dateBegin, $dateEnd, $timezone);
+        $request = $this->pubGetCustomRtbReportRequest($date_begin, $date_end, $timezone);
 
         try {
             $options = $this->createHttpClientOption();
@@ -243,16 +243,16 @@ class PubReportsApi
      *
      * Publisher's RTB report
      *
-     * @param  string $dateBegin Beginning of date interval (required)
-     * @param  string $dateEnd Ending of date interval (required)
+     * @param  string $date_begin Beginning of date interval (required)
+     * @param  string $date_end Ending of date interval (required)
      * @param  string $timezone Time zone (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetCustomRtbReportAsync($dateBegin, $dateEnd, $timezone = null)
+    public function pubGetCustomRtbReportAsync($date_begin, $date_end, $timezone = null)
     {
-        return $this->pubGetCustomRtbReportAsyncWithHttpInfo($dateBegin, $dateEnd, $timezone)
+        return $this->pubGetCustomRtbReportAsyncWithHttpInfo($date_begin, $date_end, $timezone)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -265,17 +265,17 @@ class PubReportsApi
      *
      * Publisher's RTB report
      *
-     * @param  string $dateBegin Beginning of date interval (required)
-     * @param  string $dateEnd Ending of date interval (required)
+     * @param  string $date_begin Beginning of date interval (required)
+     * @param  string $date_end Ending of date interval (required)
      * @param  string $timezone Time zone (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetCustomRtbReportAsyncWithHttpInfo($dateBegin, $dateEnd, $timezone = null)
+    public function pubGetCustomRtbReportAsyncWithHttpInfo($date_begin, $date_end, $timezone = null)
     {
         $returnType = '\Adserver\Model\StatsCustomRtbItem[]';
-        $request = $this->pubGetCustomRtbReportRequest($dateBegin, $dateEnd, $timezone);
+        $request = $this->pubGetCustomRtbReportRequest($date_begin, $date_end, $timezone);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -314,25 +314,25 @@ class PubReportsApi
     /**
      * Create request for operation 'pubGetCustomRtbReport'
      *
-     * @param  string $dateBegin Beginning of date interval (required)
-     * @param  string $dateEnd Ending of date interval (required)
+     * @param  string $date_begin Beginning of date interval (required)
+     * @param  string $date_end Ending of date interval (required)
      * @param  string $timezone Time zone (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function pubGetCustomRtbReportRequest($dateBegin, $dateEnd, $timezone = null)
+    protected function pubGetCustomRtbReportRequest($date_begin, $date_end, $timezone = null)
     {
-        // verify the required parameter 'dateBegin' is set
-        if ($dateBegin === null || (is_array($dateBegin) && count($dateBegin) === 0)) {
+        // verify the required parameter 'date_begin' is set
+        if ($date_begin === null || (is_array($date_begin) && count($date_begin) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $dateBegin when calling pubGetCustomRtbReport'
+                'Missing the required parameter $date_begin when calling pubGetCustomRtbReport'
             );
         }
-        // verify the required parameter 'dateEnd' is set
-        if ($dateEnd === null || (is_array($dateEnd) && count($dateEnd) === 0)) {
+        // verify the required parameter 'date_end' is set
+        if ($date_end === null || (is_array($date_end) && count($date_end) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $dateEnd when calling pubGetCustomRtbReport'
+                'Missing the required parameter $date_end when calling pubGetCustomRtbReport'
             );
         }
 
@@ -344,25 +344,25 @@ class PubReportsApi
         $multipart = false;
 
         // query params
-        if ($dateBegin !== null) {
-            if('form' === 'form' && is_array($dateBegin)) {
-                foreach($dateBegin as $key => $value) {
+        if ($date_begin !== null) {
+            if('form' === 'form' && is_array($date_begin)) {
+                foreach($date_begin as $key => $value) {
                     $queryParams[$key] = $value;
                 }
             }
             else {
-                $queryParams['dateBegin'] = $dateBegin;
+                $queryParams['dateBegin'] = $date_begin;
             }
         }
         // query params
-        if ($dateEnd !== null) {
-            if('form' === 'form' && is_array($dateEnd)) {
-                foreach($dateEnd as $key => $value) {
+        if ($date_end !== null) {
+            if('form' === 'form' && is_array($date_end)) {
+                foreach($date_end as $key => $value) {
                     $queryParams[$key] = $value;
                 }
             }
             else {
-                $queryParams['dateEnd'] = $dateEnd;
+                $queryParams['dateEnd'] = $date_end;
             }
         }
         // query params
@@ -452,8 +452,8 @@ class PubReportsApi
      *
      * Publisher's stats
      *
-     * @param  string $dateBegin Beginning of date interval (required)
-     * @param  string $dateEnd Ending of date interval (required)
+     * @param  string $date_begin Beginning of date interval (required)
+     * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group report by this dimension (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idsite Filter by site&#39;s ID (optional)
@@ -463,9 +463,9 @@ class PubReportsApi
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\StatsItem[]|\Adserver\Model\FormErrorResponse
      */
-    public function pubGetStats($dateBegin, $dateEnd, $group, $timezone = null, $idsite = null, $idzone = null)
+    public function pubGetStats($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null)
     {
-        list($response) = $this->pubGetStatsWithHttpInfo($dateBegin, $dateEnd, $group, $timezone, $idsite, $idzone);
+        list($response) = $this->pubGetStatsWithHttpInfo($date_begin, $date_end, $group, $timezone, $idsite, $idzone);
         return $response;
     }
 
@@ -474,8 +474,8 @@ class PubReportsApi
      *
      * Publisher's stats
      *
-     * @param  string $dateBegin Beginning of date interval (required)
-     * @param  string $dateEnd Ending of date interval (required)
+     * @param  string $date_begin Beginning of date interval (required)
+     * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group report by this dimension (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idsite Filter by site&#39;s ID (optional)
@@ -485,9 +485,9 @@ class PubReportsApi
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\StatsItem[]|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubGetStatsWithHttpInfo($dateBegin, $dateEnd, $group, $timezone = null, $idsite = null, $idzone = null)
+    public function pubGetStatsWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null)
     {
-        $request = $this->pubGetStatsRequest($dateBegin, $dateEnd, $group, $timezone, $idsite, $idzone);
+        $request = $this->pubGetStatsRequest($date_begin, $date_end, $group, $timezone, $idsite, $idzone);
 
         try {
             $options = $this->createHttpClientOption();
@@ -587,8 +587,8 @@ class PubReportsApi
      *
      * Publisher's stats
      *
-     * @param  string $dateBegin Beginning of date interval (required)
-     * @param  string $dateEnd Ending of date interval (required)
+     * @param  string $date_begin Beginning of date interval (required)
+     * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group report by this dimension (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idsite Filter by site&#39;s ID (optional)
@@ -597,9 +597,9 @@ class PubReportsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetStatsAsync($dateBegin, $dateEnd, $group, $timezone = null, $idsite = null, $idzone = null)
+    public function pubGetStatsAsync($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null)
     {
-        return $this->pubGetStatsAsyncWithHttpInfo($dateBegin, $dateEnd, $group, $timezone, $idsite, $idzone)
+        return $this->pubGetStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone, $idsite, $idzone)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -612,8 +612,8 @@ class PubReportsApi
      *
      * Publisher's stats
      *
-     * @param  string $dateBegin Beginning of date interval (required)
-     * @param  string $dateEnd Ending of date interval (required)
+     * @param  string $date_begin Beginning of date interval (required)
+     * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group report by this dimension (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idsite Filter by site&#39;s ID (optional)
@@ -622,10 +622,10 @@ class PubReportsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetStatsAsyncWithHttpInfo($dateBegin, $dateEnd, $group, $timezone = null, $idsite = null, $idzone = null)
+    public function pubGetStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null)
     {
         $returnType = '\Adserver\Model\StatsItem[]';
-        $request = $this->pubGetStatsRequest($dateBegin, $dateEnd, $group, $timezone, $idsite, $idzone);
+        $request = $this->pubGetStatsRequest($date_begin, $date_end, $group, $timezone, $idsite, $idzone);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -664,8 +664,8 @@ class PubReportsApi
     /**
      * Create request for operation 'pubGetStats'
      *
-     * @param  string $dateBegin Beginning of date interval (required)
-     * @param  string $dateEnd Ending of date interval (required)
+     * @param  string $date_begin Beginning of date interval (required)
+     * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group report by this dimension (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idsite Filter by site&#39;s ID (optional)
@@ -674,18 +674,18 @@ class PubReportsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function pubGetStatsRequest($dateBegin, $dateEnd, $group, $timezone = null, $idsite = null, $idzone = null)
+    protected function pubGetStatsRequest($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null)
     {
-        // verify the required parameter 'dateBegin' is set
-        if ($dateBegin === null || (is_array($dateBegin) && count($dateBegin) === 0)) {
+        // verify the required parameter 'date_begin' is set
+        if ($date_begin === null || (is_array($date_begin) && count($date_begin) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $dateBegin when calling pubGetStats'
+                'Missing the required parameter $date_begin when calling pubGetStats'
             );
         }
-        // verify the required parameter 'dateEnd' is set
-        if ($dateEnd === null || (is_array($dateEnd) && count($dateEnd) === 0)) {
+        // verify the required parameter 'date_end' is set
+        if ($date_end === null || (is_array($date_end) && count($date_end) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $dateEnd when calling pubGetStats'
+                'Missing the required parameter $date_end when calling pubGetStats'
             );
         }
         // verify the required parameter 'group' is set
@@ -703,25 +703,25 @@ class PubReportsApi
         $multipart = false;
 
         // query params
-        if ($dateBegin !== null) {
-            if('form' === 'form' && is_array($dateBegin)) {
-                foreach($dateBegin as $key => $value) {
+        if ($date_begin !== null) {
+            if('form' === 'form' && is_array($date_begin)) {
+                foreach($date_begin as $key => $value) {
                     $queryParams[$key] = $value;
                 }
             }
             else {
-                $queryParams['dateBegin'] = $dateBegin;
+                $queryParams['dateBegin'] = $date_begin;
             }
         }
         // query params
-        if ($dateEnd !== null) {
-            if('form' === 'form' && is_array($dateEnd)) {
-                foreach($dateEnd as $key => $value) {
+        if ($date_end !== null) {
+            if('form' === 'form' && is_array($date_end)) {
+                foreach($date_end as $key => $value) {
                     $queryParams[$key] = $value;
                 }
             }
             else {
-                $queryParams['dateEnd'] = $dateEnd;
+                $queryParams['dateEnd'] = $date_end;
             }
         }
         // query params

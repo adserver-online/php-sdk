@@ -114,15 +114,15 @@ class UsersApi
      *
      * Create user
      *
-     * @param  \Adserver\Model\UserRequest $userRequest userRequest (required)
+     * @param  \Adserver\Model\UserRequest $user_request user_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\User|\Adserver\Model\FormErrorResponse
      */
-    public function createUser($userRequest)
+    public function createUser($user_request)
     {
-        list($response) = $this->createUserWithHttpInfo($userRequest);
+        list($response) = $this->createUserWithHttpInfo($user_request);
         return $response;
     }
 
@@ -131,15 +131,15 @@ class UsersApi
      *
      * Create user
      *
-     * @param  \Adserver\Model\UserRequest $userRequest (required)
+     * @param  \Adserver\Model\UserRequest $user_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\User|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function createUserWithHttpInfo($userRequest)
+    public function createUserWithHttpInfo($user_request)
     {
-        $request = $this->createUserRequest($userRequest);
+        $request = $this->createUserRequest($user_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -239,14 +239,14 @@ class UsersApi
      *
      * Create user
      *
-     * @param  \Adserver\Model\UserRequest $userRequest (required)
+     * @param  \Adserver\Model\UserRequest $user_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createUserAsync($userRequest)
+    public function createUserAsync($user_request)
     {
-        return $this->createUserAsyncWithHttpInfo($userRequest)
+        return $this->createUserAsyncWithHttpInfo($user_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -259,15 +259,15 @@ class UsersApi
      *
      * Create user
      *
-     * @param  \Adserver\Model\UserRequest $userRequest (required)
+     * @param  \Adserver\Model\UserRequest $user_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createUserAsyncWithHttpInfo($userRequest)
+    public function createUserAsyncWithHttpInfo($user_request)
     {
         $returnType = '\Adserver\Model\User';
-        $request = $this->createUserRequest($userRequest);
+        $request = $this->createUserRequest($user_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -306,17 +306,17 @@ class UsersApi
     /**
      * Create request for operation 'createUser'
      *
-     * @param  \Adserver\Model\UserRequest $userRequest (required)
+     * @param  \Adserver\Model\UserRequest $user_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function createUserRequest($userRequest)
+    protected function createUserRequest($user_request)
     {
-        // verify the required parameter 'userRequest' is set
-        if ($userRequest === null || (is_array($userRequest) && count($userRequest) === 0)) {
+        // verify the required parameter 'user_request' is set
+        if ($user_request === null || (is_array($user_request) && count($user_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $userRequest when calling createUser'
+                'Missing the required parameter $user_request when calling createUser'
             );
         }
 
@@ -332,8 +332,8 @@ class UsersApi
 
         // body params
         $_tempBody = null;
-        if (isset($userRequest)) {
-            $_tempBody = $userRequest;
+        if (isset($user_request)) {
+            $_tempBody = $user_request;
         }
 
         if ($multipart) {
@@ -913,7 +913,7 @@ class UsersApi
      * User's list
      *
      * @param  int $page page (optional)
-     * @param  int $perPage perPage (optional)
+     * @param  int $per_page per_page (optional)
      * @param  string $sort sort (optional)
      * @param  object[] $filter filter (optional)
      *
@@ -921,9 +921,9 @@ class UsersApi
      * @throws \InvalidArgumentException
      * @return object[]
      */
-    public function getUsersList($page = null, $perPage = null, $sort = null, $filter = null)
+    public function getUsersList($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        list($response) = $this->getUsersListWithHttpInfo($page, $perPage, $sort, $filter);
+        list($response) = $this->getUsersListWithHttpInfo($page, $per_page, $sort, $filter);
         return $response;
     }
 
@@ -933,7 +933,7 @@ class UsersApi
      * User's list
      *
      * @param  int $page (optional)
-     * @param  int $perPage (optional)
+     * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
      *
@@ -941,9 +941,9 @@ class UsersApi
      * @throws \InvalidArgumentException
      * @return array of object[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getUsersListWithHttpInfo($page = null, $perPage = null, $sort = null, $filter = null)
+    public function getUsersListWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        $request = $this->getUsersListRequest($page, $perPage, $sort, $filter);
+        $request = $this->getUsersListRequest($page, $per_page, $sort, $filter);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1024,16 +1024,16 @@ class UsersApi
      * User's list
      *
      * @param  int $page (optional)
-     * @param  int $perPage (optional)
+     * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getUsersListAsync($page = null, $perPage = null, $sort = null, $filter = null)
+    public function getUsersListAsync($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        return $this->getUsersListAsyncWithHttpInfo($page, $perPage, $sort, $filter)
+        return $this->getUsersListAsyncWithHttpInfo($page, $per_page, $sort, $filter)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1047,17 +1047,17 @@ class UsersApi
      * User's list
      *
      * @param  int $page (optional)
-     * @param  int $perPage (optional)
+     * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getUsersListAsyncWithHttpInfo($page = null, $perPage = null, $sort = null, $filter = null)
+    public function getUsersListAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
         $returnType = 'object[]';
-        $request = $this->getUsersListRequest($page, $perPage, $sort, $filter);
+        $request = $this->getUsersListRequest($page, $per_page, $sort, $filter);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1097,14 +1097,14 @@ class UsersApi
      * Create request for operation 'getUsersList'
      *
      * @param  int $page (optional)
-     * @param  int $perPage (optional)
+     * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function getUsersListRequest($page = null, $perPage = null, $sort = null, $filter = null)
+    protected function getUsersListRequest($page = null, $per_page = null, $sort = null, $filter = null)
     {
 
         $resourcePath = '/user';
@@ -1126,14 +1126,14 @@ class UsersApi
             }
         }
         // query params
-        if ($perPage !== null) {
-            if('form' === 'form' && is_array($perPage)) {
-                foreach($perPage as $key => $value) {
+        if ($per_page !== null) {
+            if('form' === 'form' && is_array($per_page)) {
+                foreach($per_page as $key => $value) {
                     $queryParams[$key] = $value;
                 }
             }
             else {
-                $queryParams['per-page'] = $perPage;
+                $queryParams['per-page'] = $per_page;
             }
         }
         // query params
@@ -1234,15 +1234,15 @@ class UsersApi
      *
      * Obtain bearer token
      *
-     * @param  \Adserver\Model\LoginRequest $loginRequest loginRequest (required)
+     * @param  \Adserver\Model\LoginRequest $login_request login_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\LoginResponse|\Adserver\Model\FormErrorResponse
      */
-    public function login($loginRequest)
+    public function login($login_request)
     {
-        list($response) = $this->loginWithHttpInfo($loginRequest);
+        list($response) = $this->loginWithHttpInfo($login_request);
         return $response;
     }
 
@@ -1251,15 +1251,15 @@ class UsersApi
      *
      * Obtain bearer token
      *
-     * @param  \Adserver\Model\LoginRequest $loginRequest (required)
+     * @param  \Adserver\Model\LoginRequest $login_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\LoginResponse|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function loginWithHttpInfo($loginRequest)
+    public function loginWithHttpInfo($login_request)
     {
-        $request = $this->loginRequest($loginRequest);
+        $request = $this->loginRequest($login_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1359,14 +1359,14 @@ class UsersApi
      *
      * Obtain bearer token
      *
-     * @param  \Adserver\Model\LoginRequest $loginRequest (required)
+     * @param  \Adserver\Model\LoginRequest $login_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function loginAsync($loginRequest)
+    public function loginAsync($login_request)
     {
-        return $this->loginAsyncWithHttpInfo($loginRequest)
+        return $this->loginAsyncWithHttpInfo($login_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1379,15 +1379,15 @@ class UsersApi
      *
      * Obtain bearer token
      *
-     * @param  \Adserver\Model\LoginRequest $loginRequest (required)
+     * @param  \Adserver\Model\LoginRequest $login_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function loginAsyncWithHttpInfo($loginRequest)
+    public function loginAsyncWithHttpInfo($login_request)
     {
         $returnType = '\Adserver\Model\LoginResponse';
-        $request = $this->loginRequest($loginRequest);
+        $request = $this->loginRequest($login_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1426,17 +1426,17 @@ class UsersApi
     /**
      * Create request for operation 'login'
      *
-     * @param  \Adserver\Model\LoginRequest $loginRequest (required)
+     * @param  \Adserver\Model\LoginRequest $login_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function loginRequest($loginRequest)
+    protected function loginRequest($login_request)
     {
-        // verify the required parameter 'loginRequest' is set
-        if ($loginRequest === null || (is_array($loginRequest) && count($loginRequest) === 0)) {
+        // verify the required parameter 'login_request' is set
+        if ($login_request === null || (is_array($login_request) && count($login_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $loginRequest when calling login'
+                'Missing the required parameter $login_request when calling login'
             );
         }
 
@@ -1452,8 +1452,8 @@ class UsersApi
 
         // body params
         $_tempBody = null;
-        if (isset($loginRequest)) {
-            $_tempBody = $loginRequest;
+        if (isset($login_request)) {
+            $_tempBody = $login_request;
         }
 
         if ($multipart) {
@@ -1523,15 +1523,15 @@ class UsersApi
      * Update user
      *
      * @param  int $id id (required)
-     * @param  \Adserver\Model\UserRequest $userRequest userRequest (required)
+     * @param  \Adserver\Model\UserRequest $user_request user_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\User|\Adserver\Model\FormErrorResponse
      */
-    public function updateUser($id, $userRequest)
+    public function updateUser($id, $user_request)
     {
-        list($response) = $this->updateUserWithHttpInfo($id, $userRequest);
+        list($response) = $this->updateUserWithHttpInfo($id, $user_request);
         return $response;
     }
 
@@ -1541,15 +1541,15 @@ class UsersApi
      * Update user
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\UserRequest $userRequest (required)
+     * @param  \Adserver\Model\UserRequest $user_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\User|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function updateUserWithHttpInfo($id, $userRequest)
+    public function updateUserWithHttpInfo($id, $user_request)
     {
-        $request = $this->updateUserRequest($id, $userRequest);
+        $request = $this->updateUserRequest($id, $user_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1650,14 +1650,14 @@ class UsersApi
      * Update user
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\UserRequest $userRequest (required)
+     * @param  \Adserver\Model\UserRequest $user_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function updateUserAsync($id, $userRequest)
+    public function updateUserAsync($id, $user_request)
     {
-        return $this->updateUserAsyncWithHttpInfo($id, $userRequest)
+        return $this->updateUserAsyncWithHttpInfo($id, $user_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1671,15 +1671,15 @@ class UsersApi
      * Update user
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\UserRequest $userRequest (required)
+     * @param  \Adserver\Model\UserRequest $user_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function updateUserAsyncWithHttpInfo($id, $userRequest)
+    public function updateUserAsyncWithHttpInfo($id, $user_request)
     {
         $returnType = '\Adserver\Model\User';
-        $request = $this->updateUserRequest($id, $userRequest);
+        $request = $this->updateUserRequest($id, $user_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1719,12 +1719,12 @@ class UsersApi
      * Create request for operation 'updateUser'
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\UserRequest $userRequest (required)
+     * @param  \Adserver\Model\UserRequest $user_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function updateUserRequest($id, $userRequest)
+    protected function updateUserRequest($id, $user_request)
     {
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
@@ -1732,10 +1732,10 @@ class UsersApi
                 'Missing the required parameter $id when calling updateUser'
             );
         }
-        // verify the required parameter 'userRequest' is set
-        if ($userRequest === null || (is_array($userRequest) && count($userRequest) === 0)) {
+        // verify the required parameter 'user_request' is set
+        if ($user_request === null || (is_array($user_request) && count($user_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $userRequest when calling updateUser'
+                'Missing the required parameter $user_request when calling updateUser'
             );
         }
 
@@ -1759,8 +1759,8 @@ class UsersApi
 
         // body params
         $_tempBody = null;
-        if (isset($userRequest)) {
-            $_tempBody = $userRequest;
+        if (isset($user_request)) {
+            $_tempBody = $user_request;
         }
 
         if ($multipart) {

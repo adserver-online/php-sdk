@@ -54,7 +54,7 @@ class AdRequest implements ModelInterface, ArrayAccess
         'name' => 'string',
         'url' => 'string',
         'idcampaign' => 'int',
-        'isActive' => 'int',
+        'is_active' => 'int',
         'idstatus' => 'int',
         'details' => 'OneOfAdBannerImageAdBannerHtmlAdBannerZipAdDirectLinkAdPopupAdVastLinear'
     ];
@@ -68,7 +68,7 @@ class AdRequest implements ModelInterface, ArrayAccess
         'name' => null,
         'url' => null,
         'idcampaign' => null,
-        'isActive' => null,
+        'is_active' => null,
         'idstatus' => null,
         'details' => null
     ];
@@ -103,7 +103,7 @@ class AdRequest implements ModelInterface, ArrayAccess
         'name' => 'name',
         'url' => 'url',
         'idcampaign' => 'idcampaign',
-        'isActive' => 'is_active',
+        'is_active' => 'is_active',
         'idstatus' => 'idstatus',
         'details' => 'details'
     ];
@@ -117,7 +117,7 @@ class AdRequest implements ModelInterface, ArrayAccess
         'name' => 'setName',
         'url' => 'setUrl',
         'idcampaign' => 'setIdcampaign',
-        'isActive' => 'setIsActive',
+        'is_active' => 'setIsActive',
         'idstatus' => 'setIdstatus',
         'details' => 'setDetails'
     ];
@@ -131,7 +131,7 @@ class AdRequest implements ModelInterface, ArrayAccess
         'name' => 'getName',
         'url' => 'getUrl',
         'idcampaign' => 'getIdcampaign',
-        'isActive' => 'getIsActive',
+        'is_active' => 'getIsActive',
         'idstatus' => 'getIdstatus',
         'details' => 'getDetails'
     ];
@@ -231,7 +231,7 @@ class AdRequest implements ModelInterface, ArrayAccess
         $this->container['name'] = isset($data['name']) ? $data['name'] : null;
         $this->container['url'] = isset($data['url']) ? $data['url'] : null;
         $this->container['idcampaign'] = isset($data['idcampaign']) ? $data['idcampaign'] : null;
-        $this->container['isActive'] = isset($data['isActive']) ? $data['isActive'] : null;
+        $this->container['is_active'] = isset($data['is_active']) ? $data['is_active'] : null;
         $this->container['idstatus'] = isset($data['idstatus']) ? $data['idstatus'] : null;
         $this->container['details'] = isset($data['details']) ? $data['details'] : null;
     }
@@ -252,9 +252,9 @@ class AdRequest implements ModelInterface, ArrayAccess
             $invalidProperties[] = "'idcampaign' can't be null";
         }
         $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($this->container['isActive']) && !in_array($this->container['isActive'], $allowedValues, true)) {
+        if (!is_null($this->container['is_active']) && !in_array($this->container['is_active'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'isActive', must be one of '%s'",
+                "invalid value for 'is_active', must be one of '%s'",
                 implode("', '", $allowedValues)
             );
         }
@@ -358,34 +358,34 @@ class AdRequest implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets isActive
+     * Gets is_active
      *
      * @return int|null
      */
     public function getIsActive()
     {
-        return $this->container['isActive'];
+        return $this->container['is_active'];
     }
 
     /**
-     * Sets isActive
+     * Sets is_active
      *
-     * @param int|null $isActive isActive
+     * @param int|null $is_active is_active
      *
      * @return $this
      */
-    public function setIsActive($isActive)
+    public function setIsActive($is_active)
     {
         $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($isActive) && !in_array($isActive, $allowedValues, true)) {
+        if (!is_null($is_active) && !in_array($is_active, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'isActive', must be one of '%s'",
+                    "Invalid value for 'is_active', must be one of '%s'",
                     implode("', '", $allowedValues)
                 )
             );
         }
-        $this->container['isActive'] = $isActive;
+        $this->container['is_active'] = $is_active;
 
         return $this;
     }

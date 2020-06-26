@@ -359,7 +359,7 @@ class ConversionsApi
      * Conversion's list
      *
      * @param  int $page page (optional)
-     * @param  int $perPage perPage (optional)
+     * @param  int $per_page per_page (optional)
      * @param  string $sort sort (optional)
      * @param  object[] $filter filter (optional)
      *
@@ -367,9 +367,9 @@ class ConversionsApi
      * @throws \InvalidArgumentException
      * @return object[]
      */
-    public function getConversionsList($page = null, $perPage = null, $sort = null, $filter = null)
+    public function getConversionsList($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        list($response) = $this->getConversionsListWithHttpInfo($page, $perPage, $sort, $filter);
+        list($response) = $this->getConversionsListWithHttpInfo($page, $per_page, $sort, $filter);
         return $response;
     }
 
@@ -379,7 +379,7 @@ class ConversionsApi
      * Conversion's list
      *
      * @param  int $page (optional)
-     * @param  int $perPage (optional)
+     * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
      *
@@ -387,9 +387,9 @@ class ConversionsApi
      * @throws \InvalidArgumentException
      * @return array of object[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getConversionsListWithHttpInfo($page = null, $perPage = null, $sort = null, $filter = null)
+    public function getConversionsListWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        $request = $this->getConversionsListRequest($page, $perPage, $sort, $filter);
+        $request = $this->getConversionsListRequest($page, $per_page, $sort, $filter);
 
         try {
             $options = $this->createHttpClientOption();
@@ -470,16 +470,16 @@ class ConversionsApi
      * Conversion's list
      *
      * @param  int $page (optional)
-     * @param  int $perPage (optional)
+     * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getConversionsListAsync($page = null, $perPage = null, $sort = null, $filter = null)
+    public function getConversionsListAsync($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        return $this->getConversionsListAsyncWithHttpInfo($page, $perPage, $sort, $filter)
+        return $this->getConversionsListAsyncWithHttpInfo($page, $per_page, $sort, $filter)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -493,17 +493,17 @@ class ConversionsApi
      * Conversion's list
      *
      * @param  int $page (optional)
-     * @param  int $perPage (optional)
+     * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getConversionsListAsyncWithHttpInfo($page = null, $perPage = null, $sort = null, $filter = null)
+    public function getConversionsListAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
         $returnType = 'object[]';
-        $request = $this->getConversionsListRequest($page, $perPage, $sort, $filter);
+        $request = $this->getConversionsListRequest($page, $per_page, $sort, $filter);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -543,14 +543,14 @@ class ConversionsApi
      * Create request for operation 'getConversionsList'
      *
      * @param  int $page (optional)
-     * @param  int $perPage (optional)
+     * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function getConversionsListRequest($page = null, $perPage = null, $sort = null, $filter = null)
+    protected function getConversionsListRequest($page = null, $per_page = null, $sort = null, $filter = null)
     {
 
         $resourcePath = '/conversion';
@@ -572,14 +572,14 @@ class ConversionsApi
             }
         }
         // query params
-        if ($perPage !== null) {
-            if('form' === 'form' && is_array($perPage)) {
-                foreach($perPage as $key => $value) {
+        if ($per_page !== null) {
+            if('form' === 'form' && is_array($per_page)) {
+                foreach($per_page as $key => $value) {
                     $queryParams[$key] = $value;
                 }
             }
             else {
-                $queryParams['per-page'] = $perPage;
+                $queryParams['per-page'] = $per_page;
             }
         }
         // query params

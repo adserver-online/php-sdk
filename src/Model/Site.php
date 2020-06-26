@@ -57,11 +57,11 @@ class Site implements ModelInterface, ArrayAccess
         'url' => 'string',
         'status' => 'object',
         'idblockreason' => 'string',
-        'blockReason' => 'string',
-        'isActive' => 'bool',
+        'block_reason' => 'string',
+        'is_active' => 'bool',
         'zones' => 'object[]',
-        'createdAt' => 'string',
-        'updatedAt' => 'string'
+        'created_at' => 'string',
+        'updated_at' => 'string'
     ];
 
     /**
@@ -76,11 +76,11 @@ class Site implements ModelInterface, ArrayAccess
         'url' => null,
         'status' => null,
         'idblockreason' => null,
-        'blockReason' => null,
-        'isActive' => null,
+        'block_reason' => null,
+        'is_active' => null,
         'zones' => null,
-        'createdAt' => null,
-        'updatedAt' => null
+        'created_at' => null,
+        'updated_at' => null
     ];
 
     /**
@@ -116,11 +116,11 @@ class Site implements ModelInterface, ArrayAccess
         'url' => 'url',
         'status' => 'status',
         'idblockreason' => 'idblockreason',
-        'blockReason' => 'block_reason',
-        'isActive' => 'is_active',
+        'block_reason' => 'block_reason',
+        'is_active' => 'is_active',
         'zones' => 'zones',
-        'createdAt' => 'created_at',
-        'updatedAt' => 'updated_at'
+        'created_at' => 'created_at',
+        'updated_at' => 'updated_at'
     ];
 
     /**
@@ -135,11 +135,11 @@ class Site implements ModelInterface, ArrayAccess
         'url' => 'setUrl',
         'status' => 'setStatus',
         'idblockreason' => 'setIdblockreason',
-        'blockReason' => 'setBlockReason',
-        'isActive' => 'setIsActive',
+        'block_reason' => 'setBlockReason',
+        'is_active' => 'setIsActive',
         'zones' => 'setZones',
-        'createdAt' => 'setCreatedAt',
-        'updatedAt' => 'setUpdatedAt'
+        'created_at' => 'setCreatedAt',
+        'updated_at' => 'setUpdatedAt'
     ];
 
     /**
@@ -154,11 +154,11 @@ class Site implements ModelInterface, ArrayAccess
         'url' => 'getUrl',
         'status' => 'getStatus',
         'idblockreason' => 'getIdblockreason',
-        'blockReason' => 'getBlockReason',
-        'isActive' => 'getIsActive',
+        'block_reason' => 'getBlockReason',
+        'is_active' => 'getIsActive',
         'zones' => 'getZones',
-        'createdAt' => 'getCreatedAt',
-        'updatedAt' => 'getUpdatedAt'
+        'created_at' => 'getCreatedAt',
+        'updated_at' => 'getUpdatedAt'
     ];
 
     /**
@@ -227,11 +227,11 @@ class Site implements ModelInterface, ArrayAccess
         $this->container['url'] = isset($data['url']) ? $data['url'] : null;
         $this->container['status'] = isset($data['status']) ? $data['status'] : null;
         $this->container['idblockreason'] = isset($data['idblockreason']) ? $data['idblockreason'] : null;
-        $this->container['blockReason'] = isset($data['blockReason']) ? $data['blockReason'] : null;
-        $this->container['isActive'] = isset($data['isActive']) ? $data['isActive'] : null;
+        $this->container['block_reason'] = isset($data['block_reason']) ? $data['block_reason'] : null;
+        $this->container['is_active'] = isset($data['is_active']) ? $data['is_active'] : null;
         $this->container['zones'] = isset($data['zones']) ? $data['zones'] : null;
-        $this->container['createdAt'] = isset($data['createdAt']) ? $data['createdAt'] : null;
-        $this->container['updatedAt'] = isset($data['updatedAt']) ? $data['updatedAt'] : null;
+        $this->container['created_at'] = isset($data['created_at']) ? $data['created_at'] : null;
+        $this->container['updated_at'] = isset($data['updated_at']) ? $data['updated_at'] : null;
     }
 
     /**
@@ -403,49 +403,49 @@ class Site implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets blockReason
+     * Gets block_reason
      *
      * @return string|null
      */
     public function getBlockReason()
     {
-        return $this->container['blockReason'];
+        return $this->container['block_reason'];
     }
 
     /**
-     * Sets blockReason
+     * Sets block_reason
      *
-     * @param string|null $blockReason Custom block reason if idblockreason == 100
+     * @param string|null $block_reason Custom block reason if idblockreason == 100
      *
      * @return $this
      */
-    public function setBlockReason($blockReason)
+    public function setBlockReason($block_reason)
     {
-        $this->container['blockReason'] = $blockReason;
+        $this->container['block_reason'] = $block_reason;
 
         return $this;
     }
 
     /**
-     * Gets isActive
+     * Gets is_active
      *
      * @return bool|null
      */
     public function getIsActive()
     {
-        return $this->container['isActive'];
+        return $this->container['is_active'];
     }
 
     /**
-     * Sets isActive
+     * Sets is_active
      *
-     * @param bool|null $isActive isActive
+     * @param bool|null $is_active is_active
      *
      * @return $this
      */
-    public function setIsActive($isActive)
+    public function setIsActive($is_active)
     {
-        $this->container['isActive'] = $isActive;
+        $this->container['is_active'] = $is_active;
 
         return $this;
     }
@@ -475,49 +475,49 @@ class Site implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets createdAt
+     * Gets created_at
      *
      * @return string|null
      */
     public function getCreatedAt()
     {
-        return $this->container['createdAt'];
+        return $this->container['created_at'];
     }
 
     /**
-     * Sets createdAt
+     * Sets created_at
      *
-     * @param string|null $createdAt createdAt
+     * @param string|null $created_at created_at
      *
      * @return $this
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($created_at)
     {
-        $this->container['createdAt'] = $createdAt;
+        $this->container['created_at'] = $created_at;
 
         return $this;
     }
 
     /**
-     * Gets updatedAt
+     * Gets updated_at
      *
      * @return string|null
      */
     public function getUpdatedAt()
     {
-        return $this->container['updatedAt'];
+        return $this->container['updated_at'];
     }
 
     /**
-     * Sets updatedAt
+     * Sets updated_at
      *
-     * @param string|null $updatedAt updatedAt
+     * @param string|null $updated_at updated_at
      *
      * @return $this
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updated_at)
     {
-        $this->container['updatedAt'] = $updatedAt;
+        $this->container['updated_at'] = $updated_at;
 
         return $this;
     }

@@ -52,7 +52,7 @@ class LoginResponse implements ModelInterface, ArrayAccess
       */
     protected static $openAPITypes = [
         'token' => 'string',
-        'expirationAt' => 'string'
+        'expiration_at' => 'string'
     ];
 
     /**
@@ -62,7 +62,7 @@ class LoginResponse implements ModelInterface, ArrayAccess
       */
     protected static $openAPIFormats = [
         'token' => null,
-        'expirationAt' => null
+        'expiration_at' => null
     ];
 
     /**
@@ -93,7 +93,7 @@ class LoginResponse implements ModelInterface, ArrayAccess
      */
     protected static $attributeMap = [
         'token' => 'token',
-        'expirationAt' => 'expiration_at'
+        'expiration_at' => 'expiration_at'
     ];
 
     /**
@@ -103,7 +103,7 @@ class LoginResponse implements ModelInterface, ArrayAccess
      */
     protected static $setters = [
         'token' => 'setToken',
-        'expirationAt' => 'setExpirationAt'
+        'expiration_at' => 'setExpirationAt'
     ];
 
     /**
@@ -113,7 +113,7 @@ class LoginResponse implements ModelInterface, ArrayAccess
      */
     protected static $getters = [
         'token' => 'getToken',
-        'expirationAt' => 'getExpirationAt'
+        'expiration_at' => 'getExpirationAt'
     ];
 
     /**
@@ -177,7 +177,7 @@ class LoginResponse implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         $this->container['token'] = isset($data['token']) ? $data['token'] : null;
-        $this->container['expirationAt'] = isset($data['expirationAt']) ? $data['expirationAt'] : null;
+        $this->container['expiration_at'] = isset($data['expiration_at']) ? $data['expiration_at'] : null;
     }
 
     /**
@@ -232,25 +232,25 @@ class LoginResponse implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets expirationAt
+     * Gets expiration_at
      *
      * @return string|null
      */
     public function getExpirationAt()
     {
-        return $this->container['expirationAt'];
+        return $this->container['expiration_at'];
     }
 
     /**
-     * Sets expirationAt
+     * Sets expiration_at
      *
-     * @param string|null $expirationAt expirationAt
+     * @param string|null $expiration_at expiration_at
      *
      * @return $this
      */
-    public function setExpirationAt($expirationAt)
+    public function setExpirationAt($expiration_at)
     {
-        $this->container['expirationAt'] = $expirationAt;
+        $this->container['expiration_at'] = $expiration_at;
 
         return $this;
     }

@@ -114,15 +114,15 @@ class PubSitesApi
      *
      * Create site
      *
-     * @param  \Adserver\Model\PubSiteRequest $pubSiteRequest pubSiteRequest (required)
+     * @param  \Adserver\Model\PubSiteRequest $pub_site_request pub_site_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Site|\Adserver\Model\FormErrorResponse
      */
-    public function pubCreateSite($pubSiteRequest)
+    public function pubCreateSite($pub_site_request)
     {
-        list($response) = $this->pubCreateSiteWithHttpInfo($pubSiteRequest);
+        list($response) = $this->pubCreateSiteWithHttpInfo($pub_site_request);
         return $response;
     }
 
@@ -131,15 +131,15 @@ class PubSitesApi
      *
      * Create site
      *
-     * @param  \Adserver\Model\PubSiteRequest $pubSiteRequest (required)
+     * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Site|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubCreateSiteWithHttpInfo($pubSiteRequest)
+    public function pubCreateSiteWithHttpInfo($pub_site_request)
     {
-        $request = $this->pubCreateSiteRequest($pubSiteRequest);
+        $request = $this->pubCreateSiteRequest($pub_site_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -239,14 +239,14 @@ class PubSitesApi
      *
      * Create site
      *
-     * @param  \Adserver\Model\PubSiteRequest $pubSiteRequest (required)
+     * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubCreateSiteAsync($pubSiteRequest)
+    public function pubCreateSiteAsync($pub_site_request)
     {
-        return $this->pubCreateSiteAsyncWithHttpInfo($pubSiteRequest)
+        return $this->pubCreateSiteAsyncWithHttpInfo($pub_site_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -259,15 +259,15 @@ class PubSitesApi
      *
      * Create site
      *
-     * @param  \Adserver\Model\PubSiteRequest $pubSiteRequest (required)
+     * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubCreateSiteAsyncWithHttpInfo($pubSiteRequest)
+    public function pubCreateSiteAsyncWithHttpInfo($pub_site_request)
     {
         $returnType = '\Adserver\Model\Site';
-        $request = $this->pubCreateSiteRequest($pubSiteRequest);
+        $request = $this->pubCreateSiteRequest($pub_site_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -306,17 +306,17 @@ class PubSitesApi
     /**
      * Create request for operation 'pubCreateSite'
      *
-     * @param  \Adserver\Model\PubSiteRequest $pubSiteRequest (required)
+     * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function pubCreateSiteRequest($pubSiteRequest)
+    protected function pubCreateSiteRequest($pub_site_request)
     {
-        // verify the required parameter 'pubSiteRequest' is set
-        if ($pubSiteRequest === null || (is_array($pubSiteRequest) && count($pubSiteRequest) === 0)) {
+        // verify the required parameter 'pub_site_request' is set
+        if ($pub_site_request === null || (is_array($pub_site_request) && count($pub_site_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $pubSiteRequest when calling pubCreateSite'
+                'Missing the required parameter $pub_site_request when calling pubCreateSite'
             );
         }
 
@@ -332,8 +332,8 @@ class PubSitesApi
 
         // body params
         $_tempBody = null;
-        if (isset($pubSiteRequest)) {
-            $_tempBody = $pubSiteRequest;
+        if (isset($pub_site_request)) {
+            $_tempBody = $pub_site_request;
         }
 
         if ($multipart) {
@@ -913,15 +913,15 @@ class PubSitesApi
      * Update site
      *
      * @param  int $id id (required)
-     * @param  \Adserver\Model\PubSiteRequest $pubSiteRequest pubSiteRequest (required)
+     * @param  \Adserver\Model\PubSiteRequest $pub_site_request pub_site_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Site|\Adserver\Model\FormErrorResponse
      */
-    public function pubUpdateSite($id, $pubSiteRequest)
+    public function pubUpdateSite($id, $pub_site_request)
     {
-        list($response) = $this->pubUpdateSiteWithHttpInfo($id, $pubSiteRequest);
+        list($response) = $this->pubUpdateSiteWithHttpInfo($id, $pub_site_request);
         return $response;
     }
 
@@ -931,15 +931,15 @@ class PubSitesApi
      * Update site
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\PubSiteRequest $pubSiteRequest (required)
+     * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Site|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubUpdateSiteWithHttpInfo($id, $pubSiteRequest)
+    public function pubUpdateSiteWithHttpInfo($id, $pub_site_request)
     {
-        $request = $this->pubUpdateSiteRequest($id, $pubSiteRequest);
+        $request = $this->pubUpdateSiteRequest($id, $pub_site_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1040,14 +1040,14 @@ class PubSitesApi
      * Update site
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\PubSiteRequest $pubSiteRequest (required)
+     * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubUpdateSiteAsync($id, $pubSiteRequest)
+    public function pubUpdateSiteAsync($id, $pub_site_request)
     {
-        return $this->pubUpdateSiteAsyncWithHttpInfo($id, $pubSiteRequest)
+        return $this->pubUpdateSiteAsyncWithHttpInfo($id, $pub_site_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1061,15 +1061,15 @@ class PubSitesApi
      * Update site
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\PubSiteRequest $pubSiteRequest (required)
+     * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubUpdateSiteAsyncWithHttpInfo($id, $pubSiteRequest)
+    public function pubUpdateSiteAsyncWithHttpInfo($id, $pub_site_request)
     {
         $returnType = '\Adserver\Model\Site';
-        $request = $this->pubUpdateSiteRequest($id, $pubSiteRequest);
+        $request = $this->pubUpdateSiteRequest($id, $pub_site_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1109,12 +1109,12 @@ class PubSitesApi
      * Create request for operation 'pubUpdateSite'
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\PubSiteRequest $pubSiteRequest (required)
+     * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function pubUpdateSiteRequest($id, $pubSiteRequest)
+    protected function pubUpdateSiteRequest($id, $pub_site_request)
     {
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
@@ -1122,10 +1122,10 @@ class PubSitesApi
                 'Missing the required parameter $id when calling pubUpdateSite'
             );
         }
-        // verify the required parameter 'pubSiteRequest' is set
-        if ($pubSiteRequest === null || (is_array($pubSiteRequest) && count($pubSiteRequest) === 0)) {
+        // verify the required parameter 'pub_site_request' is set
+        if ($pub_site_request === null || (is_array($pub_site_request) && count($pub_site_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $pubSiteRequest when calling pubUpdateSite'
+                'Missing the required parameter $pub_site_request when calling pubUpdateSite'
             );
         }
 
@@ -1149,8 +1149,8 @@ class PubSitesApi
 
         // body params
         $_tempBody = null;
-        if (isset($pubSiteRequest)) {
-            $_tempBody = $pubSiteRequest;
+        if (isset($pub_site_request)) {
+            $_tempBody = $pub_site_request;
         }
 
         if ($multipart) {

@@ -117,7 +117,7 @@ class OtherApi
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return object
+     * @return \Adserver\Model\Dict
      */
     public function getDictionaries()
     {
@@ -133,7 +133,7 @@ class OtherApi
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of object, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Adserver\Model\Dict, HTTP status code, HTTP response headers (array of strings)
      */
     public function getDictionariesWithHttpInfo()
     {
@@ -170,20 +170,20 @@ class OtherApi
             $responseBody = $response->getBody();
             switch($statusCode) {
                 case 200:
-                    if ('object' === '\SplFileObject') {
+                    if ('\Adserver\Model\Dict' === '\SplFileObject') {
                         $content = $responseBody; //stream goes to serializer
                     } else {
                         $content = (string) $responseBody;
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, 'object', []),
+                        ObjectSerializer::deserialize($content, '\Adserver\Model\Dict', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
             }
 
-            $returnType = 'object';
+            $returnType = '\Adserver\Model\Dict';
             $responseBody = $response->getBody();
             if ($returnType === '\SplFileObject') {
                 $content = $responseBody; //stream goes to serializer
@@ -202,7 +202,7 @@ class OtherApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        'object',
+                        '\Adserver\Model\Dict',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -242,7 +242,7 @@ class OtherApi
      */
     public function getDictionariesAsyncWithHttpInfo()
     {
-        $returnType = 'object';
+        $returnType = '\Adserver\Model\Dict';
         $request = $this->getDictionariesRequest();
 
         return $this->client

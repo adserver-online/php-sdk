@@ -55,10 +55,10 @@ class SiteRequest implements ModelInterface, ArrayAccess
         'url' => 'string',
         'idcategory' => 'int',
         'idpublisher' => 'int',
-        'isActive' => 'int',
+        'is_active' => 'int',
         'idstatus' => 'int',
         'idblockreason' => 'string',
-        'blockReason' => 'string'
+        'block_reason' => 'string'
     ];
 
     /**
@@ -71,10 +71,10 @@ class SiteRequest implements ModelInterface, ArrayAccess
         'url' => null,
         'idcategory' => null,
         'idpublisher' => null,
-        'isActive' => null,
+        'is_active' => null,
         'idstatus' => null,
         'idblockreason' => null,
-        'blockReason' => null
+        'block_reason' => null
     ];
 
     /**
@@ -108,10 +108,10 @@ class SiteRequest implements ModelInterface, ArrayAccess
         'url' => 'url',
         'idcategory' => 'idcategory',
         'idpublisher' => 'idpublisher',
-        'isActive' => 'is_active',
+        'is_active' => 'is_active',
         'idstatus' => 'idstatus',
         'idblockreason' => 'idblockreason',
-        'blockReason' => 'block_reason'
+        'block_reason' => 'block_reason'
     ];
 
     /**
@@ -124,10 +124,10 @@ class SiteRequest implements ModelInterface, ArrayAccess
         'url' => 'setUrl',
         'idcategory' => 'setIdcategory',
         'idpublisher' => 'setIdpublisher',
-        'isActive' => 'setIsActive',
+        'is_active' => 'setIsActive',
         'idstatus' => 'setIdstatus',
         'idblockreason' => 'setIdblockreason',
-        'blockReason' => 'setBlockReason'
+        'block_reason' => 'setBlockReason'
     ];
 
     /**
@@ -140,10 +140,10 @@ class SiteRequest implements ModelInterface, ArrayAccess
         'url' => 'getUrl',
         'idcategory' => 'getIdcategory',
         'idpublisher' => 'getIdpublisher',
-        'isActive' => 'getIsActive',
+        'is_active' => 'getIsActive',
         'idstatus' => 'getIdstatus',
         'idblockreason' => 'getIdblockreason',
-        'blockReason' => 'getBlockReason'
+        'block_reason' => 'getBlockReason'
     ];
 
     /**
@@ -259,10 +259,10 @@ class SiteRequest implements ModelInterface, ArrayAccess
         $this->container['url'] = isset($data['url']) ? $data['url'] : null;
         $this->container['idcategory'] = isset($data['idcategory']) ? $data['idcategory'] : null;
         $this->container['idpublisher'] = isset($data['idpublisher']) ? $data['idpublisher'] : null;
-        $this->container['isActive'] = isset($data['isActive']) ? $data['isActive'] : null;
+        $this->container['is_active'] = isset($data['is_active']) ? $data['is_active'] : null;
         $this->container['idstatus'] = isset($data['idstatus']) ? $data['idstatus'] : null;
         $this->container['idblockreason'] = isset($data['idblockreason']) ? $data['idblockreason'] : null;
-        $this->container['blockReason'] = isset($data['blockReason']) ? $data['blockReason'] : null;
+        $this->container['block_reason'] = isset($data['block_reason']) ? $data['block_reason'] : null;
     }
 
     /**
@@ -284,9 +284,9 @@ class SiteRequest implements ModelInterface, ArrayAccess
             $invalidProperties[] = "'idcategory' can't be null";
         }
         $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($this->container['isActive']) && !in_array($this->container['isActive'], $allowedValues, true)) {
+        if (!is_null($this->container['is_active']) && !in_array($this->container['is_active'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'isActive', must be one of '%s'",
+                "invalid value for 'is_active', must be one of '%s'",
                 implode("', '", $allowedValues)
             );
         }
@@ -422,34 +422,34 @@ class SiteRequest implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets isActive
+     * Gets is_active
      *
      * @return int|null
      */
     public function getIsActive()
     {
-        return $this->container['isActive'];
+        return $this->container['is_active'];
     }
 
     /**
-     * Sets isActive
+     * Sets is_active
      *
-     * @param int|null $isActive isActive
+     * @param int|null $is_active is_active
      *
      * @return $this
      */
-    public function setIsActive($isActive)
+    public function setIsActive($is_active)
     {
         $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($isActive) && !in_array($isActive, $allowedValues, true)) {
+        if (!is_null($is_active) && !in_array($is_active, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'isActive', must be one of '%s'",
+                    "Invalid value for 'is_active', must be one of '%s'",
                     implode("', '", $allowedValues)
                 )
             );
         }
-        $this->container['isActive'] = $isActive;
+        $this->container['is_active'] = $is_active;
 
         return $this;
     }
@@ -521,25 +521,25 @@ class SiteRequest implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets blockReason
+     * Gets block_reason
      *
      * @return string|null
      */
     public function getBlockReason()
     {
-        return $this->container['blockReason'];
+        return $this->container['block_reason'];
     }
 
     /**
-     * Sets blockReason
+     * Sets block_reason
      *
-     * @param string|null $blockReason blockReason
+     * @param string|null $block_reason block_reason
      *
      * @return $this
      */
-    public function setBlockReason($blockReason)
+    public function setBlockReason($block_reason)
     {
-        $this->container['blockReason'] = $blockReason;
+        $this->container['block_reason'] = $block_reason;
 
         return $this;
     }

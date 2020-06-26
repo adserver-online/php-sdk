@@ -115,15 +115,15 @@ class PubZonesApi
      * Create zone
      *
      * @param  int $idsite idsite (required)
-     * @param  \Adserver\Model\PubZoneRequest $pubZoneRequest pubZoneRequest (required)
+     * @param  \Adserver\Model\PubZoneRequest $pub_zone_request pub_zone_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Zone|\Adserver\Model\FormErrorResponse
      */
-    public function pubCreateZone($idsite, $pubZoneRequest)
+    public function pubCreateZone($idsite, $pub_zone_request)
     {
-        list($response) = $this->pubCreateZoneWithHttpInfo($idsite, $pubZoneRequest);
+        list($response) = $this->pubCreateZoneWithHttpInfo($idsite, $pub_zone_request);
         return $response;
     }
 
@@ -133,15 +133,15 @@ class PubZonesApi
      * Create zone
      *
      * @param  int $idsite (required)
-     * @param  \Adserver\Model\PubZoneRequest $pubZoneRequest (required)
+     * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Zone|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubCreateZoneWithHttpInfo($idsite, $pubZoneRequest)
+    public function pubCreateZoneWithHttpInfo($idsite, $pub_zone_request)
     {
-        $request = $this->pubCreateZoneRequest($idsite, $pubZoneRequest);
+        $request = $this->pubCreateZoneRequest($idsite, $pub_zone_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -242,14 +242,14 @@ class PubZonesApi
      * Create zone
      *
      * @param  int $idsite (required)
-     * @param  \Adserver\Model\PubZoneRequest $pubZoneRequest (required)
+     * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubCreateZoneAsync($idsite, $pubZoneRequest)
+    public function pubCreateZoneAsync($idsite, $pub_zone_request)
     {
-        return $this->pubCreateZoneAsyncWithHttpInfo($idsite, $pubZoneRequest)
+        return $this->pubCreateZoneAsyncWithHttpInfo($idsite, $pub_zone_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -263,15 +263,15 @@ class PubZonesApi
      * Create zone
      *
      * @param  int $idsite (required)
-     * @param  \Adserver\Model\PubZoneRequest $pubZoneRequest (required)
+     * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubCreateZoneAsyncWithHttpInfo($idsite, $pubZoneRequest)
+    public function pubCreateZoneAsyncWithHttpInfo($idsite, $pub_zone_request)
     {
         $returnType = '\Adserver\Model\Zone';
-        $request = $this->pubCreateZoneRequest($idsite, $pubZoneRequest);
+        $request = $this->pubCreateZoneRequest($idsite, $pub_zone_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -311,12 +311,12 @@ class PubZonesApi
      * Create request for operation 'pubCreateZone'
      *
      * @param  int $idsite (required)
-     * @param  \Adserver\Model\PubZoneRequest $pubZoneRequest (required)
+     * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function pubCreateZoneRequest($idsite, $pubZoneRequest)
+    protected function pubCreateZoneRequest($idsite, $pub_zone_request)
     {
         // verify the required parameter 'idsite' is set
         if ($idsite === null || (is_array($idsite) && count($idsite) === 0)) {
@@ -324,10 +324,10 @@ class PubZonesApi
                 'Missing the required parameter $idsite when calling pubCreateZone'
             );
         }
-        // verify the required parameter 'pubZoneRequest' is set
-        if ($pubZoneRequest === null || (is_array($pubZoneRequest) && count($pubZoneRequest) === 0)) {
+        // verify the required parameter 'pub_zone_request' is set
+        if ($pub_zone_request === null || (is_array($pub_zone_request) && count($pub_zone_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $pubZoneRequest when calling pubCreateZone'
+                'Missing the required parameter $pub_zone_request when calling pubCreateZone'
             );
         }
 
@@ -354,8 +354,8 @@ class PubZonesApi
 
         // body params
         $_tempBody = null;
-        if (isset($pubZoneRequest)) {
-            $_tempBody = $pubZoneRequest;
+        if (isset($pub_zone_request)) {
+            $_tempBody = $pub_zone_request;
         }
 
         if ($multipart) {
@@ -935,15 +935,15 @@ class PubZonesApi
      * Update zone
      *
      * @param  int $id id (required)
-     * @param  \Adserver\Model\PubZoneRequest $pubZoneRequest pubZoneRequest (required)
+     * @param  \Adserver\Model\PubZoneRequest $pub_zone_request pub_zone_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Zone|\Adserver\Model\FormErrorResponse
      */
-    public function pubUpdateZone($id, $pubZoneRequest)
+    public function pubUpdateZone($id, $pub_zone_request)
     {
-        list($response) = $this->pubUpdateZoneWithHttpInfo($id, $pubZoneRequest);
+        list($response) = $this->pubUpdateZoneWithHttpInfo($id, $pub_zone_request);
         return $response;
     }
 
@@ -953,15 +953,15 @@ class PubZonesApi
      * Update zone
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\PubZoneRequest $pubZoneRequest (required)
+     * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Zone|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubUpdateZoneWithHttpInfo($id, $pubZoneRequest)
+    public function pubUpdateZoneWithHttpInfo($id, $pub_zone_request)
     {
-        $request = $this->pubUpdateZoneRequest($id, $pubZoneRequest);
+        $request = $this->pubUpdateZoneRequest($id, $pub_zone_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1062,14 +1062,14 @@ class PubZonesApi
      * Update zone
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\PubZoneRequest $pubZoneRequest (required)
+     * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubUpdateZoneAsync($id, $pubZoneRequest)
+    public function pubUpdateZoneAsync($id, $pub_zone_request)
     {
-        return $this->pubUpdateZoneAsyncWithHttpInfo($id, $pubZoneRequest)
+        return $this->pubUpdateZoneAsyncWithHttpInfo($id, $pub_zone_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1083,15 +1083,15 @@ class PubZonesApi
      * Update zone
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\PubZoneRequest $pubZoneRequest (required)
+     * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubUpdateZoneAsyncWithHttpInfo($id, $pubZoneRequest)
+    public function pubUpdateZoneAsyncWithHttpInfo($id, $pub_zone_request)
     {
         $returnType = '\Adserver\Model\Zone';
-        $request = $this->pubUpdateZoneRequest($id, $pubZoneRequest);
+        $request = $this->pubUpdateZoneRequest($id, $pub_zone_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1131,12 +1131,12 @@ class PubZonesApi
      * Create request for operation 'pubUpdateZone'
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\PubZoneRequest $pubZoneRequest (required)
+     * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function pubUpdateZoneRequest($id, $pubZoneRequest)
+    protected function pubUpdateZoneRequest($id, $pub_zone_request)
     {
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
@@ -1144,10 +1144,10 @@ class PubZonesApi
                 'Missing the required parameter $id when calling pubUpdateZone'
             );
         }
-        // verify the required parameter 'pubZoneRequest' is set
-        if ($pubZoneRequest === null || (is_array($pubZoneRequest) && count($pubZoneRequest) === 0)) {
+        // verify the required parameter 'pub_zone_request' is set
+        if ($pub_zone_request === null || (is_array($pub_zone_request) && count($pub_zone_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $pubZoneRequest when calling pubUpdateZone'
+                'Missing the required parameter $pub_zone_request when calling pubUpdateZone'
             );
         }
 
@@ -1171,8 +1171,8 @@ class PubZonesApi
 
         // body params
         $_tempBody = null;
-        if (isset($pubZoneRequest)) {
-            $_tempBody = $pubZoneRequest;
+        if (isset($pub_zone_request)) {
+            $_tempBody = $pub_zone_request;
         }
 
         if ($multipart) {

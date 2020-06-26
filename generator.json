@@ -1,6 +1,5 @@
 {
     "invokerPackage": "Adserver",
     "hideGenerationTimestamp": true,
-    "srcBasePath": "./src",
-    "variableNamingConvention": "camelCase"
+    "srcBasePath": "./src"
 }

@@ -56,10 +56,10 @@ class UserRequest implements ModelInterface, ArrayAccess
         'phone' => 'string',
         'skype' => 'string',
         'timezone' => 'string',
-        'isActive' => 'int',
-        'sendPassword' => 'int',
-        'allowLogin' => 'int',
-        'campaignsPostModeration' => 'int',
+        'is_active' => 'int',
+        'send_password' => 'int',
+        'allow_login' => 'int',
+        'campaigns_post_moderation' => 'int',
         'idcloudrole' => 'int'
     ];
 
@@ -74,10 +74,10 @@ class UserRequest implements ModelInterface, ArrayAccess
         'phone' => null,
         'skype' => null,
         'timezone' => null,
-        'isActive' => null,
-        'sendPassword' => null,
-        'allowLogin' => null,
-        'campaignsPostModeration' => null,
+        'is_active' => null,
+        'send_password' => null,
+        'allow_login' => null,
+        'campaigns_post_moderation' => null,
         'idcloudrole' => null
     ];
 
@@ -113,10 +113,10 @@ class UserRequest implements ModelInterface, ArrayAccess
         'phone' => 'phone',
         'skype' => 'skype',
         'timezone' => 'timezone',
-        'isActive' => 'is_active',
-        'sendPassword' => 'send_password',
-        'allowLogin' => 'allow_login',
-        'campaignsPostModeration' => 'campaigns_post_moderation',
+        'is_active' => 'is_active',
+        'send_password' => 'send_password',
+        'allow_login' => 'allow_login',
+        'campaigns_post_moderation' => 'campaigns_post_moderation',
         'idcloudrole' => 'idcloudrole'
     ];
 
@@ -131,10 +131,10 @@ class UserRequest implements ModelInterface, ArrayAccess
         'phone' => 'setPhone',
         'skype' => 'setSkype',
         'timezone' => 'setTimezone',
-        'isActive' => 'setIsActive',
-        'sendPassword' => 'setSendPassword',
-        'allowLogin' => 'setAllowLogin',
-        'campaignsPostModeration' => 'setCampaignsPostModeration',
+        'is_active' => 'setIsActive',
+        'send_password' => 'setSendPassword',
+        'allow_login' => 'setAllowLogin',
+        'campaigns_post_moderation' => 'setCampaignsPostModeration',
         'idcloudrole' => 'setIdcloudrole'
     ];
 
@@ -149,10 +149,10 @@ class UserRequest implements ModelInterface, ArrayAccess
         'phone' => 'getPhone',
         'skype' => 'getSkype',
         'timezone' => 'getTimezone',
-        'isActive' => 'getIsActive',
-        'sendPassword' => 'getSendPassword',
-        'allowLogin' => 'getAllowLogin',
-        'campaignsPostModeration' => 'getCampaignsPostModeration',
+        'is_active' => 'getIsActive',
+        'send_password' => 'getSendPassword',
+        'allow_login' => 'getAllowLogin',
+        'campaigns_post_moderation' => 'getCampaignsPostModeration',
         'idcloudrole' => 'getIdcloudrole'
     ];
 
@@ -296,10 +296,10 @@ class UserRequest implements ModelInterface, ArrayAccess
         $this->container['phone'] = isset($data['phone']) ? $data['phone'] : null;
         $this->container['skype'] = isset($data['skype']) ? $data['skype'] : null;
         $this->container['timezone'] = isset($data['timezone']) ? $data['timezone'] : null;
-        $this->container['isActive'] = isset($data['isActive']) ? $data['isActive'] : null;
-        $this->container['sendPassword'] = isset($data['sendPassword']) ? $data['sendPassword'] : null;
-        $this->container['allowLogin'] = isset($data['allowLogin']) ? $data['allowLogin'] : null;
-        $this->container['campaignsPostModeration'] = isset($data['campaignsPostModeration']) ? $data['campaignsPostModeration'] : null;
+        $this->container['is_active'] = isset($data['is_active']) ? $data['is_active'] : null;
+        $this->container['send_password'] = isset($data['send_password']) ? $data['send_password'] : null;
+        $this->container['allow_login'] = isset($data['allow_login']) ? $data['allow_login'] : null;
+        $this->container['campaigns_post_moderation'] = isset($data['campaigns_post_moderation']) ? $data['campaigns_post_moderation'] : null;
         $this->container['idcloudrole'] = isset($data['idcloudrole']) ? $data['idcloudrole'] : null;
     }
 
@@ -319,33 +319,33 @@ class UserRequest implements ModelInterface, ArrayAccess
             $invalidProperties[] = "'email' can't be null";
         }
         $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($this->container['isActive']) && !in_array($this->container['isActive'], $allowedValues, true)) {
+        if (!is_null($this->container['is_active']) && !in_array($this->container['is_active'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'isActive', must be one of '%s'",
+                "invalid value for 'is_active', must be one of '%s'",
                 implode("', '", $allowedValues)
             );
         }
 
         $allowedValues = $this->getSendPasswordAllowableValues();
-        if (!is_null($this->container['sendPassword']) && !in_array($this->container['sendPassword'], $allowedValues, true)) {
+        if (!is_null($this->container['send_password']) && !in_array($this->container['send_password'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'sendPassword', must be one of '%s'",
+                "invalid value for 'send_password', must be one of '%s'",
                 implode("', '", $allowedValues)
             );
         }
 
         $allowedValues = $this->getAllowLoginAllowableValues();
-        if (!is_null($this->container['allowLogin']) && !in_array($this->container['allowLogin'], $allowedValues, true)) {
+        if (!is_null($this->container['allow_login']) && !in_array($this->container['allow_login'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'allowLogin', must be one of '%s'",
+                "invalid value for 'allow_login', must be one of '%s'",
                 implode("', '", $allowedValues)
             );
         }
 
         $allowedValues = $this->getCampaignsPostModerationAllowableValues();
-        if (!is_null($this->container['campaignsPostModeration']) && !in_array($this->container['campaignsPostModeration'], $allowedValues, true)) {
+        if (!is_null($this->container['campaigns_post_moderation']) && !in_array($this->container['campaigns_post_moderation'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'campaignsPostModeration', must be one of '%s'",
+                "invalid value for 'campaigns_post_moderation', must be one of '%s'",
                 implode("', '", $allowedValues)
             );
         }
@@ -494,133 +494,133 @@ class UserRequest implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets isActive
+     * Gets is_active
      *
      * @return int|null
      */
     public function getIsActive()
     {
-        return $this->container['isActive'];
+        return $this->container['is_active'];
     }
 
     /**
-     * Sets isActive
+     * Sets is_active
      *
-     * @param int|null $isActive isActive
+     * @param int|null $is_active is_active
      *
      * @return $this
      */
-    public function setIsActive($isActive)
+    public function setIsActive($is_active)
     {
         $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($isActive) && !in_array($isActive, $allowedValues, true)) {
+        if (!is_null($is_active) && !in_array($is_active, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'isActive', must be one of '%s'",
+                    "Invalid value for 'is_active', must be one of '%s'",
                     implode("', '", $allowedValues)
                 )
             );
         }
-        $this->container['isActive'] = $isActive;
+        $this->container['is_active'] = $is_active;
 
         return $this;
     }
 
     /**
-     * Gets sendPassword
+     * Gets send_password
      *
      * @return int|null
      */
     public function getSendPassword()
     {
-        return $this->container['sendPassword'];
+        return $this->container['send_password'];
     }
 
     /**
-     * Sets sendPassword
+     * Sets send_password
      *
-     * @param int|null $sendPassword Generate and send password to user's email
+     * @param int|null $send_password Generate and send password to user's email
      *
      * @return $this
      */
-    public function setSendPassword($sendPassword)
+    public function setSendPassword($send_password)
     {
         $allowedValues = $this->getSendPasswordAllowableValues();
-        if (!is_null($sendPassword) && !in_array($sendPassword, $allowedValues, true)) {
+        if (!is_null($send_password) && !in_array($send_password, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'sendPassword', must be one of '%s'",
+                    "Invalid value for 'send_password', must be one of '%s'",
                     implode("', '", $allowedValues)
                 )
             );
         }
-        $this->container['sendPassword'] = $sendPassword;
+        $this->container['send_password'] = $send_password;
 
         return $this;
     }
 
     /**
-     * Gets allowLogin
+     * Gets allow_login
      *
      * @return int|null
      */
     public function getAllowLogin()
     {
-        return $this->container['allowLogin'];
+        return $this->container['allow_login'];
     }
 
     /**
-     * Sets allowLogin
+     * Sets allow_login
      *
-     * @param int|null $allowLogin allowLogin
+     * @param int|null $allow_login allow_login
      *
      * @return $this
      */
-    public function setAllowLogin($allowLogin)
+    public function setAllowLogin($allow_login)
     {
         $allowedValues = $this->getAllowLoginAllowableValues();
-        if (!is_null($allowLogin) && !in_array($allowLogin, $allowedValues, true)) {
+        if (!is_null($allow_login) && !in_array($allow_login, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'allowLogin', must be one of '%s'",
+                    "Invalid value for 'allow_login', must be one of '%s'",
                     implode("', '", $allowedValues)
                 )
             );
         }
-        $this->container['allowLogin'] = $allowLogin;
+        $this->container['allow_login'] = $allow_login;
 
         return $this;
     }
 
     /**
-     * Gets campaignsPostModeration
+     * Gets campaigns_post_moderation
      *
      * @return int|null
      */
     public function getCampaignsPostModeration()
     {
-        return $this->container['campaignsPostModeration'];
+        return $this->container['campaigns_post_moderation'];
     }
 
     /**
-     * Sets campaignsPostModeration
+     * Sets campaigns_post_moderation
      *
-     * @param int|null $campaignsPostModeration campaignsPostModeration
+     * @param int|null $campaigns_post_moderation campaigns_post_moderation
      *
      * @return $this
      */
-    public function setCampaignsPostModeration($campaignsPostModeration)
+    public function setCampaignsPostModeration($campaigns_post_moderation)
     {
         $allowedValues = $this->getCampaignsPostModerationAllowableValues();
-        if (!is_null($campaignsPostModeration) && !in_array($campaignsPostModeration, $allowedValues, true)) {
+        if (!is_null($campaigns_post_moderation) && !in_array($campaigns_post_moderation, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'campaignsPostModeration', must be one of '%s'",
+                    "Invalid value for 'campaigns_post_moderation', must be one of '%s'",
                     implode("', '", $allowedValues)
                 )
             );
         }
-        $this->container['campaignsPostModeration'] = $campaignsPostModeration;
+        $this->container['campaigns_post_moderation'] = $campaigns_post_moderation;
 
         return $this;
     }

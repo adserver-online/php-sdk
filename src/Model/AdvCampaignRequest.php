@@ -56,8 +56,8 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess
         'idrunstatus' => 'int',
         'idpricemodel' => 'int',
         'rate' => 'float',
-        'startAt' => 'string',
-        'finishAt' => 'string',
+        'start_at' => 'string',
+        'finish_at' => 'string',
         'timetargeting' => 'string'
     ];
 
@@ -72,8 +72,8 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess
         'idrunstatus' => null,
         'idpricemodel' => null,
         'rate' => null,
-        'startAt' => null,
-        'finishAt' => null,
+        'start_at' => null,
+        'finish_at' => null,
         'timetargeting' => null
     ];
 
@@ -109,8 +109,8 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess
         'idrunstatus' => 'idrunstatus',
         'idpricemodel' => 'idpricemodel',
         'rate' => 'rate',
-        'startAt' => 'start_at',
-        'finishAt' => 'finish_at',
+        'start_at' => 'start_at',
+        'finish_at' => 'finish_at',
         'timetargeting' => 'timetargeting'
     ];
 
@@ -125,8 +125,8 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess
         'idrunstatus' => 'setIdrunstatus',
         'idpricemodel' => 'setIdpricemodel',
         'rate' => 'setRate',
-        'startAt' => 'setStartAt',
-        'finishAt' => 'setFinishAt',
+        'start_at' => 'setStartAt',
+        'finish_at' => 'setFinishAt',
         'timetargeting' => 'setTimetargeting'
     ];
 
@@ -141,8 +141,8 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess
         'idrunstatus' => 'getIdrunstatus',
         'idpricemodel' => 'getIdpricemodel',
         'rate' => 'getRate',
-        'startAt' => 'getStartAt',
-        'finishAt' => 'getFinishAt',
+        'start_at' => 'getStartAt',
+        'finish_at' => 'getFinishAt',
         'timetargeting' => 'getTimetargeting'
     ];
 
@@ -228,8 +228,8 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess
         $this->container['idrunstatus'] = isset($data['idrunstatus']) ? $data['idrunstatus'] : null;
         $this->container['idpricemodel'] = isset($data['idpricemodel']) ? $data['idpricemodel'] : null;
         $this->container['rate'] = isset($data['rate']) ? $data['rate'] : null;
-        $this->container['startAt'] = isset($data['startAt']) ? $data['startAt'] : null;
-        $this->container['finishAt'] = isset($data['finishAt']) ? $data['finishAt'] : null;
+        $this->container['start_at'] = isset($data['start_at']) ? $data['start_at'] : null;
+        $this->container['finish_at'] = isset($data['finish_at']) ? $data['finish_at'] : null;
         $this->container['timetargeting'] = isset($data['timetargeting']) ? $data['timetargeting'] : null;
     }
 
@@ -395,49 +395,49 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets startAt
+     * Gets start_at
      *
      * @return string|null
      */
     public function getStartAt()
     {
-        return $this->container['startAt'];
+        return $this->container['start_at'];
     }
 
     /**
-     * Sets startAt
+     * Sets start_at
      *
-     * @param string|null $startAt startAt
+     * @param string|null $start_at start_at
      *
      * @return $this
      */
-    public function setStartAt($startAt)
+    public function setStartAt($start_at)
     {
-        $this->container['startAt'] = $startAt;
+        $this->container['start_at'] = $start_at;
 
         return $this;
     }
 
     /**
-     * Gets finishAt
+     * Gets finish_at
      *
      * @return string|null
      */
     public function getFinishAt()
     {
-        return $this->container['finishAt'];
+        return $this->container['finish_at'];
     }
 
     /**
-     * Sets finishAt
+     * Sets finish_at
      *
-     * @param string|null $finishAt finishAt
+     * @param string|null $finish_at finish_at
      *
      * @return $this
      */
-    public function setFinishAt($finishAt)
+    public function setFinishAt($finish_at)
     {
-        $this->container['finishAt'] = $finishAt;
+        $this->container['finish_at'] = $finish_at;
 
         return $this;
     }

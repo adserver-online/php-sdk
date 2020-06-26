@@ -1,6 +1,6 @@
 <?php
 /**
- * StatsCustomRtbItem
+ * Dict
  *
  * PHP version 5
  *
@@ -27,14 +27,14 @@ use \Adserver\ObjectSerializer;
 use \ArrayAccess;
 
 /**
- * StatsCustomRtbItem Class Doc Comment
+ * Dict Class Doc Comment
  *
  * @category Class
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class StatsCustomRtbItem implements ModelInterface, ArrayAccess
+class Dict implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -43,7 +43,7 @@ class StatsCustomRtbItem implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $openAPIModelName = 'StatsCustomRtbItem';
+    protected static $openAPIModelName = 'Dict';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -51,11 +51,10 @@ class StatsCustomRtbItem implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $openAPITypes = [
-        'date' => 'string',
-        'tag_id' => 'string',
-        'impressions' => 'int',
-        'clicks' => 'int',
-        'revenue' => 'float'
+        'categories' => 'map[string,string]',
+        'ad_formats' => 'map[string,string]',
+        'zone_formats' => 'map[string,string]',
+        'price_models' => 'map[string,string]'
     ];
 
     /**
@@ -64,11 +63,10 @@ class StatsCustomRtbItem implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $openAPIFormats = [
-        'date' => null,
-        'tag_id' => null,
-        'impressions' => null,
-        'clicks' => null,
-        'revenue' => null
+        'categories' => null,
+        'ad_formats' => null,
+        'zone_formats' => null,
+        'price_models' => null
     ];
 
     /**
@@ -98,11 +96,10 @@ class StatsCustomRtbItem implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'date' => 'date',
-        'tag_id' => 'tagId',
-        'impressions' => 'impressions',
-        'clicks' => 'clicks',
-        'revenue' => 'revenue'
+        'categories' => 'categories',
+        'ad_formats' => 'ad_formats',
+        'zone_formats' => 'zone_formats',
+        'price_models' => 'price_models'
     ];
 
     /**
@@ -111,11 +108,10 @@ class StatsCustomRtbItem implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'date' => 'setDate',
-        'tag_id' => 'setTagId',
-        'impressions' => 'setImpressions',
-        'clicks' => 'setClicks',
-        'revenue' => 'setRevenue'
+        'categories' => 'setCategories',
+        'ad_formats' => 'setAdFormats',
+        'zone_formats' => 'setZoneFormats',
+        'price_models' => 'setPriceModels'
     ];
 
     /**
@@ -124,11 +120,10 @@ class StatsCustomRtbItem implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'date' => 'getDate',
-        'tag_id' => 'getTagId',
-        'impressions' => 'getImpressions',
-        'clicks' => 'getClicks',
-        'revenue' => 'getRevenue'
+        'categories' => 'getCategories',
+        'ad_formats' => 'getAdFormats',
+        'zone_formats' => 'getZoneFormats',
+        'price_models' => 'getPriceModels'
     ];
 
     /**
@@ -191,11 +186,10 @@ class StatsCustomRtbItem implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['date'] = isset($data['date']) ? $data['date'] : null;
-        $this->container['tag_id'] = isset($data['tag_id']) ? $data['tag_id'] : null;
-        $this->container['impressions'] = isset($data['impressions']) ? $data['impressions'] : null;
-        $this->container['clicks'] = isset($data['clicks']) ? $data['clicks'] : null;
-        $this->container['revenue'] = isset($data['revenue']) ? $data['revenue'] : null;
+        $this->container['categories'] = isset($data['categories']) ? $data['categories'] : null;
+        $this->container['ad_formats'] = isset($data['ad_formats']) ? $data['ad_formats'] : null;
+        $this->container['zone_formats'] = isset($data['zone_formats']) ? $data['zone_formats'] : null;
+        $this->container['price_models'] = isset($data['price_models']) ? $data['price_models'] : null;
     }
 
     /**
@@ -223,121 +217,97 @@ class StatsCustomRtbItem implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets date
+     * Gets categories
      *
-     * @return string|null
+     * @return map[string,string]|null
      */
-    public function getDate()
+    public function getCategories()
     {
-        return $this->container['date'];
+        return $this->container['categories'];
     }
 
     /**
-     * Sets date
+     * Sets categories
      *
-     * @param string|null $date date
+     * @param map[string,string]|null $categories categories
      *
      * @return $this
      */
-    public function setDate($date)
+    public function setCategories($categories)
     {
-        $this->container['date'] = $date;
+        $this->container['categories'] = $categories;
 
         return $this;
     }
 
     /**
-     * Gets tag_id
+     * Gets ad_formats
      *
-     * @return string|null
+     * @return map[string,string]|null
      */
-    public function getTagId()
+    public function getAdFormats()
     {
-        return $this->container['tag_id'];
+        return $this->container['ad_formats'];
     }
 
     /**
-     * Sets tag_id
+     * Sets ad_formats
      *
-     * @param string|null $tag_id tag_id
+     * @param map[string,string]|null $ad_formats ad_formats
      *
      * @return $this
      */
-    public function setTagId($tag_id)
+    public function setAdFormats($ad_formats)
     {
-        $this->container['tag_id'] = $tag_id;
+        $this->container['ad_formats'] = $ad_formats;
 
         return $this;
     }
 
     /**
-     * Gets impressions
+     * Gets zone_formats
      *
-     * @return int|null
+     * @return map[string,string]|null
      */
-    public function getImpressions()
+    public function getZoneFormats()
     {
-        return $this->container['impressions'];
+        return $this->container['zone_formats'];
     }
 
     /**
-     * Sets impressions
+     * Sets zone_formats
      *
-     * @param int|null $impressions impressions
+     * @param map[string,string]|null $zone_formats zone_formats
      *
      * @return $this
      */
-    public function setImpressions($impressions)
+    public function setZoneFormats($zone_formats)
     {
-        $this->container['impressions'] = $impressions;
+        $this->container['zone_formats'] = $zone_formats;
 
         return $this;
     }
 
     /**
-     * Gets clicks
+     * Gets price_models
      *
-     * @return int|null
+     * @return map[string,string]|null
      */
-    public function getClicks()
+    public function getPriceModels()
     {
-        return $this->container['clicks'];
+        return $this->container['price_models'];
     }
 
     /**
-     * Sets clicks
+     * Sets price_models
      *
-     * @param int|null $clicks clicks
+     * @param map[string,string]|null $price_models price_models
      *
      * @return $this
      */
-    public function setClicks($clicks)
+    public function setPriceModels($price_models)
     {
-        $this->container['clicks'] = $clicks;
-
-        return $this;
-    }
-
-    /**
-     * Gets revenue
-     *
-     * @return float|null
-     */
-    public function getRevenue()
-    {
-        return $this->container['revenue'];
-    }
-
-    /**
-     * Sets revenue
-     *
-     * @param float|null $revenue revenue
-     *
-     * @return $this
-     */
-    public function setRevenue($revenue)
-    {
-        $this->container['revenue'] = $revenue;
+        $this->container['price_models'] = $price_models;
 
         return $this;
     }

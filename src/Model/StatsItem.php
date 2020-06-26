@@ -54,15 +54,15 @@ class StatsItem implements ModelInterface, ArrayAccess
         'dimension' => 'string',
         'iddimension' => 'int',
         'impressions' => 'int',
-        'impressionsUnique' => 'int',
+        'impressions_unique' => 'int',
         'clicks' => 'int',
-        'clicksUnique' => 'int',
+        'clicks_unique' => 'int',
         'conversions' => 'int',
         'cpm' => 'float',
         'cpc' => 'float',
         'cpa' => 'float',
         'amount' => 'float',
-        'amountPub' => 'float'
+        'amount_pub' => 'float'
     ];
 
     /**
@@ -74,15 +74,15 @@ class StatsItem implements ModelInterface, ArrayAccess
         'dimension' => null,
         'iddimension' => null,
         'impressions' => null,
-        'impressionsUnique' => null,
+        'impressions_unique' => null,
         'clicks' => null,
-        'clicksUnique' => null,
+        'clicks_unique' => null,
         'conversions' => null,
         'cpm' => null,
         'cpc' => null,
         'cpa' => null,
         'amount' => null,
-        'amountPub' => null
+        'amount_pub' => null
     ];
 
     /**
@@ -115,15 +115,15 @@ class StatsItem implements ModelInterface, ArrayAccess
         'dimension' => 'dimension',
         'iddimension' => 'iddimension',
         'impressions' => 'impressions',
-        'impressionsUnique' => 'impressions_unique',
+        'impressions_unique' => 'impressions_unique',
         'clicks' => 'clicks',
-        'clicksUnique' => 'clicks_unique',
+        'clicks_unique' => 'clicks_unique',
         'conversions' => 'conversions',
         'cpm' => 'cpm',
         'cpc' => 'cpc',
         'cpa' => 'cpa',
         'amount' => 'amount',
-        'amountPub' => 'amount_pub'
+        'amount_pub' => 'amount_pub'
     ];
 
     /**
@@ -135,15 +135,15 @@ class StatsItem implements ModelInterface, ArrayAccess
         'dimension' => 'setDimension',
         'iddimension' => 'setIddimension',
         'impressions' => 'setImpressions',
-        'impressionsUnique' => 'setImpressionsUnique',
+        'impressions_unique' => 'setImpressionsUnique',
         'clicks' => 'setClicks',
-        'clicksUnique' => 'setClicksUnique',
+        'clicks_unique' => 'setClicksUnique',
         'conversions' => 'setConversions',
         'cpm' => 'setCpm',
         'cpc' => 'setCpc',
         'cpa' => 'setCpa',
         'amount' => 'setAmount',
-        'amountPub' => 'setAmountPub'
+        'amount_pub' => 'setAmountPub'
     ];
 
     /**
@@ -155,15 +155,15 @@ class StatsItem implements ModelInterface, ArrayAccess
         'dimension' => 'getDimension',
         'iddimension' => 'getIddimension',
         'impressions' => 'getImpressions',
-        'impressionsUnique' => 'getImpressionsUnique',
+        'impressions_unique' => 'getImpressionsUnique',
         'clicks' => 'getClicks',
-        'clicksUnique' => 'getClicksUnique',
+        'clicks_unique' => 'getClicksUnique',
         'conversions' => 'getConversions',
         'cpm' => 'getCpm',
         'cpc' => 'getCpc',
         'cpa' => 'getCpa',
         'amount' => 'getAmount',
-        'amountPub' => 'getAmountPub'
+        'amount_pub' => 'getAmountPub'
     ];
 
     /**
@@ -229,15 +229,15 @@ class StatsItem implements ModelInterface, ArrayAccess
         $this->container['dimension'] = isset($data['dimension']) ? $data['dimension'] : null;
         $this->container['iddimension'] = isset($data['iddimension']) ? $data['iddimension'] : null;
         $this->container['impressions'] = isset($data['impressions']) ? $data['impressions'] : null;
-        $this->container['impressionsUnique'] = isset($data['impressionsUnique']) ? $data['impressionsUnique'] : null;
+        $this->container['impressions_unique'] = isset($data['impressions_unique']) ? $data['impressions_unique'] : null;
         $this->container['clicks'] = isset($data['clicks']) ? $data['clicks'] : null;
-        $this->container['clicksUnique'] = isset($data['clicksUnique']) ? $data['clicksUnique'] : null;
+        $this->container['clicks_unique'] = isset($data['clicks_unique']) ? $data['clicks_unique'] : null;
         $this->container['conversions'] = isset($data['conversions']) ? $data['conversions'] : null;
         $this->container['cpm'] = isset($data['cpm']) ? $data['cpm'] : null;
         $this->container['cpc'] = isset($data['cpc']) ? $data['cpc'] : null;
         $this->container['cpa'] = isset($data['cpa']) ? $data['cpa'] : null;
         $this->container['amount'] = isset($data['amount']) ? $data['amount'] : null;
-        $this->container['amountPub'] = isset($data['amountPub']) ? $data['amountPub'] : null;
+        $this->container['amount_pub'] = isset($data['amount_pub']) ? $data['amount_pub'] : null;
     }
 
     /**
@@ -337,25 +337,25 @@ class StatsItem implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets impressionsUnique
+     * Gets impressions_unique
      *
      * @return int|null
      */
     public function getImpressionsUnique()
     {
-        return $this->container['impressionsUnique'];
+        return $this->container['impressions_unique'];
     }
 
     /**
-     * Sets impressionsUnique
+     * Sets impressions_unique
      *
-     * @param int|null $impressionsUnique impressionsUnique
+     * @param int|null $impressions_unique impressions_unique
      *
      * @return $this
      */
-    public function setImpressionsUnique($impressionsUnique)
+    public function setImpressionsUnique($impressions_unique)
     {
-        $this->container['impressionsUnique'] = $impressionsUnique;
+        $this->container['impressions_unique'] = $impressions_unique;
 
         return $this;
     }
@@ -385,25 +385,25 @@ class StatsItem implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets clicksUnique
+     * Gets clicks_unique
      *
      * @return int|null
      */
     public function getClicksUnique()
     {
-        return $this->container['clicksUnique'];
+        return $this->container['clicks_unique'];
     }
 
     /**
-     * Sets clicksUnique
+     * Sets clicks_unique
      *
-     * @param int|null $clicksUnique clicksUnique
+     * @param int|null $clicks_unique clicks_unique
      *
      * @return $this
      */
-    public function setClicksUnique($clicksUnique)
+    public function setClicksUnique($clicks_unique)
     {
-        $this->container['clicksUnique'] = $clicksUnique;
+        $this->container['clicks_unique'] = $clicks_unique;
 
         return $this;
     }
@@ -529,25 +529,25 @@ class StatsItem implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets amountPub
+     * Gets amount_pub
      *
      * @return float|null
      */
     public function getAmountPub()
     {
-        return $this->container['amountPub'];
+        return $this->container['amount_pub'];
     }
 
     /**
-     * Sets amountPub
+     * Sets amount_pub
      *
-     * @param float|null $amountPub amountPub
+     * @param float|null $amount_pub amount_pub
      *
      * @return $this
      */
-    public function setAmountPub($amountPub)
+    public function setAmountPub($amount_pub)
     {
-        $this->container['amountPub'] = $amountPub;
+        $this->container['amount_pub'] = $amount_pub;
 
         return $this;
     }

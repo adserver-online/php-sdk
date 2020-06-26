@@ -114,15 +114,15 @@ class AdvCampaignsApi
      *
      * Create campaign
      *
-     * @param  \Adserver\Model\AdvCampaignRequest $advCampaignRequest advCampaignRequest (required)
+     * @param  \Adserver\Model\AdvCampaignRequest $adv_campaign_request adv_campaign_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Campaign|\Adserver\Model\FormErrorResponse
      */
-    public function advCreateCampaign($advCampaignRequest)
+    public function advCreateCampaign($adv_campaign_request)
     {
-        list($response) = $this->advCreateCampaignWithHttpInfo($advCampaignRequest);
+        list($response) = $this->advCreateCampaignWithHttpInfo($adv_campaign_request);
         return $response;
     }
 
@@ -131,15 +131,15 @@ class AdvCampaignsApi
      *
      * Create campaign
      *
-     * @param  \Adserver\Model\AdvCampaignRequest $advCampaignRequest (required)
+     * @param  \Adserver\Model\AdvCampaignRequest $adv_campaign_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Campaign|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function advCreateCampaignWithHttpInfo($advCampaignRequest)
+    public function advCreateCampaignWithHttpInfo($adv_campaign_request)
     {
-        $request = $this->advCreateCampaignRequest($advCampaignRequest);
+        $request = $this->advCreateCampaignRequest($adv_campaign_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -239,14 +239,14 @@ class AdvCampaignsApi
      *
      * Create campaign
      *
-     * @param  \Adserver\Model\AdvCampaignRequest $advCampaignRequest (required)
+     * @param  \Adserver\Model\AdvCampaignRequest $adv_campaign_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advCreateCampaignAsync($advCampaignRequest)
+    public function advCreateCampaignAsync($adv_campaign_request)
     {
-        return $this->advCreateCampaignAsyncWithHttpInfo($advCampaignRequest)
+        return $this->advCreateCampaignAsyncWithHttpInfo($adv_campaign_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -259,15 +259,15 @@ class AdvCampaignsApi
      *
      * Create campaign
      *
-     * @param  \Adserver\Model\AdvCampaignRequest $advCampaignRequest (required)
+     * @param  \Adserver\Model\AdvCampaignRequest $adv_campaign_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advCreateCampaignAsyncWithHttpInfo($advCampaignRequest)
+    public function advCreateCampaignAsyncWithHttpInfo($adv_campaign_request)
     {
         $returnType = '\Adserver\Model\Campaign';
-        $request = $this->advCreateCampaignRequest($advCampaignRequest);
+        $request = $this->advCreateCampaignRequest($adv_campaign_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -306,17 +306,17 @@ class AdvCampaignsApi
     /**
      * Create request for operation 'advCreateCampaign'
      *
-     * @param  \Adserver\Model\AdvCampaignRequest $advCampaignRequest (required)
+     * @param  \Adserver\Model\AdvCampaignRequest $adv_campaign_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function advCreateCampaignRequest($advCampaignRequest)
+    protected function advCreateCampaignRequest($adv_campaign_request)
     {
-        // verify the required parameter 'advCampaignRequest' is set
-        if ($advCampaignRequest === null || (is_array($advCampaignRequest) && count($advCampaignRequest) === 0)) {
+        // verify the required parameter 'adv_campaign_request' is set
+        if ($adv_campaign_request === null || (is_array($adv_campaign_request) && count($adv_campaign_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $advCampaignRequest when calling advCreateCampaign'
+                'Missing the required parameter $adv_campaign_request when calling advCreateCampaign'
             );
         }
 
@@ -332,8 +332,8 @@ class AdvCampaignsApi
 
         // body params
         $_tempBody = null;
-        if (isset($advCampaignRequest)) {
-            $_tempBody = $advCampaignRequest;
+        if (isset($adv_campaign_request)) {
+            $_tempBody = $adv_campaign_request;
         }
 
         if ($multipart) {
@@ -913,15 +913,15 @@ class AdvCampaignsApi
      * Update campaign
      *
      * @param  int $id id (required)
-     * @param  \Adserver\Model\AdvCampaignRequest $advCampaignRequest advCampaignRequest (required)
+     * @param  \Adserver\Model\AdvCampaignRequest $adv_campaign_request adv_campaign_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Campaign|\Adserver\Model\FormErrorResponse
      */
-    public function advUpdateCampaign($id, $advCampaignRequest)
+    public function advUpdateCampaign($id, $adv_campaign_request)
     {
-        list($response) = $this->advUpdateCampaignWithHttpInfo($id, $advCampaignRequest);
+        list($response) = $this->advUpdateCampaignWithHttpInfo($id, $adv_campaign_request);
         return $response;
     }
 
@@ -931,15 +931,15 @@ class AdvCampaignsApi
      * Update campaign
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\AdvCampaignRequest $advCampaignRequest (required)
+     * @param  \Adserver\Model\AdvCampaignRequest $adv_campaign_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Campaign|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function advUpdateCampaignWithHttpInfo($id, $advCampaignRequest)
+    public function advUpdateCampaignWithHttpInfo($id, $adv_campaign_request)
     {
-        $request = $this->advUpdateCampaignRequest($id, $advCampaignRequest);
+        $request = $this->advUpdateCampaignRequest($id, $adv_campaign_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1040,14 +1040,14 @@ class AdvCampaignsApi
      * Update campaign
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\AdvCampaignRequest $advCampaignRequest (required)
+     * @param  \Adserver\Model\AdvCampaignRequest $adv_campaign_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advUpdateCampaignAsync($id, $advCampaignRequest)
+    public function advUpdateCampaignAsync($id, $adv_campaign_request)
     {
-        return $this->advUpdateCampaignAsyncWithHttpInfo($id, $advCampaignRequest)
+        return $this->advUpdateCampaignAsyncWithHttpInfo($id, $adv_campaign_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1061,15 +1061,15 @@ class AdvCampaignsApi
      * Update campaign
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\AdvCampaignRequest $advCampaignRequest (required)
+     * @param  \Adserver\Model\AdvCampaignRequest $adv_campaign_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advUpdateCampaignAsyncWithHttpInfo($id, $advCampaignRequest)
+    public function advUpdateCampaignAsyncWithHttpInfo($id, $adv_campaign_request)
     {
         $returnType = '\Adserver\Model\Campaign';
-        $request = $this->advUpdateCampaignRequest($id, $advCampaignRequest);
+        $request = $this->advUpdateCampaignRequest($id, $adv_campaign_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1109,12 +1109,12 @@ class AdvCampaignsApi
      * Create request for operation 'advUpdateCampaign'
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\AdvCampaignRequest $advCampaignRequest (required)
+     * @param  \Adserver\Model\AdvCampaignRequest $adv_campaign_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function advUpdateCampaignRequest($id, $advCampaignRequest)
+    protected function advUpdateCampaignRequest($id, $adv_campaign_request)
     {
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
@@ -1122,10 +1122,10 @@ class AdvCampaignsApi
                 'Missing the required parameter $id when calling advUpdateCampaign'
             );
         }
-        // verify the required parameter 'advCampaignRequest' is set
-        if ($advCampaignRequest === null || (is_array($advCampaignRequest) && count($advCampaignRequest) === 0)) {
+        // verify the required parameter 'adv_campaign_request' is set
+        if ($adv_campaign_request === null || (is_array($adv_campaign_request) && count($adv_campaign_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $advCampaignRequest when calling advUpdateCampaign'
+                'Missing the required parameter $adv_campaign_request when calling advUpdateCampaign'
             );
         }
 
@@ -1149,8 +1149,8 @@ class AdvCampaignsApi
 
         // body params
         $_tempBody = null;
-        if (isset($advCampaignRequest)) {
-            $_tempBody = $advCampaignRequest;
+        if (isset($adv_campaign_request)) {
+            $_tempBody = $adv_campaign_request;
         }
 
         if ($multipart) {

@@ -53,7 +53,7 @@ class AdBannerHtml implements ModelInterface, ArrayAccess
       */
     protected static $openAPITypes = [
         'iddimension' => 'int',
-        'contentHtml' => 'string'
+        'content_html' => 'string'
     ];
 
     /**
@@ -63,7 +63,7 @@ class AdBannerHtml implements ModelInterface, ArrayAccess
       */
     protected static $openAPIFormats = [
         'iddimension' => null,
-        'contentHtml' => null
+        'content_html' => null
     ];
 
     /**
@@ -94,7 +94,7 @@ class AdBannerHtml implements ModelInterface, ArrayAccess
      */
     protected static $attributeMap = [
         'iddimension' => 'iddimension',
-        'contentHtml' => 'content_html'
+        'content_html' => 'content_html'
     ];
 
     /**
@@ -104,7 +104,7 @@ class AdBannerHtml implements ModelInterface, ArrayAccess
      */
     protected static $setters = [
         'iddimension' => 'setIddimension',
-        'contentHtml' => 'setContentHtml'
+        'content_html' => 'setContentHtml'
     ];
 
     /**
@@ -114,7 +114,7 @@ class AdBannerHtml implements ModelInterface, ArrayAccess
      */
     protected static $getters = [
         'iddimension' => 'getIddimension',
-        'contentHtml' => 'getContentHtml'
+        'content_html' => 'getContentHtml'
     ];
 
     /**
@@ -178,7 +178,7 @@ class AdBannerHtml implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         $this->container['iddimension'] = isset($data['iddimension']) ? $data['iddimension'] : null;
-        $this->container['contentHtml'] = isset($data['contentHtml']) ? $data['contentHtml'] : null;
+        $this->container['content_html'] = isset($data['content_html']) ? $data['content_html'] : null;
     }
 
     /**
@@ -230,25 +230,25 @@ class AdBannerHtml implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets contentHtml
+     * Gets content_html
      *
      * @return string|null
      */
     public function getContentHtml()
     {
-        return $this->container['contentHtml'];
+        return $this->container['content_html'];
     }
 
     /**
-     * Sets contentHtml
+     * Sets content_html
      *
-     * @param string|null $contentHtml HTML-content
+     * @param string|null $content_html HTML-content
      *
      * @return $this
      */
-    public function setContentHtml($contentHtml)
+    public function setContentHtml($content_html)
     {
-        $this->container['contentHtml'] = $contentHtml;
+        $this->container['content_html'] = $content_html;
 
         return $this;
     }

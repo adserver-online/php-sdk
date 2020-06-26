@@ -54,10 +54,10 @@ class AdVastLinear implements ModelInterface, ArrayAccess
     protected static $openAPITypes = [
         'file' => 'string',
         'skipoffset' => 'int',
-        'skipoffsetType' => 'string',
-        'allowSkip' => 'int',
-        'maintainAspectRatio' => 'int',
-        'videoScalable' => 'int'
+        'skipoffset_type' => 'string',
+        'allow_skip' => 'int',
+        'maintain_aspect_ratio' => 'int',
+        'video_scalable' => 'int'
     ];
 
     /**
@@ -68,10 +68,10 @@ class AdVastLinear implements ModelInterface, ArrayAccess
     protected static $openAPIFormats = [
         'file' => null,
         'skipoffset' => null,
-        'skipoffsetType' => null,
-        'allowSkip' => null,
-        'maintainAspectRatio' => null,
-        'videoScalable' => null
+        'skipoffset_type' => null,
+        'allow_skip' => null,
+        'maintain_aspect_ratio' => null,
+        'video_scalable' => null
     ];
 
     /**
@@ -103,10 +103,10 @@ class AdVastLinear implements ModelInterface, ArrayAccess
     protected static $attributeMap = [
         'file' => 'file',
         'skipoffset' => 'skipoffset',
-        'skipoffsetType' => 'skipoffset_type',
-        'allowSkip' => 'allow_skip',
-        'maintainAspectRatio' => 'maintain_aspect_ratio',
-        'videoScalable' => 'video_scalable'
+        'skipoffset_type' => 'skipoffset_type',
+        'allow_skip' => 'allow_skip',
+        'maintain_aspect_ratio' => 'maintain_aspect_ratio',
+        'video_scalable' => 'video_scalable'
     ];
 
     /**
@@ -117,10 +117,10 @@ class AdVastLinear implements ModelInterface, ArrayAccess
     protected static $setters = [
         'file' => 'setFile',
         'skipoffset' => 'setSkipoffset',
-        'skipoffsetType' => 'setSkipoffsetType',
-        'allowSkip' => 'setAllowSkip',
-        'maintainAspectRatio' => 'setMaintainAspectRatio',
-        'videoScalable' => 'setVideoScalable'
+        'skipoffset_type' => 'setSkipoffsetType',
+        'allow_skip' => 'setAllowSkip',
+        'maintain_aspect_ratio' => 'setMaintainAspectRatio',
+        'video_scalable' => 'setVideoScalable'
     ];
 
     /**
@@ -131,10 +131,10 @@ class AdVastLinear implements ModelInterface, ArrayAccess
     protected static $getters = [
         'file' => 'getFile',
         'skipoffset' => 'getSkipoffset',
-        'skipoffsetType' => 'getSkipoffsetType',
-        'allowSkip' => 'getAllowSkip',
-        'maintainAspectRatio' => 'getMaintainAspectRatio',
-        'videoScalable' => 'getVideoScalable'
+        'skipoffset_type' => 'getSkipoffsetType',
+        'allow_skip' => 'getAllowSkip',
+        'maintain_aspect_ratio' => 'getMaintainAspectRatio',
+        'video_scalable' => 'getVideoScalable'
     ];
 
     /**
@@ -259,10 +259,10 @@ class AdVastLinear implements ModelInterface, ArrayAccess
     {
         $this->container['file'] = isset($data['file']) ? $data['file'] : null;
         $this->container['skipoffset'] = isset($data['skipoffset']) ? $data['skipoffset'] : null;
-        $this->container['skipoffsetType'] = isset($data['skipoffsetType']) ? $data['skipoffsetType'] : null;
-        $this->container['allowSkip'] = isset($data['allowSkip']) ? $data['allowSkip'] : null;
-        $this->container['maintainAspectRatio'] = isset($data['maintainAspectRatio']) ? $data['maintainAspectRatio'] : null;
-        $this->container['videoScalable'] = isset($data['videoScalable']) ? $data['videoScalable'] : null;
+        $this->container['skipoffset_type'] = isset($data['skipoffset_type']) ? $data['skipoffset_type'] : null;
+        $this->container['allow_skip'] = isset($data['allow_skip']) ? $data['allow_skip'] : null;
+        $this->container['maintain_aspect_ratio'] = isset($data['maintain_aspect_ratio']) ? $data['maintain_aspect_ratio'] : null;
+        $this->container['video_scalable'] = isset($data['video_scalable']) ? $data['video_scalable'] : null;
     }
 
     /**
@@ -275,33 +275,33 @@ class AdVastLinear implements ModelInterface, ArrayAccess
         $invalidProperties = [];
 
         $allowedValues = $this->getSkipoffsetTypeAllowableValues();
-        if (!is_null($this->container['skipoffsetType']) && !in_array($this->container['skipoffsetType'], $allowedValues, true)) {
+        if (!is_null($this->container['skipoffset_type']) && !in_array($this->container['skipoffset_type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'skipoffsetType', must be one of '%s'",
+                "invalid value for 'skipoffset_type', must be one of '%s'",
                 implode("', '", $allowedValues)
             );
         }
 
         $allowedValues = $this->getAllowSkipAllowableValues();
-        if (!is_null($this->container['allowSkip']) && !in_array($this->container['allowSkip'], $allowedValues, true)) {
+        if (!is_null($this->container['allow_skip']) && !in_array($this->container['allow_skip'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'allowSkip', must be one of '%s'",
+                "invalid value for 'allow_skip', must be one of '%s'",
                 implode("', '", $allowedValues)
             );
         }
 
         $allowedValues = $this->getMaintainAspectRatioAllowableValues();
-        if (!is_null($this->container['maintainAspectRatio']) && !in_array($this->container['maintainAspectRatio'], $allowedValues, true)) {
+        if (!is_null($this->container['maintain_aspect_ratio']) && !in_array($this->container['maintain_aspect_ratio'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'maintainAspectRatio', must be one of '%s'",
+                "invalid value for 'maintain_aspect_ratio', must be one of '%s'",
                 implode("', '", $allowedValues)
             );
         }
 
         $allowedValues = $this->getVideoScalableAllowableValues();
-        if (!is_null($this->container['videoScalable']) && !in_array($this->container['videoScalable'], $allowedValues, true)) {
+        if (!is_null($this->container['video_scalable']) && !in_array($this->container['video_scalable'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'videoScalable', must be one of '%s'",
+                "invalid value for 'video_scalable', must be one of '%s'",
                 implode("', '", $allowedValues)
             );
         }
@@ -370,133 +370,133 @@ class AdVastLinear implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets skipoffsetType
+     * Gets skipoffset_type
      *
      * @return string|null
      */
     public function getSkipoffsetType()
     {
-        return $this->container['skipoffsetType'];
+        return $this->container['skipoffset_type'];
     }
 
     /**
-     * Sets skipoffsetType
+     * Sets skipoffset_type
      *
-     * @param string|null $skipoffsetType skipoffsetType
+     * @param string|null $skipoffset_type skipoffset_type
      *
      * @return $this
      */
-    public function setSkipoffsetType($skipoffsetType)
+    public function setSkipoffsetType($skipoffset_type)
     {
         $allowedValues = $this->getSkipoffsetTypeAllowableValues();
-        if (!is_null($skipoffsetType) && !in_array($skipoffsetType, $allowedValues, true)) {
+        if (!is_null($skipoffset_type) && !in_array($skipoffset_type, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'skipoffsetType', must be one of '%s'",
+                    "Invalid value for 'skipoffset_type', must be one of '%s'",
                     implode("', '", $allowedValues)
                 )
             );
         }
-        $this->container['skipoffsetType'] = $skipoffsetType;
+        $this->container['skipoffset_type'] = $skipoffset_type;
 
         return $this;
     }
 
     /**
-     * Gets allowSkip
+     * Gets allow_skip
      *
      * @return int|null
      */
     public function getAllowSkip()
     {
-        return $this->container['allowSkip'];
+        return $this->container['allow_skip'];
     }
 
     /**
-     * Sets allowSkip
+     * Sets allow_skip
      *
-     * @param int|null $allowSkip allowSkip
+     * @param int|null $allow_skip allow_skip
      *
      * @return $this
      */
-    public function setAllowSkip($allowSkip)
+    public function setAllowSkip($allow_skip)
     {
         $allowedValues = $this->getAllowSkipAllowableValues();
-        if (!is_null($allowSkip) && !in_array($allowSkip, $allowedValues, true)) {
+        if (!is_null($allow_skip) && !in_array($allow_skip, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'allowSkip', must be one of '%s'",
+                    "Invalid value for 'allow_skip', must be one of '%s'",
                     implode("', '", $allowedValues)
                 )
             );
         }
-        $this->container['allowSkip'] = $allowSkip;
+        $this->container['allow_skip'] = $allow_skip;
 
         return $this;
     }
 
     /**
-     * Gets maintainAspectRatio
+     * Gets maintain_aspect_ratio
      *
      * @return int|null
      */
     public function getMaintainAspectRatio()
     {
-        return $this->container['maintainAspectRatio'];
+        return $this->container['maintain_aspect_ratio'];
     }
 
     /**
-     * Sets maintainAspectRatio
+     * Sets maintain_aspect_ratio
      *
-     * @param int|null $maintainAspectRatio maintainAspectRatio
+     * @param int|null $maintain_aspect_ratio maintain_aspect_ratio
      *
      * @return $this
      */
-    public function setMaintainAspectRatio($maintainAspectRatio)
+    public function setMaintainAspectRatio($maintain_aspect_ratio)
     {
         $allowedValues = $this->getMaintainAspectRatioAllowableValues();
-        if (!is_null($maintainAspectRatio) && !in_array($maintainAspectRatio, $allowedValues, true)) {
+        if (!is_null($maintain_aspect_ratio) && !in_array($maintain_aspect_ratio, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'maintainAspectRatio', must be one of '%s'",
+                    "Invalid value for 'maintain_aspect_ratio', must be one of '%s'",
                     implode("', '", $allowedValues)
                 )
             );
         }
-        $this->container['maintainAspectRatio'] = $maintainAspectRatio;
+        $this->container['maintain_aspect_ratio'] = $maintain_aspect_ratio;
 
         return $this;
     }
 
     /**
-     * Gets videoScalable
+     * Gets video_scalable
      *
      * @return int|null
      */
     public function getVideoScalable()
     {
-        return $this->container['videoScalable'];
+        return $this->container['video_scalable'];
     }
 
     /**
-     * Sets videoScalable
+     * Sets video_scalable
      *
-     * @param int|null $videoScalable videoScalable
+     * @param int|null $video_scalable video_scalable
      *
      * @return $this
      */
-    public function setVideoScalable($videoScalable)
+    public function setVideoScalable($video_scalable)
     {
         $allowedValues = $this->getVideoScalableAllowableValues();
-        if (!is_null($videoScalable) && !in_array($videoScalable, $allowedValues, true)) {
+        if (!is_null($video_scalable) && !in_array($video_scalable, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'videoScalable', must be one of '%s'",
+                    "Invalid value for 'video_scalable', must be one of '%s'",
                     implode("', '", $allowedValues)
                 )
             );
         }
-        $this->container['videoScalable'] = $videoScalable;
+        $this->container['video_scalable'] = $video_scalable;
 
         return $this;
     }

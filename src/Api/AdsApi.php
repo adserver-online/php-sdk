@@ -115,15 +115,15 @@ class AdsApi
      * Assign ad to zones
      *
      * @param  int $id id (required)
-     * @param  \Adserver\Model\InlineObject $inlineObject inlineObject (required)
+     * @param  \Adserver\Model\InlineObject $inline_object inline_object (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function assignAdToZones($id, $inlineObject)
+    public function assignAdToZones($id, $inline_object)
     {
-        $this->assignAdToZonesWithHttpInfo($id, $inlineObject);
+        $this->assignAdToZonesWithHttpInfo($id, $inline_object);
     }
 
     /**
@@ -132,15 +132,15 @@ class AdsApi
      * Assign ad to zones
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\InlineObject $inlineObject (required)
+     * @param  \Adserver\Model\InlineObject $inline_object (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function assignAdToZonesWithHttpInfo($id, $inlineObject)
+    public function assignAdToZonesWithHttpInfo($id, $inline_object)
     {
-        $request = $this->assignAdToZonesRequest($id, $inlineObject);
+        $request = $this->assignAdToZonesRequest($id, $inline_object);
 
         try {
             $options = $this->createHttpClientOption();
@@ -185,14 +185,14 @@ class AdsApi
      * Assign ad to zones
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\InlineObject $inlineObject (required)
+     * @param  \Adserver\Model\InlineObject $inline_object (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function assignAdToZonesAsync($id, $inlineObject)
+    public function assignAdToZonesAsync($id, $inline_object)
     {
-        return $this->assignAdToZonesAsyncWithHttpInfo($id, $inlineObject)
+        return $this->assignAdToZonesAsyncWithHttpInfo($id, $inline_object)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -206,15 +206,15 @@ class AdsApi
      * Assign ad to zones
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\InlineObject $inlineObject (required)
+     * @param  \Adserver\Model\InlineObject $inline_object (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function assignAdToZonesAsyncWithHttpInfo($id, $inlineObject)
+    public function assignAdToZonesAsyncWithHttpInfo($id, $inline_object)
     {
         $returnType = '';
-        $request = $this->assignAdToZonesRequest($id, $inlineObject);
+        $request = $this->assignAdToZonesRequest($id, $inline_object);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -243,12 +243,12 @@ class AdsApi
      * Create request for operation 'assignAdToZones'
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\InlineObject $inlineObject (required)
+     * @param  \Adserver\Model\InlineObject $inline_object (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function assignAdToZonesRequest($id, $inlineObject)
+    protected function assignAdToZonesRequest($id, $inline_object)
     {
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
@@ -256,10 +256,10 @@ class AdsApi
                 'Missing the required parameter $id when calling assignAdToZones'
             );
         }
-        // verify the required parameter 'inlineObject' is set
-        if ($inlineObject === null || (is_array($inlineObject) && count($inlineObject) === 0)) {
+        // verify the required parameter 'inline_object' is set
+        if ($inline_object === null || (is_array($inline_object) && count($inline_object) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $inlineObject when calling assignAdToZones'
+                'Missing the required parameter $inline_object when calling assignAdToZones'
             );
         }
 
@@ -286,8 +286,8 @@ class AdsApi
 
         // body params
         $_tempBody = null;
-        if (isset($inlineObject)) {
-            $_tempBody = $inlineObject;
+        if (isset($inline_object)) {
+            $_tempBody = $inline_object;
         }
 
         if ($multipart) {
@@ -361,15 +361,15 @@ class AdsApi
      * Create ad
      *
      * @param  int $idformat idformat (required)
-     * @param  \Adserver\Model\AdRequest $adRequest adRequest (required)
+     * @param  \Adserver\Model\AdRequest $ad_request ad_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Ad|\Adserver\Model\FormErrorResponse
      */
-    public function createAd($idformat, $adRequest)
+    public function createAd($idformat, $ad_request)
     {
-        list($response) = $this->createAdWithHttpInfo($idformat, $adRequest);
+        list($response) = $this->createAdWithHttpInfo($idformat, $ad_request);
         return $response;
     }
 
@@ -379,15 +379,15 @@ class AdsApi
      * Create ad
      *
      * @param  int $idformat (required)
-     * @param  \Adserver\Model\AdRequest $adRequest (required)
+     * @param  \Adserver\Model\AdRequest $ad_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Ad|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function createAdWithHttpInfo($idformat, $adRequest)
+    public function createAdWithHttpInfo($idformat, $ad_request)
     {
-        $request = $this->createAdRequest($idformat, $adRequest);
+        $request = $this->createAdRequest($idformat, $ad_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -488,14 +488,14 @@ class AdsApi
      * Create ad
      *
      * @param  int $idformat (required)
-     * @param  \Adserver\Model\AdRequest $adRequest (required)
+     * @param  \Adserver\Model\AdRequest $ad_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createAdAsync($idformat, $adRequest)
+    public function createAdAsync($idformat, $ad_request)
     {
-        return $this->createAdAsyncWithHttpInfo($idformat, $adRequest)
+        return $this->createAdAsyncWithHttpInfo($idformat, $ad_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -509,15 +509,15 @@ class AdsApi
      * Create ad
      *
      * @param  int $idformat (required)
-     * @param  \Adserver\Model\AdRequest $adRequest (required)
+     * @param  \Adserver\Model\AdRequest $ad_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createAdAsyncWithHttpInfo($idformat, $adRequest)
+    public function createAdAsyncWithHttpInfo($idformat, $ad_request)
     {
         $returnType = '\Adserver\Model\Ad';
-        $request = $this->createAdRequest($idformat, $adRequest);
+        $request = $this->createAdRequest($idformat, $ad_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -557,12 +557,12 @@ class AdsApi
      * Create request for operation 'createAd'
      *
      * @param  int $idformat (required)
-     * @param  \Adserver\Model\AdRequest $adRequest (required)
+     * @param  \Adserver\Model\AdRequest $ad_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function createAdRequest($idformat, $adRequest)
+    protected function createAdRequest($idformat, $ad_request)
     {
         // verify the required parameter 'idformat' is set
         if ($idformat === null || (is_array($idformat) && count($idformat) === 0)) {
@@ -570,10 +570,10 @@ class AdsApi
                 'Missing the required parameter $idformat when calling createAd'
             );
         }
-        // verify the required parameter 'adRequest' is set
-        if ($adRequest === null || (is_array($adRequest) && count($adRequest) === 0)) {
+        // verify the required parameter 'ad_request' is set
+        if ($ad_request === null || (is_array($ad_request) && count($ad_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $adRequest when calling createAd'
+                'Missing the required parameter $ad_request when calling createAd'
             );
         }
 
@@ -600,8 +600,8 @@ class AdsApi
 
         // body params
         $_tempBody = null;
-        if (isset($adRequest)) {
-            $_tempBody = $adRequest;
+        if (isset($ad_request)) {
+            $_tempBody = $ad_request;
         }
 
         if ($multipart) {
@@ -1181,15 +1181,15 @@ class AdsApi
      * Update ad
      *
      * @param  int $id id (required)
-     * @param  \Adserver\Model\AdRequest $adRequest adRequest (required)
+     * @param  \Adserver\Model\AdRequest $ad_request ad_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Ad|\Adserver\Model\FormErrorResponse
      */
-    public function updateAd($id, $adRequest)
+    public function updateAd($id, $ad_request)
     {
-        list($response) = $this->updateAdWithHttpInfo($id, $adRequest);
+        list($response) = $this->updateAdWithHttpInfo($id, $ad_request);
         return $response;
     }
 
@@ -1199,15 +1199,15 @@ class AdsApi
      * Update ad
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\AdRequest $adRequest (required)
+     * @param  \Adserver\Model\AdRequest $ad_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Ad|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function updateAdWithHttpInfo($id, $adRequest)
+    public function updateAdWithHttpInfo($id, $ad_request)
     {
-        $request = $this->updateAdRequest($id, $adRequest);
+        $request = $this->updateAdRequest($id, $ad_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1308,14 +1308,14 @@ class AdsApi
      * Update ad
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\AdRequest $adRequest (required)
+     * @param  \Adserver\Model\AdRequest $ad_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function updateAdAsync($id, $adRequest)
+    public function updateAdAsync($id, $ad_request)
     {
-        return $this->updateAdAsyncWithHttpInfo($id, $adRequest)
+        return $this->updateAdAsyncWithHttpInfo($id, $ad_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1329,15 +1329,15 @@ class AdsApi
      * Update ad
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\AdRequest $adRequest (required)
+     * @param  \Adserver\Model\AdRequest $ad_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function updateAdAsyncWithHttpInfo($id, $adRequest)
+    public function updateAdAsyncWithHttpInfo($id, $ad_request)
     {
         $returnType = '\Adserver\Model\Ad';
-        $request = $this->updateAdRequest($id, $adRequest);
+        $request = $this->updateAdRequest($id, $ad_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1377,12 +1377,12 @@ class AdsApi
      * Create request for operation 'updateAd'
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\AdRequest $adRequest (required)
+     * @param  \Adserver\Model\AdRequest $ad_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function updateAdRequest($id, $adRequest)
+    protected function updateAdRequest($id, $ad_request)
     {
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
@@ -1390,10 +1390,10 @@ class AdsApi
                 'Missing the required parameter $id when calling updateAd'
             );
         }
-        // verify the required parameter 'adRequest' is set
-        if ($adRequest === null || (is_array($adRequest) && count($adRequest) === 0)) {
+        // verify the required parameter 'ad_request' is set
+        if ($ad_request === null || (is_array($ad_request) && count($ad_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $adRequest when calling updateAd'
+                'Missing the required parameter $ad_request when calling updateAd'
             );
         }
 
@@ -1417,8 +1417,8 @@ class AdsApi
 
         // body params
         $_tempBody = null;
-        if (isset($adRequest)) {
-            $_tempBody = $adRequest;
+        if (isset($ad_request)) {
+            $_tempBody = $ad_request;
         }
 
         if ($multipart) {

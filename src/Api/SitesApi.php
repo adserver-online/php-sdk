@@ -114,15 +114,15 @@ class SitesApi
      *
      * Create site
      *
-     * @param  \Adserver\Model\SiteRequest $siteRequest siteRequest (required)
+     * @param  \Adserver\Model\SiteRequest $site_request site_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Site|\Adserver\Model\FormErrorResponse
      */
-    public function createSite($siteRequest)
+    public function createSite($site_request)
     {
-        list($response) = $this->createSiteWithHttpInfo($siteRequest);
+        list($response) = $this->createSiteWithHttpInfo($site_request);
         return $response;
     }
 
@@ -131,15 +131,15 @@ class SitesApi
      *
      * Create site
      *
-     * @param  \Adserver\Model\SiteRequest $siteRequest (required)
+     * @param  \Adserver\Model\SiteRequest $site_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Site|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function createSiteWithHttpInfo($siteRequest)
+    public function createSiteWithHttpInfo($site_request)
     {
-        $request = $this->createSiteRequest($siteRequest);
+        $request = $this->createSiteRequest($site_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -239,14 +239,14 @@ class SitesApi
      *
      * Create site
      *
-     * @param  \Adserver\Model\SiteRequest $siteRequest (required)
+     * @param  \Adserver\Model\SiteRequest $site_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createSiteAsync($siteRequest)
+    public function createSiteAsync($site_request)
     {
-        return $this->createSiteAsyncWithHttpInfo($siteRequest)
+        return $this->createSiteAsyncWithHttpInfo($site_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -259,15 +259,15 @@ class SitesApi
      *
      * Create site
      *
-     * @param  \Adserver\Model\SiteRequest $siteRequest (required)
+     * @param  \Adserver\Model\SiteRequest $site_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createSiteAsyncWithHttpInfo($siteRequest)
+    public function createSiteAsyncWithHttpInfo($site_request)
     {
         $returnType = '\Adserver\Model\Site';
-        $request = $this->createSiteRequest($siteRequest);
+        $request = $this->createSiteRequest($site_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -306,17 +306,17 @@ class SitesApi
     /**
      * Create request for operation 'createSite'
      *
-     * @param  \Adserver\Model\SiteRequest $siteRequest (required)
+     * @param  \Adserver\Model\SiteRequest $site_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function createSiteRequest($siteRequest)
+    protected function createSiteRequest($site_request)
     {
-        // verify the required parameter 'siteRequest' is set
-        if ($siteRequest === null || (is_array($siteRequest) && count($siteRequest) === 0)) {
+        // verify the required parameter 'site_request' is set
+        if ($site_request === null || (is_array($site_request) && count($site_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $siteRequest when calling createSite'
+                'Missing the required parameter $site_request when calling createSite'
             );
         }
 
@@ -332,8 +332,8 @@ class SitesApi
 
         // body params
         $_tempBody = null;
-        if (isset($siteRequest)) {
-            $_tempBody = $siteRequest;
+        if (isset($site_request)) {
+            $_tempBody = $site_request;
         }
 
         if ($multipart) {
@@ -913,7 +913,7 @@ class SitesApi
      * Site's list
      *
      * @param  int $page page (optional)
-     * @param  int $perPage perPage (optional)
+     * @param  int $per_page per_page (optional)
      * @param  string $sort sort (optional)
      * @param  object[] $filter filter (optional)
      *
@@ -921,9 +921,9 @@ class SitesApi
      * @throws \InvalidArgumentException
      * @return object[]
      */
-    public function getSitesList($page = null, $perPage = null, $sort = null, $filter = null)
+    public function getSitesList($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        list($response) = $this->getSitesListWithHttpInfo($page, $perPage, $sort, $filter);
+        list($response) = $this->getSitesListWithHttpInfo($page, $per_page, $sort, $filter);
         return $response;
     }
 
@@ -933,7 +933,7 @@ class SitesApi
      * Site's list
      *
      * @param  int $page (optional)
-     * @param  int $perPage (optional)
+     * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
      *
@@ -941,9 +941,9 @@ class SitesApi
      * @throws \InvalidArgumentException
      * @return array of object[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getSitesListWithHttpInfo($page = null, $perPage = null, $sort = null, $filter = null)
+    public function getSitesListWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        $request = $this->getSitesListRequest($page, $perPage, $sort, $filter);
+        $request = $this->getSitesListRequest($page, $per_page, $sort, $filter);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1024,16 +1024,16 @@ class SitesApi
      * Site's list
      *
      * @param  int $page (optional)
-     * @param  int $perPage (optional)
+     * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getSitesListAsync($page = null, $perPage = null, $sort = null, $filter = null)
+    public function getSitesListAsync($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        return $this->getSitesListAsyncWithHttpInfo($page, $perPage, $sort, $filter)
+        return $this->getSitesListAsyncWithHttpInfo($page, $per_page, $sort, $filter)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1047,17 +1047,17 @@ class SitesApi
      * Site's list
      *
      * @param  int $page (optional)
-     * @param  int $perPage (optional)
+     * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getSitesListAsyncWithHttpInfo($page = null, $perPage = null, $sort = null, $filter = null)
+    public function getSitesListAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
         $returnType = 'object[]';
-        $request = $this->getSitesListRequest($page, $perPage, $sort, $filter);
+        $request = $this->getSitesListRequest($page, $per_page, $sort, $filter);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1097,14 +1097,14 @@ class SitesApi
      * Create request for operation 'getSitesList'
      *
      * @param  int $page (optional)
-     * @param  int $perPage (optional)
+     * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function getSitesListRequest($page = null, $perPage = null, $sort = null, $filter = null)
+    protected function getSitesListRequest($page = null, $per_page = null, $sort = null, $filter = null)
     {
 
         $resourcePath = '/site';
@@ -1126,14 +1126,14 @@ class SitesApi
             }
         }
         // query params
-        if ($perPage !== null) {
-            if('form' === 'form' && is_array($perPage)) {
-                foreach($perPage as $key => $value) {
+        if ($per_page !== null) {
+            if('form' === 'form' && is_array($per_page)) {
+                foreach($per_page as $key => $value) {
                     $queryParams[$key] = $value;
                 }
             }
             else {
-                $queryParams['per-page'] = $perPage;
+                $queryParams['per-page'] = $per_page;
             }
         }
         // query params
@@ -1235,15 +1235,15 @@ class SitesApi
      * Update site
      *
      * @param  int $id id (required)
-     * @param  \Adserver\Model\SiteRequest $siteRequest siteRequest (required)
+     * @param  \Adserver\Model\SiteRequest $site_request site_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Site|\Adserver\Model\FormErrorResponse
      */
-    public function updateSite($id, $siteRequest)
+    public function updateSite($id, $site_request)
     {
-        list($response) = $this->updateSiteWithHttpInfo($id, $siteRequest);
+        list($response) = $this->updateSiteWithHttpInfo($id, $site_request);
         return $response;
     }
 
@@ -1253,15 +1253,15 @@ class SitesApi
      * Update site
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\SiteRequest $siteRequest (required)
+     * @param  \Adserver\Model\SiteRequest $site_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Site|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function updateSiteWithHttpInfo($id, $siteRequest)
+    public function updateSiteWithHttpInfo($id, $site_request)
     {
-        $request = $this->updateSiteRequest($id, $siteRequest);
+        $request = $this->updateSiteRequest($id, $site_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1362,14 +1362,14 @@ class SitesApi
      * Update site
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\SiteRequest $siteRequest (required)
+     * @param  \Adserver\Model\SiteRequest $site_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function updateSiteAsync($id, $siteRequest)
+    public function updateSiteAsync($id, $site_request)
     {
-        return $this->updateSiteAsyncWithHttpInfo($id, $siteRequest)
+        return $this->updateSiteAsyncWithHttpInfo($id, $site_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1383,15 +1383,15 @@ class SitesApi
      * Update site
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\SiteRequest $siteRequest (required)
+     * @param  \Adserver\Model\SiteRequest $site_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function updateSiteAsyncWithHttpInfo($id, $siteRequest)
+    public function updateSiteAsyncWithHttpInfo($id, $site_request)
     {
         $returnType = '\Adserver\Model\Site';
-        $request = $this->updateSiteRequest($id, $siteRequest);
+        $request = $this->updateSiteRequest($id, $site_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1431,12 +1431,12 @@ class SitesApi
      * Create request for operation 'updateSite'
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\SiteRequest $siteRequest (required)
+     * @param  \Adserver\Model\SiteRequest $site_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function updateSiteRequest($id, $siteRequest)
+    protected function updateSiteRequest($id, $site_request)
     {
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
@@ -1444,10 +1444,10 @@ class SitesApi
                 'Missing the required parameter $id when calling updateSite'
             );
         }
-        // verify the required parameter 'siteRequest' is set
-        if ($siteRequest === null || (is_array($siteRequest) && count($siteRequest) === 0)) {
+        // verify the required parameter 'site_request' is set
+        if ($site_request === null || (is_array($site_request) && count($site_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $siteRequest when calling updateSite'
+                'Missing the required parameter $site_request when calling updateSite'
             );
         }
 
@@ -1471,8 +1471,8 @@ class SitesApi
 
         // body params
         $_tempBody = null;
-        if (isset($siteRequest)) {
-            $_tempBody = $siteRequest;
+        if (isset($site_request)) {
+            $_tempBody = $site_request;
         }
 
         if ($multipart) {

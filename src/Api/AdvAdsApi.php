@@ -116,15 +116,15 @@ class AdvAdsApi
      *
      * @param  int $idcampaign idcampaign (required)
      * @param  int $idformat idformat (required)
-     * @param  \Adserver\Model\AdvAdRequest $advAdRequest advAdRequest (required)
+     * @param  \Adserver\Model\AdvAdRequest $adv_ad_request adv_ad_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Ad|\Adserver\Model\FormErrorResponse
      */
-    public function advCreateAd($idcampaign, $idformat, $advAdRequest)
+    public function advCreateAd($idcampaign, $idformat, $adv_ad_request)
     {
-        list($response) = $this->advCreateAdWithHttpInfo($idcampaign, $idformat, $advAdRequest);
+        list($response) = $this->advCreateAdWithHttpInfo($idcampaign, $idformat, $adv_ad_request);
         return $response;
     }
 
@@ -135,15 +135,15 @@ class AdvAdsApi
      *
      * @param  int $idcampaign (required)
      * @param  int $idformat (required)
-     * @param  \Adserver\Model\AdvAdRequest $advAdRequest (required)
+     * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Ad|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function advCreateAdWithHttpInfo($idcampaign, $idformat, $advAdRequest)
+    public function advCreateAdWithHttpInfo($idcampaign, $idformat, $adv_ad_request)
     {
-        $request = $this->advCreateAdRequest($idcampaign, $idformat, $advAdRequest);
+        $request = $this->advCreateAdRequest($idcampaign, $idformat, $adv_ad_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -245,14 +245,14 @@ class AdvAdsApi
      *
      * @param  int $idcampaign (required)
      * @param  int $idformat (required)
-     * @param  \Adserver\Model\AdvAdRequest $advAdRequest (required)
+     * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advCreateAdAsync($idcampaign, $idformat, $advAdRequest)
+    public function advCreateAdAsync($idcampaign, $idformat, $adv_ad_request)
     {
-        return $this->advCreateAdAsyncWithHttpInfo($idcampaign, $idformat, $advAdRequest)
+        return $this->advCreateAdAsyncWithHttpInfo($idcampaign, $idformat, $adv_ad_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -267,15 +267,15 @@ class AdvAdsApi
      *
      * @param  int $idcampaign (required)
      * @param  int $idformat (required)
-     * @param  \Adserver\Model\AdvAdRequest $advAdRequest (required)
+     * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advCreateAdAsyncWithHttpInfo($idcampaign, $idformat, $advAdRequest)
+    public function advCreateAdAsyncWithHttpInfo($idcampaign, $idformat, $adv_ad_request)
     {
         $returnType = '\Adserver\Model\Ad';
-        $request = $this->advCreateAdRequest($idcampaign, $idformat, $advAdRequest);
+        $request = $this->advCreateAdRequest($idcampaign, $idformat, $adv_ad_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -316,12 +316,12 @@ class AdvAdsApi
      *
      * @param  int $idcampaign (required)
      * @param  int $idformat (required)
-     * @param  \Adserver\Model\AdvAdRequest $advAdRequest (required)
+     * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function advCreateAdRequest($idcampaign, $idformat, $advAdRequest)
+    protected function advCreateAdRequest($idcampaign, $idformat, $adv_ad_request)
     {
         // verify the required parameter 'idcampaign' is set
         if ($idcampaign === null || (is_array($idcampaign) && count($idcampaign) === 0)) {
@@ -335,10 +335,10 @@ class AdvAdsApi
                 'Missing the required parameter $idformat when calling advCreateAd'
             );
         }
-        // verify the required parameter 'advAdRequest' is set
-        if ($advAdRequest === null || (is_array($advAdRequest) && count($advAdRequest) === 0)) {
+        // verify the required parameter 'adv_ad_request' is set
+        if ($adv_ad_request === null || (is_array($adv_ad_request) && count($adv_ad_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $advAdRequest when calling advCreateAd'
+                'Missing the required parameter $adv_ad_request when calling advCreateAd'
             );
         }
 
@@ -376,8 +376,8 @@ class AdvAdsApi
 
         // body params
         $_tempBody = null;
-        if (isset($advAdRequest)) {
-            $_tempBody = $advAdRequest;
+        if (isset($adv_ad_request)) {
+            $_tempBody = $adv_ad_request;
         }
 
         if ($multipart) {
@@ -957,15 +957,15 @@ class AdvAdsApi
      * Update ad
      *
      * @param  int $id id (required)
-     * @param  \Adserver\Model\AdvAdRequest $advAdRequest advAdRequest (required)
+     * @param  \Adserver\Model\AdvAdRequest $adv_ad_request adv_ad_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Ad|\Adserver\Model\FormErrorResponse
      */
-    public function advUpdateAd($id, $advAdRequest)
+    public function advUpdateAd($id, $adv_ad_request)
     {
-        list($response) = $this->advUpdateAdWithHttpInfo($id, $advAdRequest);
+        list($response) = $this->advUpdateAdWithHttpInfo($id, $adv_ad_request);
         return $response;
     }
 
@@ -975,15 +975,15 @@ class AdvAdsApi
      * Update ad
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\AdvAdRequest $advAdRequest (required)
+     * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Ad|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function advUpdateAdWithHttpInfo($id, $advAdRequest)
+    public function advUpdateAdWithHttpInfo($id, $adv_ad_request)
     {
-        $request = $this->advUpdateAdRequest($id, $advAdRequest);
+        $request = $this->advUpdateAdRequest($id, $adv_ad_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1084,14 +1084,14 @@ class AdvAdsApi
      * Update ad
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\AdvAdRequest $advAdRequest (required)
+     * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advUpdateAdAsync($id, $advAdRequest)
+    public function advUpdateAdAsync($id, $adv_ad_request)
     {
-        return $this->advUpdateAdAsyncWithHttpInfo($id, $advAdRequest)
+        return $this->advUpdateAdAsyncWithHttpInfo($id, $adv_ad_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1105,15 +1105,15 @@ class AdvAdsApi
      * Update ad
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\AdvAdRequest $advAdRequest (required)
+     * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advUpdateAdAsyncWithHttpInfo($id, $advAdRequest)
+    public function advUpdateAdAsyncWithHttpInfo($id, $adv_ad_request)
     {
         $returnType = '\Adserver\Model\Ad';
-        $request = $this->advUpdateAdRequest($id, $advAdRequest);
+        $request = $this->advUpdateAdRequest($id, $adv_ad_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1153,12 +1153,12 @@ class AdvAdsApi
      * Create request for operation 'advUpdateAd'
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\AdvAdRequest $advAdRequest (required)
+     * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function advUpdateAdRequest($id, $advAdRequest)
+    protected function advUpdateAdRequest($id, $adv_ad_request)
     {
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
@@ -1166,10 +1166,10 @@ class AdvAdsApi
                 'Missing the required parameter $id when calling advUpdateAd'
             );
         }
-        // verify the required parameter 'advAdRequest' is set
-        if ($advAdRequest === null || (is_array($advAdRequest) && count($advAdRequest) === 0)) {
+        // verify the required parameter 'adv_ad_request' is set
+        if ($adv_ad_request === null || (is_array($adv_ad_request) && count($adv_ad_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $advAdRequest when calling advUpdateAd'
+                'Missing the required parameter $adv_ad_request when calling advUpdateAd'
             );
         }
 
@@ -1193,8 +1193,8 @@ class AdvAdsApi
 
         // body params
         $_tempBody = null;
-        if (isset($advAdRequest)) {
-            $_tempBody = $advAdRequest;
+        if (isset($adv_ad_request)) {
+            $_tempBody = $adv_ad_request;
         }
 
         if ($multipart) {

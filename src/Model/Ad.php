@@ -56,10 +56,10 @@ class Ad implements ModelInterface, ArrayAccess
         'name' => 'string',
         'url' => 'string',
         'status' => 'object',
-        'isActive' => 'bool',
+        'is_active' => 'bool',
         'format' => 'object',
-        'createdAt' => 'string',
-        'updatedAt' => 'string'
+        'created_at' => 'string',
+        'updated_at' => 'string'
     ];
 
     /**
@@ -73,10 +73,10 @@ class Ad implements ModelInterface, ArrayAccess
         'name' => null,
         'url' => null,
         'status' => null,
-        'isActive' => null,
+        'is_active' => null,
         'format' => null,
-        'createdAt' => null,
-        'updatedAt' => null
+        'created_at' => null,
+        'updated_at' => null
     ];
 
     /**
@@ -111,10 +111,10 @@ class Ad implements ModelInterface, ArrayAccess
         'name' => 'name',
         'url' => 'url',
         'status' => 'status',
-        'isActive' => 'is_active',
+        'is_active' => 'is_active',
         'format' => 'format',
-        'createdAt' => 'created_at',
-        'updatedAt' => 'updated_at'
+        'created_at' => 'created_at',
+        'updated_at' => 'updated_at'
     ];
 
     /**
@@ -128,10 +128,10 @@ class Ad implements ModelInterface, ArrayAccess
         'name' => 'setName',
         'url' => 'setUrl',
         'status' => 'setStatus',
-        'isActive' => 'setIsActive',
+        'is_active' => 'setIsActive',
         'format' => 'setFormat',
-        'createdAt' => 'setCreatedAt',
-        'updatedAt' => 'setUpdatedAt'
+        'created_at' => 'setCreatedAt',
+        'updated_at' => 'setUpdatedAt'
     ];
 
     /**
@@ -145,10 +145,10 @@ class Ad implements ModelInterface, ArrayAccess
         'name' => 'getName',
         'url' => 'getUrl',
         'status' => 'getStatus',
-        'isActive' => 'getIsActive',
+        'is_active' => 'getIsActive',
         'format' => 'getFormat',
-        'createdAt' => 'getCreatedAt',
-        'updatedAt' => 'getUpdatedAt'
+        'created_at' => 'getCreatedAt',
+        'updated_at' => 'getUpdatedAt'
     ];
 
     /**
@@ -216,10 +216,10 @@ class Ad implements ModelInterface, ArrayAccess
         $this->container['name'] = isset($data['name']) ? $data['name'] : null;
         $this->container['url'] = isset($data['url']) ? $data['url'] : null;
         $this->container['status'] = isset($data['status']) ? $data['status'] : null;
-        $this->container['isActive'] = isset($data['isActive']) ? $data['isActive'] : null;
+        $this->container['is_active'] = isset($data['is_active']) ? $data['is_active'] : null;
         $this->container['format'] = isset($data['format']) ? $data['format'] : null;
-        $this->container['createdAt'] = isset($data['createdAt']) ? $data['createdAt'] : null;
-        $this->container['updatedAt'] = isset($data['updatedAt']) ? $data['updatedAt'] : null;
+        $this->container['created_at'] = isset($data['created_at']) ? $data['created_at'] : null;
+        $this->container['updated_at'] = isset($data['updated_at']) ? $data['updated_at'] : null;
     }
 
     /**
@@ -367,25 +367,25 @@ class Ad implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets isActive
+     * Gets is_active
      *
      * @return bool|null
      */
     public function getIsActive()
     {
-        return $this->container['isActive'];
+        return $this->container['is_active'];
     }
 
     /**
-     * Sets isActive
+     * Sets is_active
      *
-     * @param bool|null $isActive isActive
+     * @param bool|null $is_active is_active
      *
      * @return $this
      */
-    public function setIsActive($isActive)
+    public function setIsActive($is_active)
     {
-        $this->container['isActive'] = $isActive;
+        $this->container['is_active'] = $is_active;
 
         return $this;
     }
@@ -415,49 +415,49 @@ class Ad implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets createdAt
+     * Gets created_at
      *
      * @return string|null
      */
     public function getCreatedAt()
     {
-        return $this->container['createdAt'];
+        return $this->container['created_at'];
     }
 
     /**
-     * Sets createdAt
+     * Sets created_at
      *
-     * @param string|null $createdAt createdAt
+     * @param string|null $created_at created_at
      *
      * @return $this
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($created_at)
     {
-        $this->container['createdAt'] = $createdAt;
+        $this->container['created_at'] = $created_at;
 
         return $this;
     }
 
     /**
-     * Gets updatedAt
+     * Gets updated_at
      *
      * @return string|null
      */
     public function getUpdatedAt()
     {
-        return $this->container['updatedAt'];
+        return $this->container['updated_at'];
     }
 
     /**
-     * Sets updatedAt
+     * Sets updated_at
      *
-     * @param string|null $updatedAt updatedAt
+     * @param string|null $updated_at updated_at
      *
      * @return $this
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updated_at)
     {
-        $this->container['updatedAt'] = $updatedAt;
+        $this->container['updated_at'] = $updated_at;
 
         return $this;
     }

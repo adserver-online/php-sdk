@@ -58,11 +58,11 @@ class User implements ModelInterface, ArrayAccess
         'phone' => 'string',
         'skype' => 'string',
         'timezone' => 'string',
-        'isActive' => 'bool',
-        'allowLogin' => 'bool',
-        'campaignsPostModeration' => 'bool',
-        'createdAt' => 'string',
-        'updatedAt' => 'string'
+        'is_active' => 'bool',
+        'allow_login' => 'bool',
+        'campaigns_post_moderation' => 'bool',
+        'created_at' => 'string',
+        'updated_at' => 'string'
     ];
 
     /**
@@ -78,11 +78,11 @@ class User implements ModelInterface, ArrayAccess
         'phone' => null,
         'skype' => null,
         'timezone' => null,
-        'isActive' => null,
-        'allowLogin' => null,
-        'campaignsPostModeration' => null,
-        'createdAt' => null,
-        'updatedAt' => null
+        'is_active' => null,
+        'allow_login' => null,
+        'campaigns_post_moderation' => null,
+        'created_at' => null,
+        'updated_at' => null
     ];
 
     /**
@@ -119,11 +119,11 @@ class User implements ModelInterface, ArrayAccess
         'phone' => 'phone',
         'skype' => 'skype',
         'timezone' => 'timezone',
-        'isActive' => 'is_active',
-        'allowLogin' => 'allow_login',
-        'campaignsPostModeration' => 'campaigns_post_moderation',
-        'createdAt' => 'created_at',
-        'updatedAt' => 'updated_at'
+        'is_active' => 'is_active',
+        'allow_login' => 'allow_login',
+        'campaigns_post_moderation' => 'campaigns_post_moderation',
+        'created_at' => 'created_at',
+        'updated_at' => 'updated_at'
     ];
 
     /**
@@ -139,11 +139,11 @@ class User implements ModelInterface, ArrayAccess
         'phone' => 'setPhone',
         'skype' => 'setSkype',
         'timezone' => 'setTimezone',
-        'isActive' => 'setIsActive',
-        'allowLogin' => 'setAllowLogin',
-        'campaignsPostModeration' => 'setCampaignsPostModeration',
-        'createdAt' => 'setCreatedAt',
-        'updatedAt' => 'setUpdatedAt'
+        'is_active' => 'setIsActive',
+        'allow_login' => 'setAllowLogin',
+        'campaigns_post_moderation' => 'setCampaignsPostModeration',
+        'created_at' => 'setCreatedAt',
+        'updated_at' => 'setUpdatedAt'
     ];
 
     /**
@@ -159,11 +159,11 @@ class User implements ModelInterface, ArrayAccess
         'phone' => 'getPhone',
         'skype' => 'getSkype',
         'timezone' => 'getTimezone',
-        'isActive' => 'getIsActive',
-        'allowLogin' => 'getAllowLogin',
-        'campaignsPostModeration' => 'getCampaignsPostModeration',
-        'createdAt' => 'getCreatedAt',
-        'updatedAt' => 'getUpdatedAt'
+        'is_active' => 'getIsActive',
+        'allow_login' => 'getAllowLogin',
+        'campaigns_post_moderation' => 'getCampaignsPostModeration',
+        'created_at' => 'getCreatedAt',
+        'updated_at' => 'getUpdatedAt'
     ];
 
     /**
@@ -233,11 +233,11 @@ class User implements ModelInterface, ArrayAccess
         $this->container['phone'] = isset($data['phone']) ? $data['phone'] : null;
         $this->container['skype'] = isset($data['skype']) ? $data['skype'] : null;
         $this->container['timezone'] = isset($data['timezone']) ? $data['timezone'] : null;
-        $this->container['isActive'] = isset($data['isActive']) ? $data['isActive'] : null;
-        $this->container['allowLogin'] = isset($data['allowLogin']) ? $data['allowLogin'] : null;
-        $this->container['campaignsPostModeration'] = isset($data['campaignsPostModeration']) ? $data['campaignsPostModeration'] : null;
-        $this->container['createdAt'] = isset($data['createdAt']) ? $data['createdAt'] : null;
-        $this->container['updatedAt'] = isset($data['updatedAt']) ? $data['updatedAt'] : null;
+        $this->container['is_active'] = isset($data['is_active']) ? $data['is_active'] : null;
+        $this->container['allow_login'] = isset($data['allow_login']) ? $data['allow_login'] : null;
+        $this->container['campaigns_post_moderation'] = isset($data['campaigns_post_moderation']) ? $data['campaigns_post_moderation'] : null;
+        $this->container['created_at'] = isset($data['created_at']) ? $data['created_at'] : null;
+        $this->container['updated_at'] = isset($data['updated_at']) ? $data['updated_at'] : null;
     }
 
     /**
@@ -433,121 +433,121 @@ class User implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets isActive
+     * Gets is_active
      *
      * @return bool|null
      */
     public function getIsActive()
     {
-        return $this->container['isActive'];
+        return $this->container['is_active'];
     }
 
     /**
-     * Sets isActive
+     * Sets is_active
      *
-     * @param bool|null $isActive isActive
+     * @param bool|null $is_active is_active
      *
      * @return $this
      */
-    public function setIsActive($isActive)
+    public function setIsActive($is_active)
     {
-        $this->container['isActive'] = $isActive;
+        $this->container['is_active'] = $is_active;
 
         return $this;
     }
 
     /**
-     * Gets allowLogin
+     * Gets allow_login
      *
      * @return bool|null
      */
     public function getAllowLogin()
     {
-        return $this->container['allowLogin'];
+        return $this->container['allow_login'];
     }
 
     /**
-     * Sets allowLogin
+     * Sets allow_login
      *
-     * @param bool|null $allowLogin allowLogin
+     * @param bool|null $allow_login allow_login
      *
      * @return $this
      */
-    public function setAllowLogin($allowLogin)
+    public function setAllowLogin($allow_login)
     {
-        $this->container['allowLogin'] = $allowLogin;
+        $this->container['allow_login'] = $allow_login;
 
         return $this;
     }
 
     /**
-     * Gets campaignsPostModeration
+     * Gets campaigns_post_moderation
      *
      * @return bool|null
      */
     public function getCampaignsPostModeration()
     {
-        return $this->container['campaignsPostModeration'];
+        return $this->container['campaigns_post_moderation'];
     }
 
     /**
-     * Sets campaignsPostModeration
+     * Sets campaigns_post_moderation
      *
-     * @param bool|null $campaignsPostModeration campaignsPostModeration
+     * @param bool|null $campaigns_post_moderation campaigns_post_moderation
      *
      * @return $this
      */
-    public function setCampaignsPostModeration($campaignsPostModeration)
+    public function setCampaignsPostModeration($campaigns_post_moderation)
     {
-        $this->container['campaignsPostModeration'] = $campaignsPostModeration;
+        $this->container['campaigns_post_moderation'] = $campaigns_post_moderation;
 
         return $this;
     }
 
     /**
-     * Gets createdAt
+     * Gets created_at
      *
      * @return string|null
      */
     public function getCreatedAt()
     {
-        return $this->container['createdAt'];
+        return $this->container['created_at'];
     }
 
     /**
-     * Sets createdAt
+     * Sets created_at
      *
-     * @param string|null $createdAt createdAt
+     * @param string|null $created_at created_at
      *
      * @return $this
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($created_at)
     {
-        $this->container['createdAt'] = $createdAt;
+        $this->container['created_at'] = $created_at;
 
         return $this;
     }
 
     /**
-     * Gets updatedAt
+     * Gets updated_at
      *
      * @return string|null
      */
     public function getUpdatedAt()
     {
-        return $this->container['updatedAt'];
+        return $this->container['updated_at'];
     }
 
     /**
-     * Sets updatedAt
+     * Sets updated_at
      *
-     * @param string|null $updatedAt updatedAt
+     * @param string|null $updated_at updated_at
      *
      * @return $this
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updated_at)
     {
-        $this->container['updatedAt'] = $updatedAt;
+        $this->container['updated_at'] = $updated_at;
 
         return $this;
     }

@@ -61,13 +61,13 @@ class Campaign implements ModelInterface, ArrayAccess
         'rate' => 'float',
         'limits' => 'object',
         'counters' => 'object',
-        'frequencyCapping' => 'string',
+        'frequency_capping' => 'string',
         'tier' => 'string',
         'wight' => 'string',
         'timezone' => 'string',
         'ads' => 'object[]',
-        'createdAt' => 'string',
-        'updatedAt' => 'string'
+        'created_at' => 'string',
+        'updated_at' => 'string'
     ];
 
     /**
@@ -86,13 +86,13 @@ class Campaign implements ModelInterface, ArrayAccess
         'rate' => null,
         'limits' => null,
         'counters' => null,
-        'frequencyCapping' => null,
+        'frequency_capping' => null,
         'tier' => null,
         'wight' => null,
         'timezone' => null,
         'ads' => null,
-        'createdAt' => null,
-        'updatedAt' => null
+        'created_at' => null,
+        'updated_at' => null
     ];
 
     /**
@@ -132,13 +132,13 @@ class Campaign implements ModelInterface, ArrayAccess
         'rate' => 'rate',
         'limits' => 'limits',
         'counters' => 'counters',
-        'frequencyCapping' => 'frequency_capping',
+        'frequency_capping' => 'frequency_capping',
         'tier' => 'tier',
         'wight' => 'wight',
         'timezone' => 'timezone',
         'ads' => 'ads',
-        'createdAt' => 'created_at',
-        'updatedAt' => 'updated_at'
+        'created_at' => 'created_at',
+        'updated_at' => 'updated_at'
     ];
 
     /**
@@ -157,13 +157,13 @@ class Campaign implements ModelInterface, ArrayAccess
         'rate' => 'setRate',
         'limits' => 'setLimits',
         'counters' => 'setCounters',
-        'frequencyCapping' => 'setFrequencyCapping',
+        'frequency_capping' => 'setFrequencyCapping',
         'tier' => 'setTier',
         'wight' => 'setWight',
         'timezone' => 'setTimezone',
         'ads' => 'setAds',
-        'createdAt' => 'setCreatedAt',
-        'updatedAt' => 'setUpdatedAt'
+        'created_at' => 'setCreatedAt',
+        'updated_at' => 'setUpdatedAt'
     ];
 
     /**
@@ -182,13 +182,13 @@ class Campaign implements ModelInterface, ArrayAccess
         'rate' => 'getRate',
         'limits' => 'getLimits',
         'counters' => 'getCounters',
-        'frequencyCapping' => 'getFrequencyCapping',
+        'frequency_capping' => 'getFrequencyCapping',
         'tier' => 'getTier',
         'wight' => 'getWight',
         'timezone' => 'getTimezone',
         'ads' => 'getAds',
-        'createdAt' => 'getCreatedAt',
-        'updatedAt' => 'getUpdatedAt'
+        'created_at' => 'getCreatedAt',
+        'updated_at' => 'getUpdatedAt'
     ];
 
     /**
@@ -261,13 +261,13 @@ class Campaign implements ModelInterface, ArrayAccess
         $this->container['rate'] = isset($data['rate']) ? $data['rate'] : null;
         $this->container['limits'] = isset($data['limits']) ? $data['limits'] : null;
         $this->container['counters'] = isset($data['counters']) ? $data['counters'] : null;
-        $this->container['frequencyCapping'] = isset($data['frequencyCapping']) ? $data['frequencyCapping'] : null;
+        $this->container['frequency_capping'] = isset($data['frequency_capping']) ? $data['frequency_capping'] : null;
         $this->container['tier'] = isset($data['tier']) ? $data['tier'] : null;
         $this->container['wight'] = isset($data['wight']) ? $data['wight'] : null;
         $this->container['timezone'] = isset($data['timezone']) ? $data['timezone'] : null;
         $this->container['ads'] = isset($data['ads']) ? $data['ads'] : null;
-        $this->container['createdAt'] = isset($data['createdAt']) ? $data['createdAt'] : null;
-        $this->container['updatedAt'] = isset($data['updatedAt']) ? $data['updatedAt'] : null;
+        $this->container['created_at'] = isset($data['created_at']) ? $data['created_at'] : null;
+        $this->container['updated_at'] = isset($data['updated_at']) ? $data['updated_at'] : null;
     }
 
     /**
@@ -535,25 +535,25 @@ class Campaign implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets frequencyCapping
+     * Gets frequency_capping
      *
      * @return string|null
      */
     public function getFrequencyCapping()
     {
-        return $this->container['frequencyCapping'];
+        return $this->container['frequency_capping'];
     }
 
     /**
-     * Sets frequencyCapping
+     * Sets frequency_capping
      *
-     * @param string|null $frequencyCapping frequencyCapping
+     * @param string|null $frequency_capping frequency_capping
      *
      * @return $this
      */
-    public function setFrequencyCapping($frequencyCapping)
+    public function setFrequencyCapping($frequency_capping)
     {
-        $this->container['frequencyCapping'] = $frequencyCapping;
+        $this->container['frequency_capping'] = $frequency_capping;
 
         return $this;
     }
@@ -655,49 +655,49 @@ class Campaign implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets createdAt
+     * Gets created_at
      *
      * @return string|null
      */
     public function getCreatedAt()
     {
-        return $this->container['createdAt'];
+        return $this->container['created_at'];
     }
 
     /**
-     * Sets createdAt
+     * Sets created_at
      *
-     * @param string|null $createdAt createdAt
+     * @param string|null $created_at created_at
      *
      * @return $this
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($created_at)
     {
-        $this->container['createdAt'] = $createdAt;
+        $this->container['created_at'] = $created_at;
 
         return $this;
     }
 
     /**
-     * Gets updatedAt
+     * Gets updated_at
      *
      * @return string|null
      */
     public function getUpdatedAt()
     {
-        return $this->container['updatedAt'];
+        return $this->container['updated_at'];
     }
 
     /**
-     * Sets updatedAt
+     * Sets updated_at
      *
-     * @param string|null $updatedAt updatedAt
+     * @param string|null $updated_at updated_at
      *
      * @return $this
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updated_at)
     {
-        $this->container['updatedAt'] = $updatedAt;
+        $this->container['updated_at'] = $updated_at;
 
         return $this;
     }

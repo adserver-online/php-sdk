@@ -52,7 +52,7 @@ class AdDirectLink implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $openAPITypes = [
-        'counterType' => 'string'
+        'counter_type' => 'string'
     ];
 
     /**
@@ -61,7 +61,7 @@ class AdDirectLink implements ModelInterface, ArrayAccess
       * @var string[]
       */
     protected static $openAPIFormats = [
-        'counterType' => null
+        'counter_type' => null
     ];
 
     /**
@@ -91,7 +91,7 @@ class AdDirectLink implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $attributeMap = [
-        'counterType' => 'counter_type'
+        'counter_type' => 'counter_type'
     ];
 
     /**
@@ -100,7 +100,7 @@ class AdDirectLink implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $setters = [
-        'counterType' => 'setCounterType'
+        'counter_type' => 'setCounterType'
     ];
 
     /**
@@ -109,7 +109,7 @@ class AdDirectLink implements ModelInterface, ArrayAccess
      * @var string[]
      */
     protected static $getters = [
-        'counterType' => 'getCounterType'
+        'counter_type' => 'getCounterType'
     ];
 
     /**
@@ -187,7 +187,7 @@ class AdDirectLink implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['counterType'] = isset($data['counterType']) ? $data['counterType'] : null;
+        $this->container['counter_type'] = isset($data['counter_type']) ? $data['counter_type'] : null;
     }
 
     /**
@@ -200,9 +200,9 @@ class AdDirectLink implements ModelInterface, ArrayAccess
         $invalidProperties = [];
 
         $allowedValues = $this->getCounterTypeAllowableValues();
-        if (!is_null($this->container['counterType']) && !in_array($this->container['counterType'], $allowedValues, true)) {
+        if (!is_null($this->container['counter_type']) && !in_array($this->container['counter_type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'counterType', must be one of '%s'",
+                "invalid value for 'counter_type', must be one of '%s'",
                 implode("', '", $allowedValues)
             );
         }
@@ -223,34 +223,34 @@ class AdDirectLink implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets counterType
+     * Gets counter_type
      *
      * @return string|null
      */
     public function getCounterType()
     {
-        return $this->container['counterType'];
+        return $this->container['counter_type'];
     }
 
     /**
-     * Sets counterType
+     * Sets counter_type
      *
-     * @param string|null $counterType Counter type
+     * @param string|null $counter_type Counter type
      *
      * @return $this
      */
-    public function setCounterType($counterType)
+    public function setCounterType($counter_type)
     {
         $allowedValues = $this->getCounterTypeAllowableValues();
-        if (!is_null($counterType) && !in_array($counterType, $allowedValues, true)) {
+        if (!is_null($counter_type) && !in_array($counter_type, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'counterType', must be one of '%s'",
+                    "Invalid value for 'counter_type', must be one of '%s'",
                     implode("', '", $allowedValues)
                 )
             );
         }
-        $this->container['counterType'] = $counterType;
+        $this->container['counter_type'] = $counter_type;
 
         return $this;
     }

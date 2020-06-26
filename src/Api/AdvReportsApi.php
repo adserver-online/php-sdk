@@ -114,8 +114,8 @@ class AdvReportsApi
      *
      * Advertiser's stats
      *
-     * @param  string $dateBegin Beginning of date interval (required)
-     * @param  string $dateEnd Ending of date interval (required)
+     * @param  string $date_begin Beginning of date interval (required)
+     * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group report by this dimension (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
@@ -126,9 +126,9 @@ class AdvReportsApi
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\StatsItem[]|\Adserver\Model\FormErrorResponse
      */
-    public function advGetStats($dateBegin, $dateEnd, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
+    public function advGetStats($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
     {
-        list($response) = $this->advGetStatsWithHttpInfo($dateBegin, $dateEnd, $group, $timezone, $idcampaign, $idusergroup, $idad);
+        list($response) = $this->advGetStatsWithHttpInfo($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad);
         return $response;
     }
 
@@ -137,8 +137,8 @@ class AdvReportsApi
      *
      * Advertiser's stats
      *
-     * @param  string $dateBegin Beginning of date interval (required)
-     * @param  string $dateEnd Ending of date interval (required)
+     * @param  string $date_begin Beginning of date interval (required)
+     * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group report by this dimension (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
@@ -149,9 +149,9 @@ class AdvReportsApi
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\StatsItem[]|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function advGetStatsWithHttpInfo($dateBegin, $dateEnd, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
+    public function advGetStatsWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
     {
-        $request = $this->advGetStatsRequest($dateBegin, $dateEnd, $group, $timezone, $idcampaign, $idusergroup, $idad);
+        $request = $this->advGetStatsRequest($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad);
 
         try {
             $options = $this->createHttpClientOption();
@@ -251,8 +251,8 @@ class AdvReportsApi
      *
      * Advertiser's stats
      *
-     * @param  string $dateBegin Beginning of date interval (required)
-     * @param  string $dateEnd Ending of date interval (required)
+     * @param  string $date_begin Beginning of date interval (required)
+     * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group report by this dimension (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
@@ -262,9 +262,9 @@ class AdvReportsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advGetStatsAsync($dateBegin, $dateEnd, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
+    public function advGetStatsAsync($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
     {
-        return $this->advGetStatsAsyncWithHttpInfo($dateBegin, $dateEnd, $group, $timezone, $idcampaign, $idusergroup, $idad)
+        return $this->advGetStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -277,8 +277,8 @@ class AdvReportsApi
      *
      * Advertiser's stats
      *
-     * @param  string $dateBegin Beginning of date interval (required)
-     * @param  string $dateEnd Ending of date interval (required)
+     * @param  string $date_begin Beginning of date interval (required)
+     * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group report by this dimension (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
@@ -288,10 +288,10 @@ class AdvReportsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advGetStatsAsyncWithHttpInfo($dateBegin, $dateEnd, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
+    public function advGetStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
     {
         $returnType = '\Adserver\Model\StatsItem[]';
-        $request = $this->advGetStatsRequest($dateBegin, $dateEnd, $group, $timezone, $idcampaign, $idusergroup, $idad);
+        $request = $this->advGetStatsRequest($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -330,8 +330,8 @@ class AdvReportsApi
     /**
      * Create request for operation 'advGetStats'
      *
-     * @param  string $dateBegin Beginning of date interval (required)
-     * @param  string $dateEnd Ending of date interval (required)
+     * @param  string $date_begin Beginning of date interval (required)
+     * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group report by this dimension (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
@@ -341,18 +341,18 @@ class AdvReportsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function advGetStatsRequest($dateBegin, $dateEnd, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
+    protected function advGetStatsRequest($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
     {
-        // verify the required parameter 'dateBegin' is set
-        if ($dateBegin === null || (is_array($dateBegin) && count($dateBegin) === 0)) {
+        // verify the required parameter 'date_begin' is set
+        if ($date_begin === null || (is_array($date_begin) && count($date_begin) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $dateBegin when calling advGetStats'
+                'Missing the required parameter $date_begin when calling advGetStats'
             );
         }
-        // verify the required parameter 'dateEnd' is set
-        if ($dateEnd === null || (is_array($dateEnd) && count($dateEnd) === 0)) {
+        // verify the required parameter 'date_end' is set
+        if ($date_end === null || (is_array($date_end) && count($date_end) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $dateEnd when calling advGetStats'
+                'Missing the required parameter $date_end when calling advGetStats'
             );
         }
         // verify the required parameter 'group' is set
@@ -370,25 +370,25 @@ class AdvReportsApi
         $multipart = false;
 
         // query params
-        if ($dateBegin !== null) {
-            if('form' === 'form' && is_array($dateBegin)) {
-                foreach($dateBegin as $key => $value) {
+        if ($date_begin !== null) {
+            if('form' === 'form' && is_array($date_begin)) {
+                foreach($date_begin as $key => $value) {
                     $queryParams[$key] = $value;
                 }
             }
             else {
-                $queryParams['dateBegin'] = $dateBegin;
+                $queryParams['dateBegin'] = $date_begin;
             }
         }
         // query params
-        if ($dateEnd !== null) {
-            if('form' === 'form' && is_array($dateEnd)) {
-                foreach($dateEnd as $key => $value) {
+        if ($date_end !== null) {
+            if('form' === 'form' && is_array($date_end)) {
+                foreach($date_end as $key => $value) {
                     $queryParams[$key] = $value;
                 }
             }
             else {
-                $queryParams['dateEnd'] = $dateEnd;
+                $queryParams['dateEnd'] = $date_end;
             }
         }
         // query params

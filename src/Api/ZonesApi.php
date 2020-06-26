@@ -115,15 +115,15 @@ class ZonesApi
      * Create zone
      *
      * @param  int $idsite idsite (required)
-     * @param  \Adserver\Model\ZoneRequest $zoneRequest zoneRequest (required)
+     * @param  \Adserver\Model\ZoneRequest $zone_request zone_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Zone|\Adserver\Model\FormErrorResponse
      */
-    public function createZone($idsite, $zoneRequest)
+    public function createZone($idsite, $zone_request)
     {
-        list($response) = $this->createZoneWithHttpInfo($idsite, $zoneRequest);
+        list($response) = $this->createZoneWithHttpInfo($idsite, $zone_request);
         return $response;
     }
 
@@ -133,15 +133,15 @@ class ZonesApi
      * Create zone
      *
      * @param  int $idsite (required)
-     * @param  \Adserver\Model\ZoneRequest $zoneRequest (required)
+     * @param  \Adserver\Model\ZoneRequest $zone_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Zone|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function createZoneWithHttpInfo($idsite, $zoneRequest)
+    public function createZoneWithHttpInfo($idsite, $zone_request)
     {
-        $request = $this->createZoneRequest($idsite, $zoneRequest);
+        $request = $this->createZoneRequest($idsite, $zone_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -242,14 +242,14 @@ class ZonesApi
      * Create zone
      *
      * @param  int $idsite (required)
-     * @param  \Adserver\Model\ZoneRequest $zoneRequest (required)
+     * @param  \Adserver\Model\ZoneRequest $zone_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createZoneAsync($idsite, $zoneRequest)
+    public function createZoneAsync($idsite, $zone_request)
     {
-        return $this->createZoneAsyncWithHttpInfo($idsite, $zoneRequest)
+        return $this->createZoneAsyncWithHttpInfo($idsite, $zone_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -263,15 +263,15 @@ class ZonesApi
      * Create zone
      *
      * @param  int $idsite (required)
-     * @param  \Adserver\Model\ZoneRequest $zoneRequest (required)
+     * @param  \Adserver\Model\ZoneRequest $zone_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createZoneAsyncWithHttpInfo($idsite, $zoneRequest)
+    public function createZoneAsyncWithHttpInfo($idsite, $zone_request)
     {
         $returnType = '\Adserver\Model\Zone';
-        $request = $this->createZoneRequest($idsite, $zoneRequest);
+        $request = $this->createZoneRequest($idsite, $zone_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -311,12 +311,12 @@ class ZonesApi
      * Create request for operation 'createZone'
      *
      * @param  int $idsite (required)
-     * @param  \Adserver\Model\ZoneRequest $zoneRequest (required)
+     * @param  \Adserver\Model\ZoneRequest $zone_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function createZoneRequest($idsite, $zoneRequest)
+    protected function createZoneRequest($idsite, $zone_request)
     {
         // verify the required parameter 'idsite' is set
         if ($idsite === null || (is_array($idsite) && count($idsite) === 0)) {
@@ -324,10 +324,10 @@ class ZonesApi
                 'Missing the required parameter $idsite when calling createZone'
             );
         }
-        // verify the required parameter 'zoneRequest' is set
-        if ($zoneRequest === null || (is_array($zoneRequest) && count($zoneRequest) === 0)) {
+        // verify the required parameter 'zone_request' is set
+        if ($zone_request === null || (is_array($zone_request) && count($zone_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $zoneRequest when calling createZone'
+                'Missing the required parameter $zone_request when calling createZone'
             );
         }
 
@@ -354,8 +354,8 @@ class ZonesApi
 
         // body params
         $_tempBody = null;
-        if (isset($zoneRequest)) {
-            $_tempBody = $zoneRequest;
+        if (isset($zone_request)) {
+            $_tempBody = $zone_request;
         }
 
         if ($multipart) {
@@ -935,15 +935,15 @@ class ZonesApi
      * Update zone
      *
      * @param  int $id id (required)
-     * @param  \Adserver\Model\ZoneRequest $zoneRequest zoneRequest (required)
+     * @param  \Adserver\Model\ZoneRequest $zone_request zone_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Zone|\Adserver\Model\FormErrorResponse
      */
-    public function updateZone($id, $zoneRequest)
+    public function updateZone($id, $zone_request)
     {
-        list($response) = $this->updateZoneWithHttpInfo($id, $zoneRequest);
+        list($response) = $this->updateZoneWithHttpInfo($id, $zone_request);
         return $response;
     }
 
@@ -953,15 +953,15 @@ class ZonesApi
      * Update zone
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\ZoneRequest $zoneRequest (required)
+     * @param  \Adserver\Model\ZoneRequest $zone_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Zone|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function updateZoneWithHttpInfo($id, $zoneRequest)
+    public function updateZoneWithHttpInfo($id, $zone_request)
     {
-        $request = $this->updateZoneRequest($id, $zoneRequest);
+        $request = $this->updateZoneRequest($id, $zone_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1062,14 +1062,14 @@ class ZonesApi
      * Update zone
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\ZoneRequest $zoneRequest (required)
+     * @param  \Adserver\Model\ZoneRequest $zone_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function updateZoneAsync($id, $zoneRequest)
+    public function updateZoneAsync($id, $zone_request)
     {
-        return $this->updateZoneAsyncWithHttpInfo($id, $zoneRequest)
+        return $this->updateZoneAsyncWithHttpInfo($id, $zone_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1083,15 +1083,15 @@ class ZonesApi
      * Update zone
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\ZoneRequest $zoneRequest (required)
+     * @param  \Adserver\Model\ZoneRequest $zone_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function updateZoneAsyncWithHttpInfo($id, $zoneRequest)
+    public function updateZoneAsyncWithHttpInfo($id, $zone_request)
     {
         $returnType = '\Adserver\Model\Zone';
-        $request = $this->updateZoneRequest($id, $zoneRequest);
+        $request = $this->updateZoneRequest($id, $zone_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1131,12 +1131,12 @@ class ZonesApi
      * Create request for operation 'updateZone'
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\ZoneRequest $zoneRequest (required)
+     * @param  \Adserver\Model\ZoneRequest $zone_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function updateZoneRequest($id, $zoneRequest)
+    protected function updateZoneRequest($id, $zone_request)
     {
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
@@ -1144,10 +1144,10 @@ class ZonesApi
                 'Missing the required parameter $id when calling updateZone'
             );
         }
-        // verify the required parameter 'zoneRequest' is set
-        if ($zoneRequest === null || (is_array($zoneRequest) && count($zoneRequest) === 0)) {
+        // verify the required parameter 'zone_request' is set
+        if ($zone_request === null || (is_array($zone_request) && count($zone_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $zoneRequest when calling updateZone'
+                'Missing the required parameter $zone_request when calling updateZone'
             );
         }
 
@@ -1171,8 +1171,8 @@ class ZonesApi
 
         // body params
         $_tempBody = null;
-        if (isset($zoneRequest)) {
-            $_tempBody = $zoneRequest;
+        if (isset($zone_request)) {
+            $_tempBody = $zone_request;
         }
 
         if ($multipart) {

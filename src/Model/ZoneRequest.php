@@ -52,7 +52,7 @@ class ZoneRequest implements ModelInterface, ArrayAccess
       */
     protected static $openAPITypes = [
         'name' => 'string',
-        'isActive' => 'int',
+        'is_active' => 'int',
         'idstatus' => 'int',
         'idadformat' => 'int',
         'iddimension' => 'int'
@@ -65,7 +65,7 @@ class ZoneRequest implements ModelInterface, ArrayAccess
       */
     protected static $openAPIFormats = [
         'name' => null,
-        'isActive' => null,
+        'is_active' => null,
         'idstatus' => null,
         'idadformat' => null,
         'iddimension' => null
@@ -99,7 +99,7 @@ class ZoneRequest implements ModelInterface, ArrayAccess
      */
     protected static $attributeMap = [
         'name' => 'name',
-        'isActive' => 'is_active',
+        'is_active' => 'is_active',
         'idstatus' => 'idstatus',
         'idadformat' => 'idadformat',
         'iddimension' => 'iddimension'
@@ -112,7 +112,7 @@ class ZoneRequest implements ModelInterface, ArrayAccess
      */
     protected static $setters = [
         'name' => 'setName',
-        'isActive' => 'setIsActive',
+        'is_active' => 'setIsActive',
         'idstatus' => 'setIdstatus',
         'idadformat' => 'setIdadformat',
         'iddimension' => 'setIddimension'
@@ -125,7 +125,7 @@ class ZoneRequest implements ModelInterface, ArrayAccess
      */
     protected static $getters = [
         'name' => 'getName',
-        'isActive' => 'getIsActive',
+        'is_active' => 'getIsActive',
         'idstatus' => 'getIdstatus',
         'idadformat' => 'getIdadformat',
         'iddimension' => 'getIddimension'
@@ -224,7 +224,7 @@ class ZoneRequest implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         $this->container['name'] = isset($data['name']) ? $data['name'] : null;
-        $this->container['isActive'] = isset($data['isActive']) ? $data['isActive'] : null;
+        $this->container['is_active'] = isset($data['is_active']) ? $data['is_active'] : null;
         $this->container['idstatus'] = isset($data['idstatus']) ? $data['idstatus'] : null;
         $this->container['idadformat'] = isset($data['idadformat']) ? $data['idadformat'] : null;
         $this->container['iddimension'] = isset($data['iddimension']) ? $data['iddimension'] : null;
@@ -243,9 +243,9 @@ class ZoneRequest implements ModelInterface, ArrayAccess
             $invalidProperties[] = "'name' can't be null";
         }
         $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($this->container['isActive']) && !in_array($this->container['isActive'], $allowedValues, true)) {
+        if (!is_null($this->container['is_active']) && !in_array($this->container['is_active'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'isActive', must be one of '%s'",
+                "invalid value for 'is_active', must be one of '%s'",
                 implode("', '", $allowedValues)
             );
         }
@@ -301,34 +301,34 @@ class ZoneRequest implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets isActive
+     * Gets is_active
      *
      * @return int|null
      */
     public function getIsActive()
     {
-        return $this->container['isActive'];
+        return $this->container['is_active'];
     }
 
     /**
-     * Sets isActive
+     * Sets is_active
      *
-     * @param int|null $isActive isActive
+     * @param int|null $is_active is_active
      *
      * @return $this
      */
-    public function setIsActive($isActive)
+    public function setIsActive($is_active)
     {
         $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($isActive) && !in_array($isActive, $allowedValues, true)) {
+        if (!is_null($is_active) && !in_array($is_active, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'isActive', must be one of '%s'",
+                    "Invalid value for 'is_active', must be one of '%s'",
                     implode("', '", $allowedValues)
                 )
             );
         }
-        $this->container['isActive'] = $isActive;
+        $this->container['is_active'] = $is_active;
 
         return $this;
     }
