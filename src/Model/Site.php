@@ -56,8 +56,7 @@ class Site implements ModelInterface, ArrayAccess
         'name' => 'string',
         'url' => 'string',
         'status' => 'object',
-        'idblockreason' => 'string',
-        'block_reason' => 'string',
+        'block_reason' => 'object',
         'is_active' => 'bool',
         'zones' => 'object[]',
         'created_at' => 'string',
@@ -75,7 +74,6 @@ class Site implements ModelInterface, ArrayAccess
         'name' => null,
         'url' => null,
         'status' => null,
-        'idblockreason' => null,
         'block_reason' => null,
         'is_active' => null,
         'zones' => null,
@@ -115,7 +113,6 @@ class Site implements ModelInterface, ArrayAccess
         'name' => 'name',
         'url' => 'url',
         'status' => 'status',
-        'idblockreason' => 'idblockreason',
         'block_reason' => 'block_reason',
         'is_active' => 'is_active',
         'zones' => 'zones',
@@ -134,7 +131,6 @@ class Site implements ModelInterface, ArrayAccess
         'name' => 'setName',
         'url' => 'setUrl',
         'status' => 'setStatus',
-        'idblockreason' => 'setIdblockreason',
         'block_reason' => 'setBlockReason',
         'is_active' => 'setIsActive',
         'zones' => 'setZones',
@@ -153,7 +149,6 @@ class Site implements ModelInterface, ArrayAccess
         'name' => 'getName',
         'url' => 'getUrl',
         'status' => 'getStatus',
-        'idblockreason' => 'getIdblockreason',
         'block_reason' => 'getBlockReason',
         'is_active' => 'getIsActive',
         'zones' => 'getZones',
@@ -226,7 +221,6 @@ class Site implements ModelInterface, ArrayAccess
         $this->container['name'] = isset($data['name']) ? $data['name'] : null;
         $this->container['url'] = isset($data['url']) ? $data['url'] : null;
         $this->container['status'] = isset($data['status']) ? $data['status'] : null;
-        $this->container['idblockreason'] = isset($data['idblockreason']) ? $data['idblockreason'] : null;
         $this->container['block_reason'] = isset($data['block_reason']) ? $data['block_reason'] : null;
         $this->container['is_active'] = isset($data['is_active']) ? $data['is_active'] : null;
         $this->container['zones'] = isset($data['zones']) ? $data['zones'] : null;
@@ -379,33 +373,9 @@ class Site implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets idblockreason
-     *
-     * @return string|null
-     */
-    public function getIdblockreason()
-    {
-        return $this->container['idblockreason'];
-    }
-
-    /**
-     * Sets idblockreason
-     *
-     * @param string|null $idblockreason idblockreason
-     *
-     * @return $this
-     */
-    public function setIdblockreason($idblockreason)
-    {
-        $this->container['idblockreason'] = $idblockreason;
-
-        return $this;
-    }
-
-    /**
      * Gets block_reason
      *
-     * @return string|null
+     * @return object|null
      */
     public function getBlockReason()
     {
@@ -415,7 +385,7 @@ class Site implements ModelInterface, ArrayAccess
     /**
      * Sets block_reason
      *
-     * @param string|null $block_reason Custom block reason if idblockreason == 100
+     * @param object|null $block_reason Block reason if status is rejected
      *
      * @return $this
      */

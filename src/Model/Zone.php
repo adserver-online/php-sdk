@@ -52,7 +52,7 @@ class Zone implements ModelInterface, ArrayAccess
       */
     protected static $openAPITypes = [
         'id' => 'int',
-        'idsite' => 'int',
+        'site' => 'object',
         'name' => 'string',
         'status' => 'object',
         'is_active' => 'bool',
@@ -68,7 +68,7 @@ class Zone implements ModelInterface, ArrayAccess
       */
     protected static $openAPIFormats = [
         'id' => null,
-        'idsite' => null,
+        'site' => null,
         'name' => null,
         'status' => null,
         'is_active' => null,
@@ -105,7 +105,7 @@ class Zone implements ModelInterface, ArrayAccess
      */
     protected static $attributeMap = [
         'id' => 'id',
-        'idsite' => 'idsite',
+        'site' => 'site',
         'name' => 'name',
         'status' => 'status',
         'is_active' => 'is_active',
@@ -121,7 +121,7 @@ class Zone implements ModelInterface, ArrayAccess
      */
     protected static $setters = [
         'id' => 'setId',
-        'idsite' => 'setIdsite',
+        'site' => 'setSite',
         'name' => 'setName',
         'status' => 'setStatus',
         'is_active' => 'setIsActive',
@@ -137,7 +137,7 @@ class Zone implements ModelInterface, ArrayAccess
      */
     protected static $getters = [
         'id' => 'getId',
-        'idsite' => 'getIdsite',
+        'site' => 'getSite',
         'name' => 'getName',
         'status' => 'getStatus',
         'is_active' => 'getIsActive',
@@ -207,7 +207,7 @@ class Zone implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         $this->container['id'] = isset($data['id']) ? $data['id'] : null;
-        $this->container['idsite'] = isset($data['idsite']) ? $data['idsite'] : null;
+        $this->container['site'] = isset($data['site']) ? $data['site'] : null;
         $this->container['name'] = isset($data['name']) ? $data['name'] : null;
         $this->container['status'] = isset($data['status']) ? $data['status'] : null;
         $this->container['is_active'] = isset($data['is_active']) ? $data['is_active'] : null;
@@ -265,25 +265,25 @@ class Zone implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets idsite
+     * Gets site
      *
-     * @return int|null
+     * @return object|null
      */
-    public function getIdsite()
+    public function getSite()
     {
-        return $this->container['idsite'];
+        return $this->container['site'];
     }
 
     /**
-     * Sets idsite
+     * Sets site
      *
-     * @param int|null $idsite idsite
+     * @param object|null $site site
      *
      * @return $this
      */
-    public function setIdsite($idsite)
+    public function setSite($site)
     {
-        $this->container['idsite'] = $idsite;
+        $this->container['site'] = $site;
 
         return $this;
     }
