@@ -2,7 +2,7 @@
 /**
  * Dict
  *
- * PHP version 5
+ * PHP version 7.2
  *
  * @category Class
  * @package  Adserver
@@ -12,6 +12,7 @@
 
 /**
  * Copyright (c) 2020 Adserver.Online
+ * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
 
@@ -33,10 +34,13 @@ use \ArrayAccess;
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
+ * @implements \ArrayAccess<TKey, TValue>
+ * @template TKey int|null
+ * @template TValue mixed|null  
  */
-class Dict implements ModelInterface, ArrayAccess
+class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
 {
-    const DISCRIMINATOR = null;
+    public const DISCRIMINATOR = null;
 
     /**
       * The original name of the model.
@@ -61,6 +65,8 @@ class Dict implements ModelInterface, ArrayAccess
       * Array of property to format mappings. Used for (de)serialization
       *
       * @var string[]
+      * @phpstan-var array<string, string|null>
+      * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
         'categories' => null,
@@ -186,10 +192,10 @@ class Dict implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['categories'] = isset($data['categories']) ? $data['categories'] : null;
-        $this->container['ad_formats'] = isset($data['ad_formats']) ? $data['ad_formats'] : null;
-        $this->container['zone_formats'] = isset($data['zone_formats']) ? $data['zone_formats'] : null;
-        $this->container['price_models'] = isset($data['price_models']) ? $data['price_models'] : null;
+        $this->container['categories'] = $data['categories'] ?? null;
+        $this->container['ad_formats'] = $data['ad_formats'] ?? null;
+        $this->container['zone_formats'] = $data['zone_formats'] ?? null;
+        $this->container['price_models'] = $data['price_models'] ?? null;
     }
 
     /**
@@ -231,7 +237,7 @@ class Dict implements ModelInterface, ArrayAccess
      *
      * @param map[string,string]|null $categories categories
      *
-     * @return $this
+     * @return self
      */
     public function setCategories($categories)
     {
@@ -255,7 +261,7 @@ class Dict implements ModelInterface, ArrayAccess
      *
      * @param map[string,string]|null $ad_formats ad_formats
      *
-     * @return $this
+     * @return self
      */
     public function setAdFormats($ad_formats)
     {
@@ -279,7 +285,7 @@ class Dict implements ModelInterface, ArrayAccess
      *
      * @param map[string,string]|null $zone_formats zone_formats
      *
-     * @return $this
+     * @return self
      */
     public function setZoneFormats($zone_formats)
     {
@@ -303,7 +309,7 @@ class Dict implements ModelInterface, ArrayAccess
      *
      * @param map[string,string]|null $price_models price_models
      *
-     * @return $this
+     * @return self
      */
     public function setPriceModels($price_models)
     {
@@ -328,18 +334,18 @@ class Dict implements ModelInterface, ArrayAccess
      *
      * @param integer $offset Offset
      *
-     * @return mixed
+     * @return mixed|null
      */
     public function offsetGet($offset)
     {
-        return isset($this->container[$offset]) ? $this->container[$offset] : null;
+        return $this->container[$offset] ?? null;
     }
 
     /**
      * Sets value based on offset.
      *
-     * @param integer $offset Offset
-     * @param mixed   $value  Value to be set
+     * @param int|null $offset Offset
+     * @param mixed    $value  Value to be set
      *
      * @return void
      */
@@ -362,6 +368,18 @@ class Dict implements ModelInterface, ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->container[$offset]);
+    }
+
+    /**
+     * Serializes the object to a value that can be serialized natively by json_encode().
+     * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
+     *
+     * @return mixed Returns data which can be serialized by json_encode(), which is a value
+     * of any type other than a resource.
+     */
+    public function jsonSerialize()
+    {
+       return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**

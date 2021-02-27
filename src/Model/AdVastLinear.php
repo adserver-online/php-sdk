@@ -2,7 +2,7 @@
 /**
  * AdVastLinear
  *
- * PHP version 5
+ * PHP version 7.2
  *
  * @category Class
  * @package  Adserver
@@ -12,6 +12,7 @@
 
 /**
  * Copyright (c) 2020 Adserver.Online
+ * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
 
@@ -34,10 +35,13 @@ use \ArrayAccess;
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
+ * @implements \ArrayAccess<TKey, TValue>
+ * @template TKey int|null
+ * @template TValue mixed|null  
  */
-class AdVastLinear implements ModelInterface, ArrayAccess
+class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
 {
-    const DISCRIMINATOR = null;
+    public const DISCRIMINATOR = null;
 
     /**
       * The original name of the model.
@@ -64,6 +68,8 @@ class AdVastLinear implements ModelInterface, ArrayAccess
       * Array of property to format mappings. Used for (de)serialization
       *
       * @var string[]
+      * @phpstan-var array<string, string|null>
+      * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
         'file' => null,
@@ -257,12 +263,12 @@ class AdVastLinear implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['file'] = isset($data['file']) ? $data['file'] : null;
-        $this->container['skipoffset'] = isset($data['skipoffset']) ? $data['skipoffset'] : null;
-        $this->container['skipoffset_type'] = isset($data['skipoffset_type']) ? $data['skipoffset_type'] : null;
-        $this->container['allow_skip'] = isset($data['allow_skip']) ? $data['allow_skip'] : null;
-        $this->container['maintain_aspect_ratio'] = isset($data['maintain_aspect_ratio']) ? $data['maintain_aspect_ratio'] : null;
-        $this->container['video_scalable'] = isset($data['video_scalable']) ? $data['video_scalable'] : null;
+        $this->container['file'] = $data['file'] ?? null;
+        $this->container['skipoffset'] = $data['skipoffset'] ?? null;
+        $this->container['skipoffset_type'] = $data['skipoffset_type'] ?? null;
+        $this->container['allow_skip'] = $data['allow_skip'] ?? null;
+        $this->container['maintain_aspect_ratio'] = $data['maintain_aspect_ratio'] ?? null;
+        $this->container['video_scalable'] = $data['video_scalable'] ?? null;
     }
 
     /**
@@ -277,7 +283,8 @@ class AdVastLinear implements ModelInterface, ArrayAccess
         $allowedValues = $this->getSkipoffsetTypeAllowableValues();
         if (!is_null($this->container['skipoffset_type']) && !in_array($this->container['skipoffset_type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'skipoffset_type', must be one of '%s'",
+                "invalid value '%s' for 'skipoffset_type', must be one of '%s'",
+                $this->container['skipoffset_type'],
                 implode("', '", $allowedValues)
             );
         }
@@ -285,7 +292,8 @@ class AdVastLinear implements ModelInterface, ArrayAccess
         $allowedValues = $this->getAllowSkipAllowableValues();
         if (!is_null($this->container['allow_skip']) && !in_array($this->container['allow_skip'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'allow_skip', must be one of '%s'",
+                "invalid value '%s' for 'allow_skip', must be one of '%s'",
+                $this->container['allow_skip'],
                 implode("', '", $allowedValues)
             );
         }
@@ -293,7 +301,8 @@ class AdVastLinear implements ModelInterface, ArrayAccess
         $allowedValues = $this->getMaintainAspectRatioAllowableValues();
         if (!is_null($this->container['maintain_aspect_ratio']) && !in_array($this->container['maintain_aspect_ratio'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'maintain_aspect_ratio', must be one of '%s'",
+                "invalid value '%s' for 'maintain_aspect_ratio', must be one of '%s'",
+                $this->container['maintain_aspect_ratio'],
                 implode("', '", $allowedValues)
             );
         }
@@ -301,7 +310,8 @@ class AdVastLinear implements ModelInterface, ArrayAccess
         $allowedValues = $this->getVideoScalableAllowableValues();
         if (!is_null($this->container['video_scalable']) && !in_array($this->container['video_scalable'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'video_scalable', must be one of '%s'",
+                "invalid value '%s' for 'video_scalable', must be one of '%s'",
+                $this->container['video_scalable'],
                 implode("', '", $allowedValues)
             );
         }
@@ -336,7 +346,7 @@ class AdVastLinear implements ModelInterface, ArrayAccess
      *
      * @param string|null $file Base64 encoded file
      *
-     * @return $this
+     * @return self
      */
     public function setFile($file)
     {
@@ -360,7 +370,7 @@ class AdVastLinear implements ModelInterface, ArrayAccess
      *
      * @param int|null $skipoffset skipoffset
      *
-     * @return $this
+     * @return self
      */
     public function setSkipoffset($skipoffset)
     {
@@ -384,7 +394,7 @@ class AdVastLinear implements ModelInterface, ArrayAccess
      *
      * @param string|null $skipoffset_type skipoffset_type
      *
-     * @return $this
+     * @return self
      */
     public function setSkipoffsetType($skipoffset_type)
     {
@@ -392,7 +402,8 @@ class AdVastLinear implements ModelInterface, ArrayAccess
         if (!is_null($skipoffset_type) && !in_array($skipoffset_type, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'skipoffset_type', must be one of '%s'",
+                    "Invalid value '%s' for 'skipoffset_type', must be one of '%s'",
+                    $skipoffset_type,
                     implode("', '", $allowedValues)
                 )
             );
@@ -417,7 +428,7 @@ class AdVastLinear implements ModelInterface, ArrayAccess
      *
      * @param int|null $allow_skip allow_skip
      *
-     * @return $this
+     * @return self
      */
     public function setAllowSkip($allow_skip)
     {
@@ -425,7 +436,8 @@ class AdVastLinear implements ModelInterface, ArrayAccess
         if (!is_null($allow_skip) && !in_array($allow_skip, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'allow_skip', must be one of '%s'",
+                    "Invalid value '%s' for 'allow_skip', must be one of '%s'",
+                    $allow_skip,
                     implode("', '", $allowedValues)
                 )
             );
@@ -450,7 +462,7 @@ class AdVastLinear implements ModelInterface, ArrayAccess
      *
      * @param int|null $maintain_aspect_ratio maintain_aspect_ratio
      *
-     * @return $this
+     * @return self
      */
     public function setMaintainAspectRatio($maintain_aspect_ratio)
     {
@@ -458,7 +470,8 @@ class AdVastLinear implements ModelInterface, ArrayAccess
         if (!is_null($maintain_aspect_ratio) && !in_array($maintain_aspect_ratio, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'maintain_aspect_ratio', must be one of '%s'",
+                    "Invalid value '%s' for 'maintain_aspect_ratio', must be one of '%s'",
+                    $maintain_aspect_ratio,
                     implode("', '", $allowedValues)
                 )
             );
@@ -483,7 +496,7 @@ class AdVastLinear implements ModelInterface, ArrayAccess
      *
      * @param int|null $video_scalable video_scalable
      *
-     * @return $this
+     * @return self
      */
     public function setVideoScalable($video_scalable)
     {
@@ -491,7 +504,8 @@ class AdVastLinear implements ModelInterface, ArrayAccess
         if (!is_null($video_scalable) && !in_array($video_scalable, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'video_scalable', must be one of '%s'",
+                    "Invalid value '%s' for 'video_scalable', must be one of '%s'",
+                    $video_scalable,
                     implode("', '", $allowedValues)
                 )
             );
@@ -517,18 +531,18 @@ class AdVastLinear implements ModelInterface, ArrayAccess
      *
      * @param integer $offset Offset
      *
-     * @return mixed
+     * @return mixed|null
      */
     public function offsetGet($offset)
     {
-        return isset($this->container[$offset]) ? $this->container[$offset] : null;
+        return $this->container[$offset] ?? null;
     }
 
     /**
      * Sets value based on offset.
      *
-     * @param integer $offset Offset
-     * @param mixed   $value  Value to be set
+     * @param int|null $offset Offset
+     * @param mixed    $value  Value to be set
      *
      * @return void
      */
@@ -551,6 +565,18 @@ class AdVastLinear implements ModelInterface, ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->container[$offset]);
+    }
+
+    /**
+     * Serializes the object to a value that can be serialized natively by json_encode().
+     * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
+     *
+     * @return mixed Returns data which can be serialized by json_encode(), which is a value
+     * of any type other than a resource.
+     */
+    public function jsonSerialize()
+    {
+       return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**

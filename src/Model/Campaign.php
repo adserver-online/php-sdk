@@ -2,7 +2,7 @@
 /**
  * Campaign
  *
- * PHP version 5
+ * PHP version 7.2
  *
  * @category Class
  * @package  Adserver
@@ -12,6 +12,7 @@
 
 /**
  * Copyright (c) 2020 Adserver.Online
+ * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
 
@@ -33,10 +34,13 @@ use \ArrayAccess;
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
+ * @implements \ArrayAccess<TKey, TValue>
+ * @template TKey int|null
+ * @template TValue mixed|null  
  */
-class Campaign implements ModelInterface, ArrayAccess
+class Campaign implements ModelInterface, ArrayAccess, \JsonSerializable
 {
-    const DISCRIMINATOR = null;
+    public const DISCRIMINATOR = null;
 
     /**
       * The original name of the model.
@@ -57,15 +61,17 @@ class Campaign implements ModelInterface, ArrayAccess
         'status' => 'object',
         'runstatus' => 'object',
         'pricemodel' => 'object',
-        'category' => 'object',
         'rate' => 'float',
-        'limits' => 'object',
+        'category' => 'object',
         'counters' => 'object',
+        'limits' => 'object',
         'frequency_capping' => 'string',
         'tier' => 'string',
         'wight' => 'string',
         'timezone' => 'string',
+        'restrict_update' => 'bool',
         'ads' => 'object[]',
+        'timetargeting' => 'string',
         'created_at' => 'string',
         'updated_at' => 'string'
     ];
@@ -74,6 +80,8 @@ class Campaign implements ModelInterface, ArrayAccess
       * Array of property to format mappings. Used for (de)serialization
       *
       * @var string[]
+      * @phpstan-var array<string, string|null>
+      * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
         'id' => null,
@@ -82,15 +90,17 @@ class Campaign implements ModelInterface, ArrayAccess
         'status' => null,
         'runstatus' => null,
         'pricemodel' => null,
-        'category' => null,
         'rate' => null,
-        'limits' => null,
+        'category' => null,
         'counters' => null,
+        'limits' => null,
         'frequency_capping' => null,
         'tier' => null,
         'wight' => null,
         'timezone' => null,
+        'restrict_update' => null,
         'ads' => null,
+        'timetargeting' => null,
         'created_at' => null,
         'updated_at' => null
     ];
@@ -128,15 +138,17 @@ class Campaign implements ModelInterface, ArrayAccess
         'status' => 'status',
         'runstatus' => 'runstatus',
         'pricemodel' => 'pricemodel',
-        'category' => 'category',
         'rate' => 'rate',
-        'limits' => 'limits',
+        'category' => 'category',
         'counters' => 'counters',
+        'limits' => 'limits',
         'frequency_capping' => 'frequency_capping',
         'tier' => 'tier',
         'wight' => 'wight',
         'timezone' => 'timezone',
+        'restrict_update' => 'restrict_update',
         'ads' => 'ads',
+        'timetargeting' => 'timetargeting',
         'created_at' => 'created_at',
         'updated_at' => 'updated_at'
     ];
@@ -153,15 +165,17 @@ class Campaign implements ModelInterface, ArrayAccess
         'status' => 'setStatus',
         'runstatus' => 'setRunstatus',
         'pricemodel' => 'setPricemodel',
-        'category' => 'setCategory',
         'rate' => 'setRate',
-        'limits' => 'setLimits',
+        'category' => 'setCategory',
         'counters' => 'setCounters',
+        'limits' => 'setLimits',
         'frequency_capping' => 'setFrequencyCapping',
         'tier' => 'setTier',
         'wight' => 'setWight',
         'timezone' => 'setTimezone',
+        'restrict_update' => 'setRestrictUpdate',
         'ads' => 'setAds',
+        'timetargeting' => 'setTimetargeting',
         'created_at' => 'setCreatedAt',
         'updated_at' => 'setUpdatedAt'
     ];
@@ -178,15 +192,17 @@ class Campaign implements ModelInterface, ArrayAccess
         'status' => 'getStatus',
         'runstatus' => 'getRunstatus',
         'pricemodel' => 'getPricemodel',
-        'category' => 'getCategory',
         'rate' => 'getRate',
-        'limits' => 'getLimits',
+        'category' => 'getCategory',
         'counters' => 'getCounters',
+        'limits' => 'getLimits',
         'frequency_capping' => 'getFrequencyCapping',
         'tier' => 'getTier',
         'wight' => 'getWight',
         'timezone' => 'getTimezone',
+        'restrict_update' => 'getRestrictUpdate',
         'ads' => 'getAds',
+        'timetargeting' => 'getTimetargeting',
         'created_at' => 'getCreatedAt',
         'updated_at' => 'getUpdatedAt'
     ];
@@ -251,23 +267,25 @@ class Campaign implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['id'] = isset($data['id']) ? $data['id'] : null;
-        $this->container['name'] = isset($data['name']) ? $data['name'] : null;
-        $this->container['advertiser'] = isset($data['advertiser']) ? $data['advertiser'] : null;
-        $this->container['status'] = isset($data['status']) ? $data['status'] : null;
-        $this->container['runstatus'] = isset($data['runstatus']) ? $data['runstatus'] : null;
-        $this->container['pricemodel'] = isset($data['pricemodel']) ? $data['pricemodel'] : null;
-        $this->container['category'] = isset($data['category']) ? $data['category'] : null;
-        $this->container['rate'] = isset($data['rate']) ? $data['rate'] : null;
-        $this->container['limits'] = isset($data['limits']) ? $data['limits'] : null;
-        $this->container['counters'] = isset($data['counters']) ? $data['counters'] : null;
-        $this->container['frequency_capping'] = isset($data['frequency_capping']) ? $data['frequency_capping'] : null;
-        $this->container['tier'] = isset($data['tier']) ? $data['tier'] : null;
-        $this->container['wight'] = isset($data['wight']) ? $data['wight'] : null;
-        $this->container['timezone'] = isset($data['timezone']) ? $data['timezone'] : null;
-        $this->container['ads'] = isset($data['ads']) ? $data['ads'] : null;
-        $this->container['created_at'] = isset($data['created_at']) ? $data['created_at'] : null;
-        $this->container['updated_at'] = isset($data['updated_at']) ? $data['updated_at'] : null;
+        $this->container['id'] = $data['id'] ?? null;
+        $this->container['name'] = $data['name'] ?? null;
+        $this->container['advertiser'] = $data['advertiser'] ?? null;
+        $this->container['status'] = $data['status'] ?? null;
+        $this->container['runstatus'] = $data['runstatus'] ?? null;
+        $this->container['pricemodel'] = $data['pricemodel'] ?? null;
+        $this->container['rate'] = $data['rate'] ?? null;
+        $this->container['category'] = $data['category'] ?? null;
+        $this->container['counters'] = $data['counters'] ?? null;
+        $this->container['limits'] = $data['limits'] ?? null;
+        $this->container['frequency_capping'] = $data['frequency_capping'] ?? null;
+        $this->container['tier'] = $data['tier'] ?? null;
+        $this->container['wight'] = $data['wight'] ?? null;
+        $this->container['timezone'] = $data['timezone'] ?? null;
+        $this->container['restrict_update'] = $data['restrict_update'] ?? null;
+        $this->container['ads'] = $data['ads'] ?? null;
+        $this->container['timetargeting'] = $data['timetargeting'] ?? null;
+        $this->container['created_at'] = $data['created_at'] ?? null;
+        $this->container['updated_at'] = $data['updated_at'] ?? null;
     }
 
     /**
@@ -309,7 +327,7 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param int|null $id id
      *
-     * @return $this
+     * @return self
      */
     public function setId($id)
     {
@@ -333,7 +351,7 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param string|null $name name
      *
-     * @return $this
+     * @return self
      */
     public function setName($name)
     {
@@ -357,7 +375,7 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param object|null $advertiser advertiser
      *
-     * @return $this
+     * @return self
      */
     public function setAdvertiser($advertiser)
     {
@@ -381,7 +399,7 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param object|null $status status
      *
-     * @return $this
+     * @return self
      */
     public function setStatus($status)
     {
@@ -405,7 +423,7 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param object|null $runstatus runstatus
      *
-     * @return $this
+     * @return self
      */
     public function setRunstatus($runstatus)
     {
@@ -429,35 +447,11 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param object|null $pricemodel pricemodel
      *
-     * @return $this
+     * @return self
      */
     public function setPricemodel($pricemodel)
     {
         $this->container['pricemodel'] = $pricemodel;
-
-        return $this;
-    }
-
-    /**
-     * Gets category
-     *
-     * @return object|null
-     */
-    public function getCategory()
-    {
-        return $this->container['category'];
-    }
-
-    /**
-     * Sets category
-     *
-     * @param object|null $category category
-     *
-     * @return $this
-     */
-    public function setCategory($category)
-    {
-        $this->container['category'] = $category;
 
         return $this;
     }
@@ -477,7 +471,7 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param float|null $rate rate
      *
-     * @return $this
+     * @return self
      */
     public function setRate($rate)
     {
@@ -487,25 +481,25 @@ class Campaign implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets limits
+     * Gets category
      *
      * @return object|null
      */
-    public function getLimits()
+    public function getCategory()
     {
-        return $this->container['limits'];
+        return $this->container['category'];
     }
 
     /**
-     * Sets limits
+     * Sets category
      *
-     * @param object|null $limits limits
+     * @param object|null $category category
      *
-     * @return $this
+     * @return self
      */
-    public function setLimits($limits)
+    public function setCategory($category)
     {
-        $this->container['limits'] = $limits;
+        $this->container['category'] = $category;
 
         return $this;
     }
@@ -525,11 +519,35 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param object|null $counters counters
      *
-     * @return $this
+     * @return self
      */
     public function setCounters($counters)
     {
         $this->container['counters'] = $counters;
+
+        return $this;
+    }
+
+    /**
+     * Gets limits
+     *
+     * @return object|null
+     */
+    public function getLimits()
+    {
+        return $this->container['limits'];
+    }
+
+    /**
+     * Sets limits
+     *
+     * @param object|null $limits limits
+     *
+     * @return self
+     */
+    public function setLimits($limits)
+    {
+        $this->container['limits'] = $limits;
 
         return $this;
     }
@@ -549,7 +567,7 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param string|null $frequency_capping frequency_capping
      *
-     * @return $this
+     * @return self
      */
     public function setFrequencyCapping($frequency_capping)
     {
@@ -573,7 +591,7 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param string|null $tier tier
      *
-     * @return $this
+     * @return self
      */
     public function setTier($tier)
     {
@@ -597,7 +615,7 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param string|null $wight wight
      *
-     * @return $this
+     * @return self
      */
     public function setWight($wight)
     {
@@ -621,11 +639,35 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param string|null $timezone timezone
      *
-     * @return $this
+     * @return self
      */
     public function setTimezone($timezone)
     {
         $this->container['timezone'] = $timezone;
+
+        return $this;
+    }
+
+    /**
+     * Gets restrict_update
+     *
+     * @return bool|null
+     */
+    public function getRestrictUpdate()
+    {
+        return $this->container['restrict_update'];
+    }
+
+    /**
+     * Sets restrict_update
+     *
+     * @param bool|null $restrict_update restrict_update
+     *
+     * @return self
+     */
+    public function setRestrictUpdate($restrict_update)
+    {
+        $this->container['restrict_update'] = $restrict_update;
 
         return $this;
     }
@@ -645,11 +687,35 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param object[]|null $ads ads
      *
-     * @return $this
+     * @return self
      */
     public function setAds($ads)
     {
         $this->container['ads'] = $ads;
+
+        return $this;
+    }
+
+    /**
+     * Gets timetargeting
+     *
+     * @return string|null
+     */
+    public function getTimetargeting()
+    {
+        return $this->container['timetargeting'];
+    }
+
+    /**
+     * Sets timetargeting
+     *
+     * @param string|null $timetargeting timetargeting
+     *
+     * @return self
+     */
+    public function setTimetargeting($timetargeting)
+    {
+        $this->container['timetargeting'] = $timetargeting;
 
         return $this;
     }
@@ -669,7 +735,7 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param string|null $created_at created_at
      *
-     * @return $this
+     * @return self
      */
     public function setCreatedAt($created_at)
     {
@@ -693,7 +759,7 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param string|null $updated_at updated_at
      *
-     * @return $this
+     * @return self
      */
     public function setUpdatedAt($updated_at)
     {
@@ -718,18 +784,18 @@ class Campaign implements ModelInterface, ArrayAccess
      *
      * @param integer $offset Offset
      *
-     * @return mixed
+     * @return mixed|null
      */
     public function offsetGet($offset)
     {
-        return isset($this->container[$offset]) ? $this->container[$offset] : null;
+        return $this->container[$offset] ?? null;
     }
 
     /**
      * Sets value based on offset.
      *
-     * @param integer $offset Offset
-     * @param mixed   $value  Value to be set
+     * @param int|null $offset Offset
+     * @param mixed    $value  Value to be set
      *
      * @return void
      */
@@ -752,6 +818,18 @@ class Campaign implements ModelInterface, ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->container[$offset]);
+    }
+
+    /**
+     * Serializes the object to a value that can be serialized natively by json_encode().
+     * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
+     *
+     * @return mixed Returns data which can be serialized by json_encode(), which is a value
+     * of any type other than a resource.
+     */
+    public function jsonSerialize()
+    {
+       return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**

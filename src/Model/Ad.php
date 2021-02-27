@@ -2,7 +2,7 @@
 /**
  * Ad
  *
- * PHP version 5
+ * PHP version 7.2
  *
  * @category Class
  * @package  Adserver
@@ -12,6 +12,7 @@
 
 /**
  * Copyright (c) 2020 Adserver.Online
+ * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
 
@@ -33,10 +34,13 @@ use \ArrayAccess;
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
+ * @implements \ArrayAccess<TKey, TValue>
+ * @template TKey int|null
+ * @template TValue mixed|null  
  */
-class Ad implements ModelInterface, ArrayAccess
+class Ad implements ModelInterface, ArrayAccess, \JsonSerializable
 {
-    const DISCRIMINATOR = null;
+    public const DISCRIMINATOR = null;
 
     /**
       * The original name of the model.
@@ -52,15 +56,19 @@ class Ad implements ModelInterface, ArrayAccess
       */
     protected static $openAPITypes = [
         'id' => 'int',
-        'campaign' => 'object',
         'name' => 'string',
-        'url' => 'string',
-        'pixel_url' => 'string',
-        'pixel_html' => 'string',
+        'campaign' => 'object',
         'status' => 'object',
         'is_active' => 'bool',
         'format' => 'object',
+        'width' => 'string',
+        'height' => 'string',
+        'weight' => 'string',
+        'url' => 'string',
+        'pixel_url' => 'string',
+        'pixel_html' => 'string',
         'details' => 'object',
+        'assigned_zones' => 'object[]',
         'created_at' => 'string',
         'updated_at' => 'string'
     ];
@@ -69,18 +77,24 @@ class Ad implements ModelInterface, ArrayAccess
       * Array of property to format mappings. Used for (de)serialization
       *
       * @var string[]
+      * @phpstan-var array<string, string|null>
+      * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
         'id' => null,
-        'campaign' => null,
         'name' => null,
-        'url' => null,
-        'pixel_url' => null,
-        'pixel_html' => null,
+        'campaign' => null,
         'status' => null,
         'is_active' => null,
         'format' => null,
+        'width' => null,
+        'height' => null,
+        'weight' => null,
+        'url' => null,
+        'pixel_url' => null,
+        'pixel_html' => null,
         'details' => null,
+        'assigned_zones' => null,
         'created_at' => null,
         'updated_at' => null
     ];
@@ -113,15 +127,19 @@ class Ad implements ModelInterface, ArrayAccess
      */
     protected static $attributeMap = [
         'id' => 'id',
-        'campaign' => 'campaign',
         'name' => 'name',
-        'url' => 'url',
-        'pixel_url' => 'pixel_url',
-        'pixel_html' => 'pixel_html',
+        'campaign' => 'campaign',
         'status' => 'status',
         'is_active' => 'is_active',
         'format' => 'format',
+        'width' => 'width',
+        'height' => 'height',
+        'weight' => 'weight',
+        'url' => 'url',
+        'pixel_url' => 'pixel_url',
+        'pixel_html' => 'pixel_html',
         'details' => 'details',
+        'assigned_zones' => 'assigned_zones',
         'created_at' => 'created_at',
         'updated_at' => 'updated_at'
     ];
@@ -133,15 +151,19 @@ class Ad implements ModelInterface, ArrayAccess
      */
     protected static $setters = [
         'id' => 'setId',
-        'campaign' => 'setCampaign',
         'name' => 'setName',
-        'url' => 'setUrl',
-        'pixel_url' => 'setPixelUrl',
-        'pixel_html' => 'setPixelHtml',
+        'campaign' => 'setCampaign',
         'status' => 'setStatus',
         'is_active' => 'setIsActive',
         'format' => 'setFormat',
+        'width' => 'setWidth',
+        'height' => 'setHeight',
+        'weight' => 'setWeight',
+        'url' => 'setUrl',
+        'pixel_url' => 'setPixelUrl',
+        'pixel_html' => 'setPixelHtml',
         'details' => 'setDetails',
+        'assigned_zones' => 'setAssignedZones',
         'created_at' => 'setCreatedAt',
         'updated_at' => 'setUpdatedAt'
     ];
@@ -153,15 +175,19 @@ class Ad implements ModelInterface, ArrayAccess
      */
     protected static $getters = [
         'id' => 'getId',
-        'campaign' => 'getCampaign',
         'name' => 'getName',
-        'url' => 'getUrl',
-        'pixel_url' => 'getPixelUrl',
-        'pixel_html' => 'getPixelHtml',
+        'campaign' => 'getCampaign',
         'status' => 'getStatus',
         'is_active' => 'getIsActive',
         'format' => 'getFormat',
+        'width' => 'getWidth',
+        'height' => 'getHeight',
+        'weight' => 'getWeight',
+        'url' => 'getUrl',
+        'pixel_url' => 'getPixelUrl',
+        'pixel_html' => 'getPixelHtml',
         'details' => 'getDetails',
+        'assigned_zones' => 'getAssignedZones',
         'created_at' => 'getCreatedAt',
         'updated_at' => 'getUpdatedAt'
     ];
@@ -226,18 +252,22 @@ class Ad implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['id'] = isset($data['id']) ? $data['id'] : null;
-        $this->container['campaign'] = isset($data['campaign']) ? $data['campaign'] : null;
-        $this->container['name'] = isset($data['name']) ? $data['name'] : null;
-        $this->container['url'] = isset($data['url']) ? $data['url'] : null;
-        $this->container['pixel_url'] = isset($data['pixel_url']) ? $data['pixel_url'] : null;
-        $this->container['pixel_html'] = isset($data['pixel_html']) ? $data['pixel_html'] : null;
-        $this->container['status'] = isset($data['status']) ? $data['status'] : null;
-        $this->container['is_active'] = isset($data['is_active']) ? $data['is_active'] : null;
-        $this->container['format'] = isset($data['format']) ? $data['format'] : null;
-        $this->container['details'] = isset($data['details']) ? $data['details'] : null;
-        $this->container['created_at'] = isset($data['created_at']) ? $data['created_at'] : null;
-        $this->container['updated_at'] = isset($data['updated_at']) ? $data['updated_at'] : null;
+        $this->container['id'] = $data['id'] ?? null;
+        $this->container['name'] = $data['name'] ?? null;
+        $this->container['campaign'] = $data['campaign'] ?? null;
+        $this->container['status'] = $data['status'] ?? null;
+        $this->container['is_active'] = $data['is_active'] ?? null;
+        $this->container['format'] = $data['format'] ?? null;
+        $this->container['width'] = $data['width'] ?? null;
+        $this->container['height'] = $data['height'] ?? null;
+        $this->container['weight'] = $data['weight'] ?? null;
+        $this->container['url'] = $data['url'] ?? null;
+        $this->container['pixel_url'] = $data['pixel_url'] ?? null;
+        $this->container['pixel_html'] = $data['pixel_html'] ?? null;
+        $this->container['details'] = $data['details'] ?? null;
+        $this->container['assigned_zones'] = $data['assigned_zones'] ?? null;
+        $this->container['created_at'] = $data['created_at'] ?? null;
+        $this->container['updated_at'] = $data['updated_at'] ?? null;
     }
 
     /**
@@ -279,35 +309,11 @@ class Ad implements ModelInterface, ArrayAccess
      *
      * @param int|null $id id
      *
-     * @return $this
+     * @return self
      */
     public function setId($id)
     {
         $this->container['id'] = $id;
-
-        return $this;
-    }
-
-    /**
-     * Gets campaign
-     *
-     * @return object|null
-     */
-    public function getCampaign()
-    {
-        return $this->container['campaign'];
-    }
-
-    /**
-     * Sets campaign
-     *
-     * @param object|null $campaign campaign
-     *
-     * @return $this
-     */
-    public function setCampaign($campaign)
-    {
-        $this->container['campaign'] = $campaign;
 
         return $this;
     }
@@ -327,7 +333,7 @@ class Ad implements ModelInterface, ArrayAccess
      *
      * @param string|null $name name
      *
-     * @return $this
+     * @return self
      */
     public function setName($name)
     {
@@ -337,73 +343,25 @@ class Ad implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets url
+     * Gets campaign
      *
-     * @return string|null
+     * @return object|null
      */
-    public function getUrl()
+    public function getCampaign()
     {
-        return $this->container['url'];
+        return $this->container['campaign'];
     }
 
     /**
-     * Sets url
+     * Sets campaign
      *
-     * @param string|null $url url
+     * @param object|null $campaign campaign
      *
-     * @return $this
+     * @return self
      */
-    public function setUrl($url)
+    public function setCampaign($campaign)
     {
-        $this->container['url'] = $url;
-
-        return $this;
-    }
-
-    /**
-     * Gets pixel_url
-     *
-     * @return string|null
-     */
-    public function getPixelUrl()
-    {
-        return $this->container['pixel_url'];
-    }
-
-    /**
-     * Sets pixel_url
-     *
-     * @param string|null $pixel_url pixel_url
-     *
-     * @return $this
-     */
-    public function setPixelUrl($pixel_url)
-    {
-        $this->container['pixel_url'] = $pixel_url;
-
-        return $this;
-    }
-
-    /**
-     * Gets pixel_html
-     *
-     * @return string|null
-     */
-    public function getPixelHtml()
-    {
-        return $this->container['pixel_html'];
-    }
-
-    /**
-     * Sets pixel_html
-     *
-     * @param string|null $pixel_html pixel_html
-     *
-     * @return $this
-     */
-    public function setPixelHtml($pixel_html)
-    {
-        $this->container['pixel_html'] = $pixel_html;
+        $this->container['campaign'] = $campaign;
 
         return $this;
     }
@@ -423,7 +381,7 @@ class Ad implements ModelInterface, ArrayAccess
      *
      * @param object|null $status status
      *
-     * @return $this
+     * @return self
      */
     public function setStatus($status)
     {
@@ -447,7 +405,7 @@ class Ad implements ModelInterface, ArrayAccess
      *
      * @param bool|null $is_active is_active
      *
-     * @return $this
+     * @return self
      */
     public function setIsActive($is_active)
     {
@@ -471,11 +429,155 @@ class Ad implements ModelInterface, ArrayAccess
      *
      * @param object|null $format format
      *
-     * @return $this
+     * @return self
      */
     public function setFormat($format)
     {
         $this->container['format'] = $format;
+
+        return $this;
+    }
+
+    /**
+     * Gets width
+     *
+     * @return string|null
+     */
+    public function getWidth()
+    {
+        return $this->container['width'];
+    }
+
+    /**
+     * Sets width
+     *
+     * @param string|null $width width
+     *
+     * @return self
+     */
+    public function setWidth($width)
+    {
+        $this->container['width'] = $width;
+
+        return $this;
+    }
+
+    /**
+     * Gets height
+     *
+     * @return string|null
+     */
+    public function getHeight()
+    {
+        return $this->container['height'];
+    }
+
+    /**
+     * Sets height
+     *
+     * @param string|null $height height
+     *
+     * @return self
+     */
+    public function setHeight($height)
+    {
+        $this->container['height'] = $height;
+
+        return $this;
+    }
+
+    /**
+     * Gets weight
+     *
+     * @return string|null
+     */
+    public function getWeight()
+    {
+        return $this->container['weight'];
+    }
+
+    /**
+     * Sets weight
+     *
+     * @param string|null $weight weight
+     *
+     * @return self
+     */
+    public function setWeight($weight)
+    {
+        $this->container['weight'] = $weight;
+
+        return $this;
+    }
+
+    /**
+     * Gets url
+     *
+     * @return string|null
+     */
+    public function getUrl()
+    {
+        return $this->container['url'];
+    }
+
+    /**
+     * Sets url
+     *
+     * @param string|null $url url
+     *
+     * @return self
+     */
+    public function setUrl($url)
+    {
+        $this->container['url'] = $url;
+
+        return $this;
+    }
+
+    /**
+     * Gets pixel_url
+     *
+     * @return string|null
+     */
+    public function getPixelUrl()
+    {
+        return $this->container['pixel_url'];
+    }
+
+    /**
+     * Sets pixel_url
+     *
+     * @param string|null $pixel_url pixel_url
+     *
+     * @return self
+     */
+    public function setPixelUrl($pixel_url)
+    {
+        $this->container['pixel_url'] = $pixel_url;
+
+        return $this;
+    }
+
+    /**
+     * Gets pixel_html
+     *
+     * @return string|null
+     */
+    public function getPixelHtml()
+    {
+        return $this->container['pixel_html'];
+    }
+
+    /**
+     * Sets pixel_html
+     *
+     * @param string|null $pixel_html pixel_html
+     *
+     * @return self
+     */
+    public function setPixelHtml($pixel_html)
+    {
+        $this->container['pixel_html'] = $pixel_html;
 
         return $this;
     }
@@ -495,11 +597,35 @@ class Ad implements ModelInterface, ArrayAccess
      *
      * @param object|null $details details
      *
-     * @return $this
+     * @return self
      */
     public function setDetails($details)
     {
         $this->container['details'] = $details;
+
+        return $this;
+    }
+
+    /**
+     * Gets assigned_zones
+     *
+     * @return object[]|null
+     */
+    public function getAssignedZones()
+    {
+        return $this->container['assigned_zones'];
+    }
+
+    /**
+     * Sets assigned_zones
+     *
+     * @param object[]|null $assigned_zones assigned_zones
+     *
+     * @return self
+     */
+    public function setAssignedZones($assigned_zones)
+    {
+        $this->container['assigned_zones'] = $assigned_zones;
 
         return $this;
     }
@@ -519,7 +645,7 @@ class Ad implements ModelInterface, ArrayAccess
      *
      * @param string|null $created_at created_at
      *
-     * @return $this
+     * @return self
      */
     public function setCreatedAt($created_at)
     {
@@ -543,7 +669,7 @@ class Ad implements ModelInterface, ArrayAccess
      *
      * @param string|null $updated_at updated_at
      *
-     * @return $this
+     * @return self
      */
     public function setUpdatedAt($updated_at)
     {
@@ -568,18 +694,18 @@ class Ad implements ModelInterface, ArrayAccess
      *
      * @param integer $offset Offset
      *
-     * @return mixed
+     * @return mixed|null
      */
     public function offsetGet($offset)
     {
-        return isset($this->container[$offset]) ? $this->container[$offset] : null;
+        return $this->container[$offset] ?? null;
     }
 
     /**
      * Sets value based on offset.
      *
-     * @param integer $offset Offset
-     * @param mixed   $value  Value to be set
+     * @param int|null $offset Offset
+     * @param mixed    $value  Value to be set
      *
      * @return void
      */
@@ -602,6 +728,18 @@ class Ad implements ModelInterface, ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->container[$offset]);
+    }
+
+    /**
+     * Serializes the object to a value that can be serialized natively by json_encode().
+     * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
+     *
+     * @return mixed Returns data which can be serialized by json_encode(), which is a value
+     * of any type other than a resource.
+     */
+    public function jsonSerialize()
+    {
+       return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**

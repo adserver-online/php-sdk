@@ -1,7 +1,7 @@
 <?php
 /**
  * PubReportsApi
- * PHP version 5
+ * PHP version 7.2
  *
  * @category Class
  * @package  Adserver
@@ -11,6 +11,7 @@
 
 /**
  * Copyright (c) 2020 Adserver.Online
+ * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
 
@@ -67,34 +68,34 @@ class PubReportsApi
      * @param ClientInterface $client
      * @param Configuration   $config
      * @param HeaderSelector  $selector
-     * @param int             $host_index (Optional) host index to select the list of hosts if defined in the OpenAPI spec
+     * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
     public function __construct(
         ClientInterface $client = null,
         Configuration $config = null,
         HeaderSelector $selector = null,
-        $host_index = 0
+        $hostIndex = 0
     ) {
         $this->client = $client ?: new Client();
         $this->config = $config ?: new Configuration();
         $this->headerSelector = $selector ?: new HeaderSelector();
-        $this->hostIndex = $host_index;
+        $this->hostIndex = $hostIndex;
     }
 
     /**
      * Set the host index
      *
-     * @param  int Host index (required)
+     * @param int $hostIndex Host index (required)
      */
-    public function setHostIndex($host_index)
+    public function setHostIndex($hostIndex)
     {
-        $this->hostIndex = $host_index;
+        $this->hostIndex = $hostIndex;
     }
 
     /**
      * Get the host index
      *
-     * @return Host index
+     * @return int Host index
      */
     public function getHostIndex()
     {
@@ -117,14 +118,16 @@ class PubReportsApi
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $timezone Time zone (optional)
+     * @param  int $idsite Site ID (optional)
+     * @param  int $idzone Zone ID (optional)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\StatsCustomRtbItem[]|\Adserver\Model\FormErrorResponse
      */
-    public function pubGetCustomRtbReport($date_begin, $date_end, $timezone = null)
+    public function pubGetCustomRtbReport($date_begin, $date_end, $timezone = null, $idsite = null, $idzone = null)
     {
-        list($response) = $this->pubGetCustomRtbReportWithHttpInfo($date_begin, $date_end, $timezone);
+        list($response) = $this->pubGetCustomRtbReportWithHttpInfo($date_begin, $date_end, $timezone, $idsite, $idzone);
         return $response;
     }
 
@@ -136,14 +139,16 @@ class PubReportsApi
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $timezone Time zone (optional)
+     * @param  int $idsite Site ID (optional)
+     * @param  int $idzone Zone ID (optional)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\StatsCustomRtbItem[]|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubGetCustomRtbReportWithHttpInfo($date_begin, $date_end, $timezone = null)
+    public function pubGetCustomRtbReportWithHttpInfo($date_begin, $date_end, $timezone = null, $idsite = null, $idzone = null)
     {
-        $request = $this->pubGetCustomRtbReportRequest($date_begin, $date_end, $timezone);
+        $request = $this->pubGetCustomRtbReportRequest($date_begin, $date_end, $timezone, $idsite, $idzone);
 
         try {
             $options = $this->createHttpClientOption();
@@ -246,13 +251,15 @@ class PubReportsApi
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $timezone Time zone (optional)
+     * @param  int $idsite Site ID (optional)
+     * @param  int $idzone Zone ID (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetCustomRtbReportAsync($date_begin, $date_end, $timezone = null)
+    public function pubGetCustomRtbReportAsync($date_begin, $date_end, $timezone = null, $idsite = null, $idzone = null)
     {
-        return $this->pubGetCustomRtbReportAsyncWithHttpInfo($date_begin, $date_end, $timezone)
+        return $this->pubGetCustomRtbReportAsyncWithHttpInfo($date_begin, $date_end, $timezone, $idsite, $idzone)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -268,14 +275,16 @@ class PubReportsApi
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $timezone Time zone (optional)
+     * @param  int $idsite Site ID (optional)
+     * @param  int $idzone Zone ID (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetCustomRtbReportAsyncWithHttpInfo($date_begin, $date_end, $timezone = null)
+    public function pubGetCustomRtbReportAsyncWithHttpInfo($date_begin, $date_end, $timezone = null, $idsite = null, $idzone = null)
     {
         $returnType = '\Adserver\Model\StatsCustomRtbItem[]';
-        $request = $this->pubGetCustomRtbReportRequest($date_begin, $date_end, $timezone);
+        $request = $this->pubGetCustomRtbReportRequest($date_begin, $date_end, $timezone, $idsite, $idzone);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -317,11 +326,13 @@ class PubReportsApi
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $timezone Time zone (optional)
+     * @param  int $idsite Site ID (optional)
+     * @param  int $idzone Zone ID (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function pubGetCustomRtbReportRequest($date_begin, $date_end, $timezone = null)
+    public function pubGetCustomRtbReportRequest($date_begin, $date_end, $timezone = null, $idsite = null, $idzone = null)
     {
         // verify the required parameter 'date_begin' is set
         if ($date_begin === null || (is_array($date_begin) && count($date_begin) === 0)) {
@@ -376,11 +387,31 @@ class PubReportsApi
                 $queryParams['timezone'] = $timezone;
             }
         }
+        // query params
+        if ($idsite !== null) {
+            if('form' === 'form' && is_array($idsite)) {
+                foreach($idsite as $key => $value) {
+                    $queryParams[$key] = $value;
+                }
+            }
+            else {
+                $queryParams['idsite'] = $idsite;
+            }
+        }
+        // query params
+        if ($idzone !== null) {
+            if('form' === 'form' && is_array($idzone)) {
+                foreach($idzone as $key => $value) {
+                    $queryParams[$key] = $value;
+                }
+            }
+            else {
+                $queryParams['idzone'] = $idzone;
+            }
+        }
 
 
 
-        // body params
-        $_tempBody = null;
 
         if ($multipart) {
             $headers = $this->headerSelector->selectHeadersForMultipart(
@@ -394,21 +425,17 @@ class PubReportsApi
         }
 
         // for model (json/xml)
-        if (isset($_tempBody)) {
-            // $_tempBody is the method argument, if present
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($_tempBody));
-            } else {
-                $httpBody = $_tempBody;
-            }
-        } elseif (count($formParams) > 0) {
+        if (count($formParams) > 0) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
-                    $multipartContents[] = [
-                        'name' => $formParamName,
-                        'contents' => $formParamValue
-                    ];
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
@@ -674,7 +701,7 @@ class PubReportsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function pubGetStatsRequest($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null)
+    public function pubGetStatsRequest($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null)
     {
         // verify the required parameter 'date_begin' is set
         if ($date_begin === null || (is_array($date_begin) && count($date_begin) === 0)) {
@@ -771,8 +798,6 @@ class PubReportsApi
 
 
 
-        // body params
-        $_tempBody = null;
 
         if ($multipart) {
             $headers = $this->headerSelector->selectHeadersForMultipart(
@@ -786,21 +811,17 @@ class PubReportsApi
         }
 
         // for model (json/xml)
-        if (isset($_tempBody)) {
-            // $_tempBody is the method argument, if present
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($_tempBody));
-            } else {
-                $httpBody = $_tempBody;
-            }
-        } elseif (count($formParams) > 0) {
+        if (count($formParams) > 0) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
-                    $multipartContents[] = [
-                        'name' => $formParamName,
-                        'contents' => $formParamValue
-                    ];
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
                 }
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);

@@ -2,7 +2,7 @@
 /**
  * Site
  *
- * PHP version 5
+ * PHP version 7.2
  *
  * @category Class
  * @package  Adserver
@@ -12,6 +12,7 @@
 
 /**
  * Copyright (c) 2020 Adserver.Online
+ * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
 
@@ -33,10 +34,13 @@ use \ArrayAccess;
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
+ * @implements \ArrayAccess<TKey, TValue>
+ * @template TKey int|null
+ * @template TValue mixed|null  
  */
-class Site implements ModelInterface, ArrayAccess
+class Site implements ModelInterface, ArrayAccess, \JsonSerializable
 {
-    const DISCRIMINATOR = null;
+    public const DISCRIMINATOR = null;
 
     /**
       * The original name of the model.
@@ -56,6 +60,7 @@ class Site implements ModelInterface, ArrayAccess
         'name' => 'string',
         'url' => 'string',
         'status' => 'object',
+        'category' => 'object',
         'block_reason' => 'object',
         'is_active' => 'bool',
         'zones' => 'object[]',
@@ -67,6 +72,8 @@ class Site implements ModelInterface, ArrayAccess
       * Array of property to format mappings. Used for (de)serialization
       *
       * @var string[]
+      * @phpstan-var array<string, string|null>
+      * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
         'id' => null,
@@ -74,6 +81,7 @@ class Site implements ModelInterface, ArrayAccess
         'name' => null,
         'url' => null,
         'status' => null,
+        'category' => null,
         'block_reason' => null,
         'is_active' => null,
         'zones' => null,
@@ -113,6 +121,7 @@ class Site implements ModelInterface, ArrayAccess
         'name' => 'name',
         'url' => 'url',
         'status' => 'status',
+        'category' => 'category',
         'block_reason' => 'block_reason',
         'is_active' => 'is_active',
         'zones' => 'zones',
@@ -131,6 +140,7 @@ class Site implements ModelInterface, ArrayAccess
         'name' => 'setName',
         'url' => 'setUrl',
         'status' => 'setStatus',
+        'category' => 'setCategory',
         'block_reason' => 'setBlockReason',
         'is_active' => 'setIsActive',
         'zones' => 'setZones',
@@ -149,6 +159,7 @@ class Site implements ModelInterface, ArrayAccess
         'name' => 'getName',
         'url' => 'getUrl',
         'status' => 'getStatus',
+        'category' => 'getCategory',
         'block_reason' => 'getBlockReason',
         'is_active' => 'getIsActive',
         'zones' => 'getZones',
@@ -216,16 +227,17 @@ class Site implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['id'] = isset($data['id']) ? $data['id'] : null;
-        $this->container['publisher'] = isset($data['publisher']) ? $data['publisher'] : null;
-        $this->container['name'] = isset($data['name']) ? $data['name'] : null;
-        $this->container['url'] = isset($data['url']) ? $data['url'] : null;
-        $this->container['status'] = isset($data['status']) ? $data['status'] : null;
-        $this->container['block_reason'] = isset($data['block_reason']) ? $data['block_reason'] : null;
-        $this->container['is_active'] = isset($data['is_active']) ? $data['is_active'] : null;
-        $this->container['zones'] = isset($data['zones']) ? $data['zones'] : null;
-        $this->container['created_at'] = isset($data['created_at']) ? $data['created_at'] : null;
-        $this->container['updated_at'] = isset($data['updated_at']) ? $data['updated_at'] : null;
+        $this->container['id'] = $data['id'] ?? null;
+        $this->container['publisher'] = $data['publisher'] ?? null;
+        $this->container['name'] = $data['name'] ?? null;
+        $this->container['url'] = $data['url'] ?? null;
+        $this->container['status'] = $data['status'] ?? null;
+        $this->container['category'] = $data['category'] ?? null;
+        $this->container['block_reason'] = $data['block_reason'] ?? null;
+        $this->container['is_active'] = $data['is_active'] ?? null;
+        $this->container['zones'] = $data['zones'] ?? null;
+        $this->container['created_at'] = $data['created_at'] ?? null;
+        $this->container['updated_at'] = $data['updated_at'] ?? null;
     }
 
     /**
@@ -267,7 +279,7 @@ class Site implements ModelInterface, ArrayAccess
      *
      * @param int|null $id id
      *
-     * @return $this
+     * @return self
      */
     public function setId($id)
     {
@@ -291,7 +303,7 @@ class Site implements ModelInterface, ArrayAccess
      *
      * @param object|null $publisher publisher
      *
-     * @return $this
+     * @return self
      */
     public function setPublisher($publisher)
     {
@@ -315,7 +327,7 @@ class Site implements ModelInterface, ArrayAccess
      *
      * @param string|null $name name
      *
-     * @return $this
+     * @return self
      */
     public function setName($name)
     {
@@ -339,7 +351,7 @@ class Site implements ModelInterface, ArrayAccess
      *
      * @param string|null $url url
      *
-     * @return $this
+     * @return self
      */
     public function setUrl($url)
     {
@@ -363,11 +375,35 @@ class Site implements ModelInterface, ArrayAccess
      *
      * @param object|null $status status
      *
-     * @return $this
+     * @return self
      */
     public function setStatus($status)
     {
         $this->container['status'] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets category
+     *
+     * @return object|null
+     */
+    public function getCategory()
+    {
+        return $this->container['category'];
+    }
+
+    /**
+     * Sets category
+     *
+     * @param object|null $category category
+     *
+     * @return self
+     */
+    public function setCategory($category)
+    {
+        $this->container['category'] = $category;
 
         return $this;
     }
@@ -387,7 +423,7 @@ class Site implements ModelInterface, ArrayAccess
      *
      * @param object|null $block_reason Block reason if status is rejected
      *
-     * @return $this
+     * @return self
      */
     public function setBlockReason($block_reason)
     {
@@ -411,7 +447,7 @@ class Site implements ModelInterface, ArrayAccess
      *
      * @param bool|null $is_active is_active
      *
-     * @return $this
+     * @return self
      */
     public function setIsActive($is_active)
     {
@@ -435,7 +471,7 @@ class Site implements ModelInterface, ArrayAccess
      *
      * @param object[]|null $zones zones
      *
-     * @return $this
+     * @return self
      */
     public function setZones($zones)
     {
@@ -459,7 +495,7 @@ class Site implements ModelInterface, ArrayAccess
      *
      * @param string|null $created_at created_at
      *
-     * @return $this
+     * @return self
      */
     public function setCreatedAt($created_at)
     {
@@ -483,7 +519,7 @@ class Site implements ModelInterface, ArrayAccess
      *
      * @param string|null $updated_at updated_at
      *
-     * @return $this
+     * @return self
      */
     public function setUpdatedAt($updated_at)
     {
@@ -508,18 +544,18 @@ class Site implements ModelInterface, ArrayAccess
      *
      * @param integer $offset Offset
      *
-     * @return mixed
+     * @return mixed|null
      */
     public function offsetGet($offset)
     {
-        return isset($this->container[$offset]) ? $this->container[$offset] : null;
+        return $this->container[$offset] ?? null;
     }
 
     /**
      * Sets value based on offset.
      *
-     * @param integer $offset Offset
-     * @param mixed   $value  Value to be set
+     * @param int|null $offset Offset
+     * @param mixed    $value  Value to be set
      *
      * @return void
      */
@@ -542,6 +578,18 @@ class Site implements ModelInterface, ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->container[$offset]);
+    }
+
+    /**
+     * Serializes the object to a value that can be serialized natively by json_encode().
+     * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
+     *
+     * @return mixed Returns data which can be serialized by json_encode(), which is a value
+     * of any type other than a resource.
+     */
+    public function jsonSerialize()
+    {
+       return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**

@@ -2,7 +2,7 @@
 /**
  * AdDirectLink
  *
- * PHP version 5
+ * PHP version 7.2
  *
  * @category Class
  * @package  Adserver
@@ -12,6 +12,7 @@
 
 /**
  * Copyright (c) 2020 Adserver.Online
+ * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
 
@@ -34,10 +35,13 @@ use \ArrayAccess;
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
+ * @implements \ArrayAccess<TKey, TValue>
+ * @template TKey int|null
+ * @template TValue mixed|null  
  */
-class AdDirectLink implements ModelInterface, ArrayAccess
+class AdDirectLink implements ModelInterface, ArrayAccess, \JsonSerializable
 {
-    const DISCRIMINATOR = null;
+    public const DISCRIMINATOR = null;
 
     /**
       * The original name of the model.
@@ -59,6 +63,8 @@ class AdDirectLink implements ModelInterface, ArrayAccess
       * Array of property to format mappings. Used for (de)serialization
       *
       * @var string[]
+      * @phpstan-var array<string, string|null>
+      * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
         'counter_type' => null
@@ -187,7 +193,7 @@ class AdDirectLink implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['counter_type'] = isset($data['counter_type']) ? $data['counter_type'] : null;
+        $this->container['counter_type'] = $data['counter_type'] ?? null;
     }
 
     /**
@@ -202,7 +208,8 @@ class AdDirectLink implements ModelInterface, ArrayAccess
         $allowedValues = $this->getCounterTypeAllowableValues();
         if (!is_null($this->container['counter_type']) && !in_array($this->container['counter_type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'counter_type', must be one of '%s'",
+                "invalid value '%s' for 'counter_type', must be one of '%s'",
+                $this->container['counter_type'],
                 implode("', '", $allowedValues)
             );
         }
@@ -237,7 +244,7 @@ class AdDirectLink implements ModelInterface, ArrayAccess
      *
      * @param string|null $counter_type Counter type
      *
-     * @return $this
+     * @return self
      */
     public function setCounterType($counter_type)
     {
@@ -245,7 +252,8 @@ class AdDirectLink implements ModelInterface, ArrayAccess
         if (!is_null($counter_type) && !in_array($counter_type, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'counter_type', must be one of '%s'",
+                    "Invalid value '%s' for 'counter_type', must be one of '%s'",
+                    $counter_type,
                     implode("', '", $allowedValues)
                 )
             );
@@ -271,18 +279,18 @@ class AdDirectLink implements ModelInterface, ArrayAccess
      *
      * @param integer $offset Offset
      *
-     * @return mixed
+     * @return mixed|null
      */
     public function offsetGet($offset)
     {
-        return isset($this->container[$offset]) ? $this->container[$offset] : null;
+        return $this->container[$offset] ?? null;
     }
 
     /**
      * Sets value based on offset.
      *
-     * @param integer $offset Offset
-     * @param mixed   $value  Value to be set
+     * @param int|null $offset Offset
+     * @param mixed    $value  Value to be set
      *
      * @return void
      */
@@ -305,6 +313,18 @@ class AdDirectLink implements ModelInterface, ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->container[$offset]);
+    }
+
+    /**
+     * Serializes the object to a value that can be serialized natively by json_encode().
+     * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
+     *
+     * @return mixed Returns data which can be serialized by json_encode(), which is a value
+     * of any type other than a resource.
+     */
+    public function jsonSerialize()
+    {
+       return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**

@@ -2,7 +2,7 @@
 /**
  * CampaignRequest
  *
- * PHP version 5
+ * PHP version 7.2
  *
  * @category Class
  * @package  Adserver
@@ -12,6 +12,7 @@
 
 /**
  * Copyright (c) 2020 Adserver.Online
+ * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
 
@@ -33,10 +34,13 @@ use \ArrayAccess;
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
+ * @implements \ArrayAccess<TKey, TValue>
+ * @template TKey int|null
+ * @template TValue mixed|null  
  */
-class CampaignRequest implements ModelInterface, ArrayAccess
+class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
 {
-    const DISCRIMINATOR = null;
+    public const DISCRIMINATOR = null;
 
     /**
       * The original name of the model.
@@ -67,6 +71,8 @@ class CampaignRequest implements ModelInterface, ArrayAccess
       * Array of property to format mappings. Used for (de)serialization
       *
       * @var string[]
+      * @phpstan-var array<string, string|null>
+      * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
         'name' => null,
@@ -271,16 +277,16 @@ class CampaignRequest implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['name'] = isset($data['name']) ? $data['name'] : null;
-        $this->container['idadvertiser'] = isset($data['idadvertiser']) ? $data['idadvertiser'] : null;
-        $this->container['idcategory'] = isset($data['idcategory']) ? $data['idcategory'] : null;
-        $this->container['idstatus'] = isset($data['idstatus']) ? $data['idstatus'] : null;
-        $this->container['idrunstatus'] = isset($data['idrunstatus']) ? $data['idrunstatus'] : null;
-        $this->container['idpricemodel'] = isset($data['idpricemodel']) ? $data['idpricemodel'] : null;
-        $this->container['rate'] = isset($data['rate']) ? $data['rate'] : null;
-        $this->container['start_at'] = isset($data['start_at']) ? $data['start_at'] : null;
-        $this->container['finish_at'] = isset($data['finish_at']) ? $data['finish_at'] : null;
-        $this->container['timetargeting'] = isset($data['timetargeting']) ? $data['timetargeting'] : null;
+        $this->container['name'] = $data['name'] ?? null;
+        $this->container['idadvertiser'] = $data['idadvertiser'] ?? null;
+        $this->container['idcategory'] = $data['idcategory'] ?? null;
+        $this->container['idstatus'] = $data['idstatus'] ?? null;
+        $this->container['idrunstatus'] = $data['idrunstatus'] ?? null;
+        $this->container['idpricemodel'] = $data['idpricemodel'] ?? null;
+        $this->container['rate'] = $data['rate'] ?? null;
+        $this->container['start_at'] = $data['start_at'] ?? null;
+        $this->container['finish_at'] = $data['finish_at'] ?? null;
+        $this->container['timetargeting'] = $data['timetargeting'] ?? null;
     }
 
     /**
@@ -295,7 +301,8 @@ class CampaignRequest implements ModelInterface, ArrayAccess
         $allowedValues = $this->getIdstatusAllowableValues();
         if (!is_null($this->container['idstatus']) && !in_array($this->container['idstatus'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'idstatus', must be one of '%s'",
+                "invalid value '%s' for 'idstatus', must be one of '%s'",
+                $this->container['idstatus'],
                 implode("', '", $allowedValues)
             );
         }
@@ -303,7 +310,8 @@ class CampaignRequest implements ModelInterface, ArrayAccess
         $allowedValues = $this->getIdrunstatusAllowableValues();
         if (!is_null($this->container['idrunstatus']) && !in_array($this->container['idrunstatus'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'idrunstatus', must be one of '%s'",
+                "invalid value '%s' for 'idrunstatus', must be one of '%s'",
+                $this->container['idrunstatus'],
                 implode("', '", $allowedValues)
             );
         }
@@ -311,7 +319,8 @@ class CampaignRequest implements ModelInterface, ArrayAccess
         $allowedValues = $this->getIdpricemodelAllowableValues();
         if (!is_null($this->container['idpricemodel']) && !in_array($this->container['idpricemodel'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value for 'idpricemodel', must be one of '%s'",
+                "invalid value '%s' for 'idpricemodel', must be one of '%s'",
+                $this->container['idpricemodel'],
                 implode("', '", $allowedValues)
             );
         }
@@ -346,7 +355,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess
      *
      * @param string|null $name name
      *
-     * @return $this
+     * @return self
      */
     public function setName($name)
     {
@@ -370,7 +379,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess
      *
      * @param int|null $idadvertiser idadvertiser
      *
-     * @return $this
+     * @return self
      */
     public function setIdadvertiser($idadvertiser)
     {
@@ -394,7 +403,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess
      *
      * @param int|null $idcategory idcategory
      *
-     * @return $this
+     * @return self
      */
     public function setIdcategory($idcategory)
     {
@@ -418,7 +427,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess
      *
      * @param int|null $idstatus Moderation statuses:  * 1510 - pending  * 1520 - approved  * 1530 - blocked
      *
-     * @return $this
+     * @return self
      */
     public function setIdstatus($idstatus)
     {
@@ -426,7 +435,8 @@ class CampaignRequest implements ModelInterface, ArrayAccess
         if (!is_null($idstatus) && !in_array($idstatus, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'idstatus', must be one of '%s'",
+                    "Invalid value '%s' for 'idstatus', must be one of '%s'",
+                    $idstatus,
                     implode("', '", $allowedValues)
                 )
             );
@@ -451,7 +461,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess
      *
      * @param int|null $idrunstatus Run statuses:  * 4010 - running  * 4020 - paused  * 4030 - finished
      *
-     * @return $this
+     * @return self
      */
     public function setIdrunstatus($idrunstatus)
     {
@@ -459,7 +469,8 @@ class CampaignRequest implements ModelInterface, ArrayAccess
         if (!is_null($idrunstatus) && !in_array($idrunstatus, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'idrunstatus', must be one of '%s'",
+                    "Invalid value '%s' for 'idrunstatus', must be one of '%s'",
+                    $idrunstatus,
                     implode("', '", $allowedValues)
                 )
             );
@@ -484,7 +495,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess
      *
      * @param int|null $idpricemodel Pricing models:  * 1 - CPM  * 2 - CPC  * 3 - CPA  * 4 - CPUC (cost per unique click)  * 5 - CPUM (cost per unique mile)
      *
-     * @return $this
+     * @return self
      */
     public function setIdpricemodel($idpricemodel)
     {
@@ -492,7 +503,8 @@ class CampaignRequest implements ModelInterface, ArrayAccess
         if (!is_null($idpricemodel) && !in_array($idpricemodel, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value for 'idpricemodel', must be one of '%s'",
+                    "Invalid value '%s' for 'idpricemodel', must be one of '%s'",
+                    $idpricemodel,
                     implode("', '", $allowedValues)
                 )
             );
@@ -517,7 +529,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess
      *
      * @param float|null $rate rate
      *
-     * @return $this
+     * @return self
      */
     public function setRate($rate)
     {
@@ -541,7 +553,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess
      *
      * @param string|null $start_at start_at
      *
-     * @return $this
+     * @return self
      */
     public function setStartAt($start_at)
     {
@@ -565,7 +577,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess
      *
      * @param string|null $finish_at finish_at
      *
-     * @return $this
+     * @return self
      */
     public function setFinishAt($finish_at)
     {
@@ -589,7 +601,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess
      *
      * @param string|null $timetargeting This field uses a special format.  For example, if you need to disable all time slots except slots from 00:00 to 05:00 and from 22:00 to 23:00 you have to pass the following JSON-string as value:  ```json {   \"tt\": {     \"1\": {\"0\":0,\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0,\"22\":0,\"23\":0},     \"2\": {\"0\":0,\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0,\"22\":0,\"23\":0},     \"3\": {\"0\":0,\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0,\"22\":0,\"23\":0},     \"4\": {\"0\":0,\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0,\"22\":0,\"23\":0},     \"5\": {\"0\":0,\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0,\"22\":0,\"23\":0},     \"6\": {\"0\":0,\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0,\"22\":0,\"23\":0},     \"7\": {\"0\":0,\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0,\"22\":0,\"23\":0}   } } ``` The logic is simple. Horizontal lines are representing week days: 1 (Monday) - 7 (Sunday). Vertical columns are hours: 0 - 23. You have to put **0** value to needed cells to disable a particular time slot. A timeslot is enabled by default so you don't need to put 1 to enable cells.
      *
-     * @return $this
+     * @return self
      */
     public function setTimetargeting($timetargeting)
     {
@@ -614,18 +626,18 @@ class CampaignRequest implements ModelInterface, ArrayAccess
      *
      * @param integer $offset Offset
      *
-     * @return mixed
+     * @return mixed|null
      */
     public function offsetGet($offset)
     {
-        return isset($this->container[$offset]) ? $this->container[$offset] : null;
+        return $this->container[$offset] ?? null;
     }
 
     /**
      * Sets value based on offset.
      *
-     * @param integer $offset Offset
-     * @param mixed   $value  Value to be set
+     * @param int|null $offset Offset
+     * @param mixed    $value  Value to be set
      *
      * @return void
      */
@@ -648,6 +660,18 @@ class CampaignRequest implements ModelInterface, ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->container[$offset]);
+    }
+
+    /**
+     * Serializes the object to a value that can be serialized natively by json_encode().
+     * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
+     *
+     * @return mixed Returns data which can be serialized by json_encode(), which is a value
+     * of any type other than a resource.
+     */
+    public function jsonSerialize()
+    {
+       return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**

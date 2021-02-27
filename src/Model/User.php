@@ -2,7 +2,7 @@
 /**
  * User
  *
- * PHP version 5
+ * PHP version 7.2
  *
  * @category Class
  * @package  Adserver
@@ -12,6 +12,7 @@
 
 /**
  * Copyright (c) 2020 Adserver.Online
+ * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
 
@@ -33,10 +34,13 @@ use \ArrayAccess;
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
+ * @implements \ArrayAccess<TKey, TValue>
+ * @template TKey int|null
+ * @template TValue mixed|null  
  */
-class User implements ModelInterface, ArrayAccess
+class User implements ModelInterface, ArrayAccess, \JsonSerializable
 {
-    const DISCRIMINATOR = null;
+    public const DISCRIMINATOR = null;
 
     /**
       * The original name of the model.
@@ -52,11 +56,11 @@ class User implements ModelInterface, ArrayAccess
       */
     protected static $openAPITypes = [
         'id' => 'int',
-        'idcloudrole' => 'int',
+        'role' => 'int',
         'name' => 'string',
         'email' => 'string',
         'phone' => 'string',
-        'skype' => 'string',
+        'messenger' => 'object',
         'timezone' => 'string',
         'is_active' => 'bool',
         'allow_login' => 'bool',
@@ -69,14 +73,16 @@ class User implements ModelInterface, ArrayAccess
       * Array of property to format mappings. Used for (de)serialization
       *
       * @var string[]
+      * @phpstan-var array<string, string|null>
+      * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
         'id' => null,
-        'idcloudrole' => null,
+        'role' => null,
         'name' => null,
         'email' => null,
         'phone' => null,
-        'skype' => null,
+        'messenger' => null,
         'timezone' => null,
         'is_active' => null,
         'allow_login' => null,
@@ -113,11 +119,11 @@ class User implements ModelInterface, ArrayAccess
      */
     protected static $attributeMap = [
         'id' => 'id',
-        'idcloudrole' => 'idcloudrole',
+        'role' => 'role',
         'name' => 'name',
         'email' => 'email',
         'phone' => 'phone',
-        'skype' => 'skype',
+        'messenger' => 'messenger',
         'timezone' => 'timezone',
         'is_active' => 'is_active',
         'allow_login' => 'allow_login',
@@ -133,11 +139,11 @@ class User implements ModelInterface, ArrayAccess
      */
     protected static $setters = [
         'id' => 'setId',
-        'idcloudrole' => 'setIdcloudrole',
+        'role' => 'setRole',
         'name' => 'setName',
         'email' => 'setEmail',
         'phone' => 'setPhone',
-        'skype' => 'setSkype',
+        'messenger' => 'setMessenger',
         'timezone' => 'setTimezone',
         'is_active' => 'setIsActive',
         'allow_login' => 'setAllowLogin',
@@ -153,11 +159,11 @@ class User implements ModelInterface, ArrayAccess
      */
     protected static $getters = [
         'id' => 'getId',
-        'idcloudrole' => 'getIdcloudrole',
+        'role' => 'getRole',
         'name' => 'getName',
         'email' => 'getEmail',
         'phone' => 'getPhone',
-        'skype' => 'getSkype',
+        'messenger' => 'getMessenger',
         'timezone' => 'getTimezone',
         'is_active' => 'getIsActive',
         'allow_login' => 'getAllowLogin',
@@ -226,18 +232,18 @@ class User implements ModelInterface, ArrayAccess
      */
     public function __construct(array $data = null)
     {
-        $this->container['id'] = isset($data['id']) ? $data['id'] : null;
-        $this->container['idcloudrole'] = isset($data['idcloudrole']) ? $data['idcloudrole'] : null;
-        $this->container['name'] = isset($data['name']) ? $data['name'] : null;
-        $this->container['email'] = isset($data['email']) ? $data['email'] : null;
-        $this->container['phone'] = isset($data['phone']) ? $data['phone'] : null;
-        $this->container['skype'] = isset($data['skype']) ? $data['skype'] : null;
-        $this->container['timezone'] = isset($data['timezone']) ? $data['timezone'] : null;
-        $this->container['is_active'] = isset($data['is_active']) ? $data['is_active'] : null;
-        $this->container['allow_login'] = isset($data['allow_login']) ? $data['allow_login'] : null;
-        $this->container['campaigns_post_moderation'] = isset($data['campaigns_post_moderation']) ? $data['campaigns_post_moderation'] : null;
-        $this->container['created_at'] = isset($data['created_at']) ? $data['created_at'] : null;
-        $this->container['updated_at'] = isset($data['updated_at']) ? $data['updated_at'] : null;
+        $this->container['id'] = $data['id'] ?? null;
+        $this->container['role'] = $data['role'] ?? null;
+        $this->container['name'] = $data['name'] ?? null;
+        $this->container['email'] = $data['email'] ?? null;
+        $this->container['phone'] = $data['phone'] ?? null;
+        $this->container['messenger'] = $data['messenger'] ?? null;
+        $this->container['timezone'] = $data['timezone'] ?? null;
+        $this->container['is_active'] = $data['is_active'] ?? null;
+        $this->container['allow_login'] = $data['allow_login'] ?? null;
+        $this->container['campaigns_post_moderation'] = $data['campaigns_post_moderation'] ?? null;
+        $this->container['created_at'] = $data['created_at'] ?? null;
+        $this->container['updated_at'] = $data['updated_at'] ?? null;
     }
 
     /**
@@ -279,7 +285,7 @@ class User implements ModelInterface, ArrayAccess
      *
      * @param int|null $id id
      *
-     * @return $this
+     * @return self
      */
     public function setId($id)
     {
@@ -289,25 +295,25 @@ class User implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets idcloudrole
+     * Gets role
      *
      * @return int|null
      */
-    public function getIdcloudrole()
+    public function getRole()
     {
-        return $this->container['idcloudrole'];
+        return $this->container['role'];
     }
 
     /**
-     * Sets idcloudrole
+     * Sets role
      *
-     * @param int|null $idcloudrole idcloudrole
+     * @param int|null $role role
      *
-     * @return $this
+     * @return self
      */
-    public function setIdcloudrole($idcloudrole)
+    public function setRole($role)
     {
-        $this->container['idcloudrole'] = $idcloudrole;
+        $this->container['role'] = $role;
 
         return $this;
     }
@@ -327,7 +333,7 @@ class User implements ModelInterface, ArrayAccess
      *
      * @param string|null $name name
      *
-     * @return $this
+     * @return self
      */
     public function setName($name)
     {
@@ -351,7 +357,7 @@ class User implements ModelInterface, ArrayAccess
      *
      * @param string|null $email email
      *
-     * @return $this
+     * @return self
      */
     public function setEmail($email)
     {
@@ -375,7 +381,7 @@ class User implements ModelInterface, ArrayAccess
      *
      * @param string|null $phone phone
      *
-     * @return $this
+     * @return self
      */
     public function setPhone($phone)
     {
@@ -385,25 +391,25 @@ class User implements ModelInterface, ArrayAccess
     }
 
     /**
-     * Gets skype
+     * Gets messenger
      *
-     * @return string|null
+     * @return object|null
      */
-    public function getSkype()
+    public function getMessenger()
     {
-        return $this->container['skype'];
+        return $this->container['messenger'];
     }
 
     /**
-     * Sets skype
+     * Sets messenger
      *
-     * @param string|null $skype skype
+     * @param object|null $messenger messenger
      *
-     * @return $this
+     * @return self
      */
-    public function setSkype($skype)
+    public function setMessenger($messenger)
     {
-        $this->container['skype'] = $skype;
+        $this->container['messenger'] = $messenger;
 
         return $this;
     }
@@ -423,7 +429,7 @@ class User implements ModelInterface, ArrayAccess
      *
      * @param string|null $timezone timezone
      *
-     * @return $this
+     * @return self
      */
     public function setTimezone($timezone)
     {
@@ -447,7 +453,7 @@ class User implements ModelInterface, ArrayAccess
      *
      * @param bool|null $is_active is_active
      *
-     * @return $this
+     * @return self
      */
     public function setIsActive($is_active)
     {
@@ -471,7 +477,7 @@ class User implements ModelInterface, ArrayAccess
      *
      * @param bool|null $allow_login allow_login
      *
-     * @return $this
+     * @return self
      */
     public function setAllowLogin($allow_login)
     {
@@ -495,7 +501,7 @@ class User implements ModelInterface, ArrayAccess
      *
      * @param bool|null $campaigns_post_moderation campaigns_post_moderation
      *
-     * @return $this
+     * @return self
      */
     public function setCampaignsPostModeration($campaigns_post_moderation)
     {
@@ -519,7 +525,7 @@ class User implements ModelInterface, ArrayAccess
      *
      * @param string|null $created_at created_at
      *
-     * @return $this
+     * @return self
      */
     public function setCreatedAt($created_at)
     {
@@ -543,7 +549,7 @@ class User implements ModelInterface, ArrayAccess
      *
      * @param string|null $updated_at updated_at
      *
-     * @return $this
+     * @return self
      */
     public function setUpdatedAt($updated_at)
     {
@@ -568,18 +574,18 @@ class User implements ModelInterface, ArrayAccess
      *
      * @param integer $offset Offset
      *
-     * @return mixed
+     * @return mixed|null
      */
     public function offsetGet($offset)
     {
-        return isset($this->container[$offset]) ? $this->container[$offset] : null;
+        return $this->container[$offset] ?? null;
     }
 
     /**
      * Sets value based on offset.
      *
-     * @param integer $offset Offset
-     * @param mixed   $value  Value to be set
+     * @param int|null $offset Offset
+     * @param mixed    $value  Value to be set
      *
      * @return void
      */
@@ -602,6 +608,18 @@ class User implements ModelInterface, ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->container[$offset]);
+    }
+
+    /**
+     * Serializes the object to a value that can be serialized natively by json_encode().
+     * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
+     *
+     * @return mixed Returns data which can be serialized by json_encode(), which is a value
+     * of any type other than a resource.
+     */
+    public function jsonSerialize()
+    {
+       return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**

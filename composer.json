@@ -20,7 +20,7 @@
         "docs": "https://adserver.online/api"
     },
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.2",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^6.2"
     },

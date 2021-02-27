@@ -1,7 +1,7 @@
 <?php
 /**
  * Configuration
- * PHP version 5
+ * PHP version 7.2
  *
  * @category Class
  * @package  Adserver
@@ -11,6 +11,7 @@
 
 /**
  * Copyright (c) 2020 Adserver.Online
+ * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
 
@@ -24,7 +25,7 @@ namespace Adserver;
 
 /**
  * Configuration Class Doc Comment
- * PHP version 5
+ * PHP version 7.2
  *
  * @category Class
  * @package  Adserver
@@ -33,6 +34,9 @@ namespace Adserver;
  */
 class Configuration
 {
+    /**
+     * @var Configuration
+     */
     private static $defaultConfiguration;
 
     /**
@@ -132,7 +136,7 @@ class Configuration
      *
      * @param string $apiKeyIdentifier API key identifier (authentication scheme)
      *
-     * @return string API key or token
+     * @return null|string API key or token
      */
     public function getApiKey($apiKeyIdentifier)
     {
@@ -158,7 +162,7 @@ class Configuration
      *
      * @param string $apiKeyIdentifier API key identifier (authentication scheme)
      *
-     * @return string
+     * @return null|string
      */
     public function getApiKeyPrefix($apiKeyIdentifier)
     {
@@ -390,7 +394,7 @@ class Configuration
         $report  = 'PHP SDK (Adserver) Debug Report:' . PHP_EOL;
         $report .= '    OS: ' . php_uname() . PHP_EOL;
         $report .= '    PHP Version: ' . PHP_VERSION . PHP_EOL;
-        $report .= '    The version of the OpenAPI document: 2.0.6' . PHP_EOL;
+        $report .= '    The version of the OpenAPI document: 2.1.0' . PHP_EOL;
         $report .= '    Temp Folder Path: ' . self::getDefaultConfiguration()->getTempFolderPath() . PHP_EOL;
 
         return $report;
@@ -401,7 +405,7 @@ class Configuration
      *
      * @param  string $apiKeyIdentifier name of apikey
      *
-     * @return string API key with the prefix
+     * @return null|string API key with the prefix
      */
     public function getApiKeyWithPrefix($apiKeyIdentifier)
     {
@@ -424,24 +428,24 @@ class Configuration
     /**
      * Returns an array of host settings
      *
-     * @return an array of host settings
+     * @return array an array of host settings
      */
     public function getHostSettings()
     {
         return [
-          [
-            "url" => "https://api.adsrv.net/v2",
-            "description" => "production",
-          ]
+            [
+                "url" => "https://api.adsrv.net/v2",
+                "description" => "production",
+            ]
         ];
     }
 
     /**
      * Returns URL based on the index and variables
      *
-     * @param index array index of the host settings
-     * @param variables hash of variable and the corresponding value (optional)
-     * @return URL based on host settings
+     * @param int        $index     index of the host settings
+     * @param array|null $variables hash of variable and the corresponding value (optional)
+     * @return string URL based on host settings
      */
     public function getHostFromSettings($index, $variables = null)
     {
@@ -460,7 +464,7 @@ class Configuration
         $url = $host["url"];
 
         // go through variable and assign a value
-        foreach ($host["variables"] as $name => $variable) {
+        foreach ($host["variables"] ?? [] as $name => $variable) {
             if (array_key_exists($name, $variables)) { // check to see if it's in the variables provided by the user
                 if (in_array($variables[$name], $variable["enum_values"], true)) { // check to see if the value is in the enum
                     $url = str_replace("{".$name."}", $variables[$name], $url);

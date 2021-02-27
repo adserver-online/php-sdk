@@ -1,3 +1,4 @@
 README.md
 composer.json
 .php_cs
+.gitignore

@@ -2,7 +2,7 @@
 /**
  * ModelInterface
  *
- * PHP version 5
+ * PHP version 7.2
  *
  * @category Class
  * @package  Adserver\Model
@@ -12,6 +12,7 @@
 
 /**
  * Copyright (c) 2020 Adserver.Online
+ * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
 
