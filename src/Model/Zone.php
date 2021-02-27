@@ -61,6 +61,7 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
         'status' => 'object',
         'is_active' => 'bool',
         'format' => 'object',
+        'code' => 'object[]',
         'created_at' => 'string',
         'updated_at' => 'string'
     ];
@@ -79,6 +80,7 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
         'status' => null,
         'is_active' => null,
         'format' => null,
+        'code' => null,
         'created_at' => null,
         'updated_at' => null
     ];
@@ -116,6 +118,7 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
         'status' => 'status',
         'is_active' => 'is_active',
         'format' => 'format',
+        'code' => 'code',
         'created_at' => 'created_at',
         'updated_at' => 'updated_at'
     ];
@@ -132,6 +135,7 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
         'status' => 'setStatus',
         'is_active' => 'setIsActive',
         'format' => 'setFormat',
+        'code' => 'setCode',
         'created_at' => 'setCreatedAt',
         'updated_at' => 'setUpdatedAt'
     ];
@@ -148,6 +152,7 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
         'status' => 'getStatus',
         'is_active' => 'getIsActive',
         'format' => 'getFormat',
+        'code' => 'getCode',
         'created_at' => 'getCreatedAt',
         'updated_at' => 'getUpdatedAt'
     ];
@@ -218,6 +223,7 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->container['status'] = $data['status'] ?? null;
         $this->container['is_active'] = $data['is_active'] ?? null;
         $this->container['format'] = $data['format'] ?? null;
+        $this->container['code'] = $data['code'] ?? null;
         $this->container['created_at'] = $data['created_at'] ?? null;
         $this->container['updated_at'] = $data['updated_at'] ?? null;
     }
@@ -386,6 +392,30 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
     public function setFormat($format)
     {
         $this->container['format'] = $format;
+
+        return $this;
+    }
+
+    /**
+     * Gets code
+     *
+     * @return object[]|null
+     */
+    public function getCode()
+    {
+        return $this->container['code'];
+    }
+
+    /**
+     * Sets code
+     *
+     * @param object[]|null $code code
+     *
+     * @return self
+     */
+    public function setCode($code)
+    {
+        $this->container['code'] = $code;
 
         return $this;
     }
