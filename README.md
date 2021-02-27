@@ -5,7 +5,7 @@ API reference https://adserver.online/api
 ## Requirements
 
  * [Adserver.Online account](https://adserver.online)
- * PHP 7.0 and later
+ * PHP 7.2 and later
 
 ## Installation & Usage
 
