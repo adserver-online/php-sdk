@@ -2,7 +2,7 @@
 /**
  * Dict
  *
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020 Adserver.Online
+ * Copyright (c) 2020-2022 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -24,8 +24,8 @@
 
 namespace Adserver\Model;
 
-use \Adserver\ObjectSerializer;
 use \ArrayAccess;
+use \Adserver\ObjectSerializer;
 
 /**
  * Dict Class Doc Comment
@@ -36,7 +36,7 @@ use \ArrayAccess;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<TKey, TValue>
  * @template TKey int|null
- * @template TValue mixed|null  
+ * @template TValue mixed|null
  */
 class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
 {
@@ -55,10 +55,11 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'categories' => 'map[string,string]',
-        'ad_formats' => 'map[string,string]',
-        'zone_formats' => 'map[string,string]',
-        'price_models' => 'map[string,string]'
+        'categories' => 'array<string,string>',
+        'ad_formats' => 'array<string,string>',
+        'zone_formats' => 'array<string,string>',
+        'price_models' => 'array<string,string>',
+        'transaction_types' => 'array<string,string>'
     ];
 
     /**
@@ -72,7 +73,8 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
         'categories' => null,
         'ad_formats' => null,
         'zone_formats' => null,
-        'price_models' => null
+        'price_models' => null,
+        'transaction_types' => null
     ];
 
     /**
@@ -105,7 +107,8 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
         'categories' => 'categories',
         'ad_formats' => 'ad_formats',
         'zone_formats' => 'zone_formats',
-        'price_models' => 'price_models'
+        'price_models' => 'price_models',
+        'transaction_types' => 'transaction_types'
     ];
 
     /**
@@ -117,7 +120,8 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
         'categories' => 'setCategories',
         'ad_formats' => 'setAdFormats',
         'zone_formats' => 'setZoneFormats',
-        'price_models' => 'setPriceModels'
+        'price_models' => 'setPriceModels',
+        'transaction_types' => 'setTransactionTypes'
     ];
 
     /**
@@ -129,7 +133,8 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
         'categories' => 'getCategories',
         'ad_formats' => 'getAdFormats',
         'zone_formats' => 'getZoneFormats',
-        'price_models' => 'getPriceModels'
+        'price_models' => 'getPriceModels',
+        'transaction_types' => 'getTransactionTypes'
     ];
 
     /**
@@ -173,9 +178,6 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
-    
-
-    
 
     /**
      * Associative array for storing property values
@@ -196,6 +198,7 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->container['ad_formats'] = $data['ad_formats'] ?? null;
         $this->container['zone_formats'] = $data['zone_formats'] ?? null;
         $this->container['price_models'] = $data['price_models'] ?? null;
+        $this->container['transaction_types'] = $data['transaction_types'] ?? null;
     }
 
     /**
@@ -225,7 +228,7 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets categories
      *
-     * @return map[string,string]|null
+     * @return array<string,string>|null
      */
     public function getCategories()
     {
@@ -235,7 +238,7 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets categories
      *
-     * @param map[string,string]|null $categories categories
+     * @param array<string,string>|null $categories categories
      *
      * @return self
      */
@@ -249,7 +252,7 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets ad_formats
      *
-     * @return map[string,string]|null
+     * @return array<string,string>|null
      */
     public function getAdFormats()
     {
@@ -259,7 +262,7 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets ad_formats
      *
-     * @param map[string,string]|null $ad_formats ad_formats
+     * @param array<string,string>|null $ad_formats ad_formats
      *
      * @return self
      */
@@ -273,7 +276,7 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets zone_formats
      *
-     * @return map[string,string]|null
+     * @return array<string,string>|null
      */
     public function getZoneFormats()
     {
@@ -283,7 +286,7 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets zone_formats
      *
-     * @param map[string,string]|null $zone_formats zone_formats
+     * @param array<string,string>|null $zone_formats zone_formats
      *
      * @return self
      */
@@ -297,7 +300,7 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets price_models
      *
-     * @return map[string,string]|null
+     * @return array<string,string>|null
      */
     public function getPriceModels()
     {
@@ -307,13 +310,37 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets price_models
      *
-     * @param map[string,string]|null $price_models price_models
+     * @param array<string,string>|null $price_models price_models
      *
      * @return self
      */
     public function setPriceModels($price_models)
     {
         $this->container['price_models'] = $price_models;
+
+        return $this;
+    }
+
+    /**
+     * Gets transaction_types
+     *
+     * @return array<string,string>|null
+     */
+    public function getTransactionTypes()
+    {
+        return $this->container['transaction_types'];
+    }
+
+    /**
+     * Sets transaction_types
+     *
+     * @param array<string,string>|null $transaction_types transaction_types
+     *
+     * @return self
+     */
+    public function setTransactionTypes($transaction_types)
+    {
+        $this->container['transaction_types'] = $transaction_types;
 
         return $this;
     }
@@ -324,7 +351,7 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -336,6 +363,7 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return mixed|null
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -349,7 +377,7 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -365,7 +393,7 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->container[$offset]);
     }
@@ -377,6 +405,7 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
      * of any type other than a resource.
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
        return ObjectSerializer::sanitizeForSerialization($this);

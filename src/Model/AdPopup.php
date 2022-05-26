@@ -2,7 +2,7 @@
 /**
  * AdPopup
  *
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020 Adserver.Online
+ * Copyright (c) 2020-2022 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -24,8 +24,8 @@
 
 namespace Adserver\Model;
 
-use \Adserver\ObjectSerializer;
 use \ArrayAccess;
+use \Adserver\ObjectSerializer;
 
 /**
  * AdPopup Class Doc Comment
@@ -37,7 +37,7 @@ use \ArrayAccess;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<TKey, TValue>
  * @template TKey int|null
- * @template TValue mixed|null  
+ * @template TValue mixed|null
  */
 class AdPopup implements ModelInterface, ArrayAccess, \JsonSerializable
 {
@@ -159,11 +159,9 @@ class AdPopup implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
-    const COUNTER_TYPE_IMPRESSIONS = 'impressions';
-    const COUNTER_TYPE_CLICKS = 'clicks';
-    
+    public const COUNTER_TYPE_IMPRESSIONS = 'impressions';
+    public const COUNTER_TYPE_CLICKS = 'clicks';
 
-    
     /**
      * Gets allowable values of the enum
      *
@@ -176,7 +174,6 @@ class AdPopup implements ModelInterface, ArrayAccess, \JsonSerializable
             self::COUNTER_TYPE_CLICKS,
         ];
     }
-    
 
     /**
      * Associative array for storing property values
@@ -269,7 +266,7 @@ class AdPopup implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -281,6 +278,7 @@ class AdPopup implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return mixed|null
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -294,7 +292,7 @@ class AdPopup implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -310,7 +308,7 @@ class AdPopup implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->container[$offset]);
     }
@@ -322,6 +320,7 @@ class AdPopup implements ModelInterface, ArrayAccess, \JsonSerializable
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
      * of any type other than a resource.
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
        return ObjectSerializer::sanitizeForSerialization($this);

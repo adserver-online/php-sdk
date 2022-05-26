@@ -2,7 +2,7 @@
 /**
  * CampaignRequest
  *
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020 Adserver.Online
+ * Copyright (c) 2020-2022 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -24,8 +24,8 @@
 
 namespace Adserver\Model;
 
-use \Adserver\ObjectSerializer;
 use \ArrayAccess;
+use \Adserver\ObjectSerializer;
 
 /**
  * CampaignRequest Class Doc Comment
@@ -36,7 +36,7 @@ use \ArrayAccess;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<TKey, TValue>
  * @template TKey int|null
- * @template TValue mixed|null  
+ * @template TValue mixed|null
  */
 class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
 {
@@ -62,8 +62,16 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'idrunstatus' => 'int',
         'idpricemodel' => 'int',
         'rate' => 'float',
-        'start_at' => 'string',
-        'finish_at' => 'string',
+        'start_date' => 'string',
+        'finish_date' => 'string',
+        'os' => 'int[]',
+        'browser' => 'int[]',
+        'device' => 'int[]',
+        'brand' => 'int[]',
+        'language' => 'string[]',
+        'geo' => 'int[]',
+        'geo_bl' => 'int[]',
+        'sites_category' => 'int[]',
         'timetargeting' => 'string'
     ];
 
@@ -82,8 +90,16 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'idrunstatus' => null,
         'idpricemodel' => null,
         'rate' => null,
-        'start_at' => null,
-        'finish_at' => null,
+        'start_date' => null,
+        'finish_date' => null,
+        'os' => null,
+        'browser' => null,
+        'device' => null,
+        'brand' => null,
+        'language' => null,
+        'geo' => null,
+        'geo_bl' => null,
+        'sites_category' => null,
         'timetargeting' => null
     ];
 
@@ -121,8 +137,16 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'idrunstatus' => 'idrunstatus',
         'idpricemodel' => 'idpricemodel',
         'rate' => 'rate',
-        'start_at' => 'start_at',
-        'finish_at' => 'finish_at',
+        'start_date' => 'start_date',
+        'finish_date' => 'finish_date',
+        'os' => 'os',
+        'browser' => 'browser',
+        'device' => 'device',
+        'brand' => 'brand',
+        'language' => 'language',
+        'geo' => 'geo',
+        'geo_bl' => 'geo_bl',
+        'sites_category' => 'sites_category',
         'timetargeting' => 'timetargeting'
     ];
 
@@ -139,8 +163,16 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'idrunstatus' => 'setIdrunstatus',
         'idpricemodel' => 'setIdpricemodel',
         'rate' => 'setRate',
-        'start_at' => 'setStartAt',
-        'finish_at' => 'setFinishAt',
+        'start_date' => 'setStartDate',
+        'finish_date' => 'setFinishDate',
+        'os' => 'setOs',
+        'browser' => 'setBrowser',
+        'device' => 'setDevice',
+        'brand' => 'setBrand',
+        'language' => 'setLanguage',
+        'geo' => 'setGeo',
+        'geo_bl' => 'setGeoBl',
+        'sites_category' => 'setSitesCategory',
         'timetargeting' => 'setTimetargeting'
     ];
 
@@ -157,8 +189,16 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'idrunstatus' => 'getIdrunstatus',
         'idpricemodel' => 'getIdpricemodel',
         'rate' => 'getRate',
-        'start_at' => 'getStartAt',
-        'finish_at' => 'getFinishAt',
+        'start_date' => 'getStartDate',
+        'finish_date' => 'getFinishDate',
+        'os' => 'getOs',
+        'browser' => 'getBrowser',
+        'device' => 'getDevice',
+        'brand' => 'getBrand',
+        'language' => 'getLanguage',
+        'geo' => 'getGeo',
+        'geo_bl' => 'getGeoBl',
+        'sites_category' => 'getSitesCategory',
         'timetargeting' => 'getTimetargeting'
     ];
 
@@ -203,20 +243,18 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
-    const IDSTATUS_1510 = 1510;
-    const IDSTATUS_1520 = 1520;
-    const IDSTATUS_1530 = 1530;
-    const IDRUNSTATUS_4010 = 4010;
-    const IDRUNSTATUS_4020 = 4020;
-    const IDRUNSTATUS_4030 = 4030;
-    const IDPRICEMODEL_1 = 1;
-    const IDPRICEMODEL_2 = 2;
-    const IDPRICEMODEL_3 = 3;
-    const IDPRICEMODEL_4 = 4;
-    const IDPRICEMODEL_5 = 5;
-    
+    public const IDSTATUS_1510 = 1510;
+    public const IDSTATUS_1520 = 1520;
+    public const IDSTATUS_1530 = 1530;
+    public const IDRUNSTATUS_4010 = 4010;
+    public const IDRUNSTATUS_4020 = 4020;
+    public const IDRUNSTATUS_4030 = 4030;
+    public const IDPRICEMODEL_1 = 1;
+    public const IDPRICEMODEL_2 = 2;
+    public const IDPRICEMODEL_3 = 3;
+    public const IDPRICEMODEL_4 = 4;
+    public const IDPRICEMODEL_5 = 5;
 
-    
     /**
      * Gets allowable values of the enum
      *
@@ -230,7 +268,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
             self::IDSTATUS_1530,
         ];
     }
-    
+
     /**
      * Gets allowable values of the enum
      *
@@ -244,7 +282,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
             self::IDRUNSTATUS_4030,
         ];
     }
-    
+
     /**
      * Gets allowable values of the enum
      *
@@ -260,7 +298,6 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
             self::IDPRICEMODEL_5,
         ];
     }
-    
 
     /**
      * Associative array for storing property values
@@ -284,8 +321,16 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->container['idrunstatus'] = $data['idrunstatus'] ?? null;
         $this->container['idpricemodel'] = $data['idpricemodel'] ?? null;
         $this->container['rate'] = $data['rate'] ?? null;
-        $this->container['start_at'] = $data['start_at'] ?? null;
-        $this->container['finish_at'] = $data['finish_at'] ?? null;
+        $this->container['start_date'] = $data['start_date'] ?? null;
+        $this->container['finish_date'] = $data['finish_date'] ?? null;
+        $this->container['os'] = $data['os'] ?? null;
+        $this->container['browser'] = $data['browser'] ?? null;
+        $this->container['device'] = $data['device'] ?? null;
+        $this->container['brand'] = $data['brand'] ?? null;
+        $this->container['language'] = $data['language'] ?? null;
+        $this->container['geo'] = $data['geo'] ?? null;
+        $this->container['geo_bl'] = $data['geo_bl'] ?? null;
+        $this->container['sites_category'] = $data['sites_category'] ?? null;
         $this->container['timetargeting'] = $data['timetargeting'] ?? null;
     }
 
@@ -539,49 +584,241 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets start_at
+     * Gets start_date
      *
      * @return string|null
      */
-    public function getStartAt()
+    public function getStartDate()
     {
-        return $this->container['start_at'];
+        return $this->container['start_date'];
     }
 
     /**
-     * Sets start_at
+     * Sets start_date
      *
-     * @param string|null $start_at start_at
+     * @param string|null $start_date start_date
      *
      * @return self
      */
-    public function setStartAt($start_at)
+    public function setStartDate($start_date)
     {
-        $this->container['start_at'] = $start_at;
+        $this->container['start_date'] = $start_date;
 
         return $this;
     }
 
     /**
-     * Gets finish_at
+     * Gets finish_date
      *
      * @return string|null
      */
-    public function getFinishAt()
+    public function getFinishDate()
     {
-        return $this->container['finish_at'];
+        return $this->container['finish_date'];
     }
 
     /**
-     * Sets finish_at
+     * Sets finish_date
      *
-     * @param string|null $finish_at finish_at
+     * @param string|null $finish_date finish_date
      *
      * @return self
      */
-    public function setFinishAt($finish_at)
+    public function setFinishDate($finish_date)
     {
-        $this->container['finish_at'] = $finish_at;
+        $this->container['finish_date'] = $finish_date;
+
+        return $this;
+    }
+
+    /**
+     * Gets os
+     *
+     * @return int[]|null
+     */
+    public function getOs()
+    {
+        return $this->container['os'];
+    }
+
+    /**
+     * Sets os
+     *
+     * @param int[]|null $os os
+     *
+     * @return self
+     */
+    public function setOs($os)
+    {
+        $this->container['os'] = $os;
+
+        return $this;
+    }
+
+    /**
+     * Gets browser
+     *
+     * @return int[]|null
+     */
+    public function getBrowser()
+    {
+        return $this->container['browser'];
+    }
+
+    /**
+     * Sets browser
+     *
+     * @param int[]|null $browser browser
+     *
+     * @return self
+     */
+    public function setBrowser($browser)
+    {
+        $this->container['browser'] = $browser;
+
+        return $this;
+    }
+
+    /**
+     * Gets device
+     *
+     * @return int[]|null
+     */
+    public function getDevice()
+    {
+        return $this->container['device'];
+    }
+
+    /**
+     * Sets device
+     *
+     * @param int[]|null $device device
+     *
+     * @return self
+     */
+    public function setDevice($device)
+    {
+        $this->container['device'] = $device;
+
+        return $this;
+    }
+
+    /**
+     * Gets brand
+     *
+     * @return int[]|null
+     */
+    public function getBrand()
+    {
+        return $this->container['brand'];
+    }
+
+    /**
+     * Sets brand
+     *
+     * @param int[]|null $brand brand
+     *
+     * @return self
+     */
+    public function setBrand($brand)
+    {
+        $this->container['brand'] = $brand;
+
+        return $this;
+    }
+
+    /**
+     * Gets language
+     *
+     * @return string[]|null
+     */
+    public function getLanguage()
+    {
+        return $this->container['language'];
+    }
+
+    /**
+     * Sets language
+     *
+     * @param string[]|null $language language
+     *
+     * @return self
+     */
+    public function setLanguage($language)
+    {
+        $this->container['language'] = $language;
+
+        return $this;
+    }
+
+    /**
+     * Gets geo
+     *
+     * @return int[]|null
+     */
+    public function getGeo()
+    {
+        return $this->container['geo'];
+    }
+
+    /**
+     * Sets geo
+     *
+     * @param int[]|null $geo geo
+     *
+     * @return self
+     */
+    public function setGeo($geo)
+    {
+        $this->container['geo'] = $geo;
+
+        return $this;
+    }
+
+    /**
+     * Gets geo_bl
+     *
+     * @return int[]|null
+     */
+    public function getGeoBl()
+    {
+        return $this->container['geo_bl'];
+    }
+
+    /**
+     * Sets geo_bl
+     *
+     * @param int[]|null $geo_bl geo_bl
+     *
+     * @return self
+     */
+    public function setGeoBl($geo_bl)
+    {
+        $this->container['geo_bl'] = $geo_bl;
+
+        return $this;
+    }
+
+    /**
+     * Gets sites_category
+     *
+     * @return int[]|null
+     */
+    public function getSitesCategory()
+    {
+        return $this->container['sites_category'];
+    }
+
+    /**
+     * Sets sites_category
+     *
+     * @param int[]|null $sites_category sites_category
+     *
+     * @return self
+     */
+    public function setSitesCategory($sites_category)
+    {
+        $this->container['sites_category'] = $sites_category;
 
         return $this;
     }
@@ -616,7 +853,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -628,6 +865,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return mixed|null
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -641,7 +879,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -657,7 +895,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->container[$offset]);
     }
@@ -669,6 +907,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
      * of any type other than a resource.
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
        return ObjectSerializer::sanitizeForSerialization($this);

@@ -1,7 +1,7 @@
 <?php
 /**
  * ReportsApi
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020 Adserver.Online
+ * Copyright (c) 2020-2022 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -23,16 +23,17 @@
 
 namespace Adserver\Api;
 
-use Adserver\ApiException;
-use Adserver\Configuration;
-use Adserver\HeaderSelector;
-use Adserver\ObjectSerializer;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use Adserver\ApiException;
+use Adserver\Configuration;
+use Adserver\HeaderSelector;
+use Adserver\ObjectSerializer;
 
 /**
  * ReportsApi Class Doc Comment
@@ -87,7 +88,7 @@ class ReportsApi
      *
      * @param int $hostIndex Host index (required)
      */
-    public function setHostIndex($hostIndex)
+    public function setHostIndex($hostIndex): void
     {
         $this->hostIndex = $hostIndex;
     }
@@ -111,6 +112,327 @@ class ReportsApi
     }
 
     /**
+     * Operation getConversionsList
+     *
+     * Conversions list
+     *
+     * @param  int $page page (optional)
+     * @param  int $per_page per_page (optional)
+     * @param  string $sort sort (optional)
+     * @param  object[] $filter filter (optional)
+     *
+     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return object[]
+     */
+    public function getConversionsList($page = null, $per_page = null, $sort = null, $filter = null)
+    {
+        list($response) = $this->getConversionsListWithHttpInfo($page, $per_page, $sort, $filter);
+        return $response;
+    }
+
+    /**
+     * Operation getConversionsListWithHttpInfo
+     *
+     * Conversions list
+     *
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
+     *
+     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of object[], HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getConversionsListWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    {
+        $request = $this->getConversionsListRequest($page, $per_page, $sort, $filter);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            switch($statusCode) {
+                case 200:
+                    if ('object[]' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('object[]' !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, 'object[]', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = 'object[]';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        'object[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getConversionsListAsync
+     *
+     * Conversions list
+     *
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getConversionsListAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    {
+        return $this->getConversionsListAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getConversionsListAsyncWithHttpInfo
+     *
+     * Conversions list
+     *
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getConversionsListAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    {
+        $returnType = 'object[]';
+        $request = $this->getConversionsListRequest($page, $per_page, $sort, $filter);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getConversionsList'
+     *
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getConversionsListRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    {
+
+        $resourcePath = '/conversion';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $page,
+            'page', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $per_page,
+            'per-page', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $sort,
+            'sort', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $filter,
+            'filter', // param base name
+            'array', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+
+
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                ['application/json']
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                ['application/json'],
+                []
+            );
+        }
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation getEvents
      *
      * Events report
@@ -118,7 +440,7 @@ class ReportsApi
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  int $report Report types:  * 1 - Linear VAST  * 2 - Video banner  * 10 - blocked (required)
-     * @param  string $group Report&#39;s grouping (required)
+     * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
      * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
@@ -146,7 +468,7 @@ class ReportsApi
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  int $report Report types:  * 1 - Linear VAST  * 2 - Video banner  * 10 - blocked (required)
-     * @param  string $group Report&#39;s grouping (required)
+     * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
      * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
@@ -171,9 +493,16 @@ class ReportsApi
             } catch (RequestException $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
+                    (int) $e->getCode(),
                     $e->getResponse() ? $e->getResponse()->getHeaders() : null,
                     $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
                 );
             }
 
@@ -184,21 +513,23 @@ class ReportsApi
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        $request->getUri()
+                        (string) $request->getUri()
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    $response->getBody()
+                    (string) $response->getBody()
                 );
             }
 
-            $responseBody = $response->getBody();
             switch($statusCode) {
                 case 200:
                     if ('object[]' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ('object[]' !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -208,9 +539,12 @@ class ReportsApi
                     ];
                 case 400:
                     if ('\Adserver\Model\FormErrorResponse' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\FormErrorResponse' !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -221,11 +555,13 @@ class ReportsApi
             }
 
             $returnType = 'object[]';
-            $responseBody = $response->getBody();
             if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
+                $content = $response->getBody(); //stream goes to serializer
             } else {
-                $content = (string) $responseBody;
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
             }
 
             return [
@@ -265,7 +601,7 @@ class ReportsApi
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  int $report Report types:  * 1 - Linear VAST  * 2 - Video banner  * 10 - blocked (required)
-     * @param  string $group Report&#39;s grouping (required)
+     * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
      * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
@@ -296,7 +632,7 @@ class ReportsApi
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  int $report Report types:  * 1 - Linear VAST  * 2 - Video banner  * 10 - blocked (required)
-     * @param  string $group Report&#39;s grouping (required)
+     * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
      * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
@@ -318,11 +654,13 @@ class ReportsApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    $responseBody = $response->getBody();
                     if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -342,7 +680,7 @@ class ReportsApi
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        $response->getBody()
+                        (string) $response->getBody()
                     );
                 }
             );
@@ -354,7 +692,7 @@ class ReportsApi
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  int $report Report types:  * 1 - Linear VAST  * 2 - Video banner  * 10 - blocked (required)
-     * @param  string $group Report&#39;s grouping (required)
+     * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
      * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
@@ -402,137 +740,113 @@ class ReportsApi
         $multipart = false;
 
         // query params
-        if ($date_begin !== null) {
-            if('form' === 'form' && is_array($date_begin)) {
-                foreach($date_begin as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['dateBegin'] = $date_begin;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $date_begin,
+            'dateBegin', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
         // query params
-        if ($date_end !== null) {
-            if('form' === 'form' && is_array($date_end)) {
-                foreach($date_end as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['dateEnd'] = $date_end;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $date_end,
+            'dateEnd', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
         // query params
-        if ($report !== null) {
-            if('form' === 'form' && is_array($report)) {
-                foreach($report as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['report'] = $report;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $report,
+            'report', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
         // query params
-        if ($group !== null) {
-            if('form' === 'form' && is_array($group)) {
-                foreach($group as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['group'] = $group;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $group,
+            'group', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
         // query params
-        if ($timezone !== null) {
-            if('form' === 'form' && is_array($timezone)) {
-                foreach($timezone as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['timezone'] = $timezone;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $timezone,
+            'timezone', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idadvertiser !== null) {
-            if('form' === 'form' && is_array($idadvertiser)) {
-                foreach($idadvertiser as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idadvertiser'] = $idadvertiser;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idadvertiser,
+            'idadvertiser', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idcampaign !== null) {
-            if('form' === 'form' && is_array($idcampaign)) {
-                foreach($idcampaign as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idcampaign'] = $idcampaign;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idcampaign,
+            'idcampaign', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idgroup !== null) {
-            if('form' === 'form' && is_array($idgroup)) {
-                foreach($idgroup as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idgroup'] = $idgroup;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idgroup,
+            'idgroup', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idad !== null) {
-            if('form' === 'form' && is_array($idad)) {
-                foreach($idad as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idad'] = $idad;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idad,
+            'idad', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idpublisher !== null) {
-            if('form' === 'form' && is_array($idpublisher)) {
-                foreach($idpublisher as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idpublisher'] = $idpublisher;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idpublisher,
+            'idpublisher', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idsite !== null) {
-            if('form' === 'form' && is_array($idsite)) {
-                foreach($idsite as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idsite'] = $idsite;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idsite,
+            'idsite', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idzone !== null) {
-            if('form' === 'form' && is_array($idzone)) {
-                foreach($idzone as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idzone'] = $idzone;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idzone,
+            'idzone', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
 
@@ -569,12 +883,12 @@ class ReportsApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if ($this->config->getAccessToken() !== null) {
+        if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -589,7 +903,328 @@ class ReportsApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getStatement
+     *
+     * Statement
+     *
+     * @param  int $page page (optional)
+     * @param  int $per_page per_page (optional)
+     * @param  string $sort sort (optional)
+     * @param  object[] $filter Example:filter[iduser]&#x3D;123&amp;filter[date_range]&#x3D;2021-02-09 - 2021-03-09&amp;filter[showStats]&#x3D;0 (optional)
+     *
+     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return \Adserver\Model\Statement[]
+     */
+    public function getStatement($page = null, $per_page = null, $sort = null, $filter = null)
+    {
+        list($response) = $this->getStatementWithHttpInfo($page, $per_page, $sort, $filter);
+        return $response;
+    }
+
+    /**
+     * Operation getStatementWithHttpInfo
+     *
+     * Statement
+     *
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter Example:filter[iduser]&#x3D;123&amp;filter[date_range]&#x3D;2021-02-09 - 2021-03-09&amp;filter[showStats]&#x3D;0 (optional)
+     *
+     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \InvalidArgumentException
+     * @return array of \Adserver\Model\Statement[], HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getStatementWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    {
+        $request = $this->getStatementRequest($page, $per_page, $sort, $filter);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            switch($statusCode) {
+                case 200:
+                    if ('\Adserver\Model\Statement[]' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\Statement[]' !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\Adserver\Model\Statement[]', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = '\Adserver\Model\Statement[]';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Adserver\Model\Statement[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getStatementAsync
+     *
+     * Statement
+     *
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter Example:filter[iduser]&#x3D;123&amp;filter[date_range]&#x3D;2021-02-09 - 2021-03-09&amp;filter[showStats]&#x3D;0 (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getStatementAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    {
+        return $this->getStatementAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getStatementAsyncWithHttpInfo
+     *
+     * Statement
+     *
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter Example:filter[iduser]&#x3D;123&amp;filter[date_range]&#x3D;2021-02-09 - 2021-03-09&amp;filter[showStats]&#x3D;0 (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function getStatementAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    {
+        $returnType = '\Adserver\Model\Statement[]';
+        $request = $this->getStatementRequest($page, $per_page, $sort, $filter);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getStatement'
+     *
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter Example:filter[iduser]&#x3D;123&amp;filter[date_range]&#x3D;2021-02-09 - 2021-03-09&amp;filter[showStats]&#x3D;0 (optional)
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getStatementRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    {
+
+        $resourcePath = '/statement';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $page,
+            'page', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $per_page,
+            'per-page', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $sort,
+            'sort', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $filter,
+            'filter', // param base name
+            'array', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+
+
+
+        if ($multipart) {
+            $headers = $this->headerSelector->selectHeadersForMultipart(
+                ['application/json']
+            );
+        } else {
+            $headers = $this->headerSelector->selectHeaders(
+                ['application/json'],
+                []
+            );
+        }
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif ($headers['Content-Type'] === 'application/json') {
+                $httpBody = \GuzzleHttp\json_encode($formParams);
+
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
@@ -605,7 +1240,8 @@ class ReportsApi
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
-     * @param  string $group Group report by this dimension (required)
+     * @param  string $group Group by (required)
+     * @param  string $group2 Extra group by (optional)
      * @param  string $timezone Time zone (optional)
      * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
      * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
@@ -619,9 +1255,9 @@ class ReportsApi
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\StatsItem[]|\Adserver\Model\FormErrorResponse
      */
-    public function getStats($date_begin, $date_end, $group, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
+    public function getStats($date_begin, $date_end, $group, $group2 = null, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
     {
-        list($response) = $this->getStatsWithHttpInfo($date_begin, $date_end, $group, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone);
+        list($response) = $this->getStatsWithHttpInfo($date_begin, $date_end, $group, $group2, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone);
         return $response;
     }
 
@@ -632,7 +1268,8 @@ class ReportsApi
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
-     * @param  string $group Group report by this dimension (required)
+     * @param  string $group Group by (required)
+     * @param  string $group2 Extra group by (optional)
      * @param  string $timezone Time zone (optional)
      * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
      * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
@@ -646,9 +1283,9 @@ class ReportsApi
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\StatsItem[]|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getStatsWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
+    public function getStatsWithHttpInfo($date_begin, $date_end, $group, $group2 = null, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
     {
-        $request = $this->getStatsRequest($date_begin, $date_end, $group, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone);
+        $request = $this->getStatsRequest($date_begin, $date_end, $group, $group2, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone);
 
         try {
             $options = $this->createHttpClientOption();
@@ -657,9 +1294,16 @@ class ReportsApi
             } catch (RequestException $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
+                    (int) $e->getCode(),
                     $e->getResponse() ? $e->getResponse()->getHeaders() : null,
                     $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
                 );
             }
 
@@ -670,21 +1314,23 @@ class ReportsApi
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        $request->getUri()
+                        (string) $request->getUri()
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    $response->getBody()
+                    (string) $response->getBody()
                 );
             }
 
-            $responseBody = $response->getBody();
             switch($statusCode) {
                 case 200:
                     if ('\Adserver\Model\StatsItem[]' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\StatsItem[]' !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -694,9 +1340,12 @@ class ReportsApi
                     ];
                 case 400:
                     if ('\Adserver\Model\FormErrorResponse' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\FormErrorResponse' !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -707,11 +1356,13 @@ class ReportsApi
             }
 
             $returnType = '\Adserver\Model\StatsItem[]';
-            $responseBody = $response->getBody();
             if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
+                $content = $response->getBody(); //stream goes to serializer
             } else {
-                $content = (string) $responseBody;
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
             }
 
             return [
@@ -750,7 +1401,8 @@ class ReportsApi
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
-     * @param  string $group Group report by this dimension (required)
+     * @param  string $group Group by (required)
+     * @param  string $group2 Extra group by (optional)
      * @param  string $timezone Time zone (optional)
      * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
      * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
@@ -763,9 +1415,9 @@ class ReportsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getStatsAsync($date_begin, $date_end, $group, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
+    public function getStatsAsync($date_begin, $date_end, $group, $group2 = null, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
     {
-        return $this->getStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone)
+        return $this->getStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $group2, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -780,7 +1432,8 @@ class ReportsApi
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
-     * @param  string $group Group report by this dimension (required)
+     * @param  string $group Group by (required)
+     * @param  string $group2 Extra group by (optional)
      * @param  string $timezone Time zone (optional)
      * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
      * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
@@ -793,20 +1446,22 @@ class ReportsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
+    public function getStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $group2 = null, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
     {
         $returnType = '\Adserver\Model\StatsItem[]';
-        $request = $this->getStatsRequest($date_begin, $date_end, $group, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone);
+        $request = $this->getStatsRequest($date_begin, $date_end, $group, $group2, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    $responseBody = $response->getBody();
                     if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -826,7 +1481,7 @@ class ReportsApi
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        $response->getBody()
+                        (string) $response->getBody()
                     );
                 }
             );
@@ -837,7 +1492,8 @@ class ReportsApi
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
-     * @param  string $group Group report by this dimension (required)
+     * @param  string $group Group by (required)
+     * @param  string $group2 Extra group by (optional)
      * @param  string $timezone Time zone (optional)
      * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
      * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
@@ -850,7 +1506,7 @@ class ReportsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getStatsRequest($date_begin, $date_end, $group, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
+    public function getStatsRequest($date_begin, $date_end, $group, $group2 = null, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
     {
         // verify the required parameter 'date_begin' is set
         if ($date_begin === null || (is_array($date_begin) && count($date_begin) === 0)) {
@@ -879,126 +1535,113 @@ class ReportsApi
         $multipart = false;
 
         // query params
-        if ($date_begin !== null) {
-            if('form' === 'form' && is_array($date_begin)) {
-                foreach($date_begin as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['dateBegin'] = $date_begin;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $date_begin,
+            'dateBegin', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
         // query params
-        if ($date_end !== null) {
-            if('form' === 'form' && is_array($date_end)) {
-                foreach($date_end as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['dateEnd'] = $date_end;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $date_end,
+            'dateEnd', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
         // query params
-        if ($group !== null) {
-            if('form' === 'form' && is_array($group)) {
-                foreach($group as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['group'] = $group;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $group,
+            'group', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
         // query params
-        if ($timezone !== null) {
-            if('form' === 'form' && is_array($timezone)) {
-                foreach($timezone as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['timezone'] = $timezone;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $group2,
+            'group2', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idadvertiser !== null) {
-            if('form' === 'form' && is_array($idadvertiser)) {
-                foreach($idadvertiser as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idadvertiser'] = $idadvertiser;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $timezone,
+            'timezone', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idcampaign !== null) {
-            if('form' === 'form' && is_array($idcampaign)) {
-                foreach($idcampaign as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idcampaign'] = $idcampaign;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idadvertiser,
+            'idadvertiser', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idgroup !== null) {
-            if('form' === 'form' && is_array($idgroup)) {
-                foreach($idgroup as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idgroup'] = $idgroup;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idcampaign,
+            'idcampaign', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idad !== null) {
-            if('form' === 'form' && is_array($idad)) {
-                foreach($idad as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idad'] = $idad;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idgroup,
+            'idgroup', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idpublisher !== null) {
-            if('form' === 'form' && is_array($idpublisher)) {
-                foreach($idpublisher as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idpublisher'] = $idpublisher;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idad,
+            'idad', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idsite !== null) {
-            if('form' === 'form' && is_array($idsite)) {
-                foreach($idsite as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idsite'] = $idsite;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idpublisher,
+            'idpublisher', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idzone !== null) {
-            if('form' === 'form' && is_array($idzone)) {
-                foreach($idzone as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idzone'] = $idzone;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idsite,
+            'idsite', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idzone,
+            'idzone', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
 
@@ -1035,12 +1678,12 @@ class ReportsApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if ($this->config->getAccessToken() !== null) {
+        if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1055,7 +1698,7 @@ class ReportsApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),

@@ -1,7 +1,7 @@
 <?php
 /**
  * Configuration
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020 Adserver.Online
+ * Copyright (c) 2020-2022 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -25,7 +25,7 @@ namespace Adserver;
 
 /**
  * Configuration Class Doc Comment
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -34,6 +34,9 @@ namespace Adserver;
  */
 class Configuration
 {
+    public const BOOLEAN_FORMAT_INT = 'int';
+    public const BOOLEAN_FORMAT_STRING = 'string';
+
     /**
      * @var Configuration
      */
@@ -59,6 +62,13 @@ class Configuration
      * @var string
      */
     protected $accessToken = '';
+
+    /**
+     * Boolean format for query string
+     *
+     * @var string
+     */
+    protected $booleanFormatForQueryString = self::BOOLEAN_FORMAT_INT;
 
     /**
      * Username for HTTP basic authentication
@@ -190,6 +200,30 @@ class Configuration
     public function getAccessToken()
     {
         return $this->accessToken;
+    }
+
+    /**
+     * Sets boolean format for query string.
+     *
+     * @param string $booleanFormatForQueryString Boolean format for query string
+     *
+     * @return $this
+     */
+    public function setBooleanFormatForQueryString(string $booleanFormat)
+    {
+        $this->booleanFormatForQueryString = $booleanFormat;
+
+        return $this;
+    }
+
+    /**
+     * Gets boolean format for query string.
+     *
+     * @return string Boolean format for query string
+     */
+    public function getBooleanFormatForQueryString(): string
+    {
+        return $this->booleanFormatForQueryString;
     }
 
     /**
@@ -373,7 +407,7 @@ class Configuration
     }
 
     /**
-     * Sets the detault configuration instance
+     * Sets the default configuration instance
      *
      * @param Configuration $config An instance of the Configuration Object
      *
@@ -394,7 +428,7 @@ class Configuration
         $report  = 'PHP SDK (Adserver) Debug Report:' . PHP_EOL;
         $report .= '    OS: ' . php_uname() . PHP_EOL;
         $report .= '    PHP Version: ' . PHP_VERSION . PHP_EOL;
-        $report .= '    The version of the OpenAPI document: 2.1.0' . PHP_EOL;
+        $report .= '    The version of the OpenAPI document: 2.2.0' . PHP_EOL;
         $report .= '    Temp Folder Path: ' . self::getDefaultConfiguration()->getTempFolderPath() . PHP_EOL;
 
         return $report;

@@ -1,6 +1,6 @@
 <?php
 /**
- * AdvReportsApi
+ * PaymentsApi
  * PHP version 7.4
  *
  * @category Class
@@ -36,14 +36,14 @@ use Adserver\HeaderSelector;
 use Adserver\ObjectSerializer;
 
 /**
- * AdvReportsApi Class Doc Comment
+ * PaymentsApi Class Doc Comment
  *
  * @category Class
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class AdvReportsApi
+class PaymentsApi
 {
     /**
      * @var ClientInterface
@@ -112,48 +112,42 @@ class AdvReportsApi
     }
 
     /**
-     * Operation advGetStats
+     * Operation getPaymentsList
      *
-     * Advertiser&#39;s stats
+     * Payments list
      *
-     * @param  string $date_begin Beginning of date interval (required)
-     * @param  string $date_end Ending of date interval (required)
-     * @param  string $group Group by (required)
-     * @param  string $timezone Time zone (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idusergroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
+     * @param  int $page page (optional)
+     * @param  int $per_page per_page (optional)
+     * @param  string $sort sort (optional)
+     * @param  object[] $filter filter (optional)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return \Adserver\Model\StatsItem[]|\Adserver\Model\FormErrorResponse
+     * @return \Adserver\Model\Payment[]
      */
-    public function advGetStats($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
+    public function getPaymentsList($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        list($response) = $this->advGetStatsWithHttpInfo($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad);
+        list($response) = $this->getPaymentsListWithHttpInfo($page, $per_page, $sort, $filter);
         return $response;
     }
 
     /**
-     * Operation advGetStatsWithHttpInfo
+     * Operation getPaymentsListWithHttpInfo
      *
-     * Advertiser&#39;s stats
+     * Payments list
      *
-     * @param  string $date_begin Beginning of date interval (required)
-     * @param  string $date_end Ending of date interval (required)
-     * @param  string $group Group by (required)
-     * @param  string $timezone Time zone (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idusergroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of \Adserver\Model\StatsItem[]|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Adserver\Model\Payment[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function advGetStatsWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
+    public function getPaymentsListWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        $request = $this->advGetStatsRequest($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad);
+        $request = $this->getPaymentsListRequest($page, $per_page, $sort, $filter);
 
         try {
             $options = $this->createHttpClientOption();
@@ -192,38 +186,23 @@ class AdvReportsApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\Adserver\Model\StatsItem[]' === '\SplFileObject') {
+                    if ('\Adserver\Model\Payment[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\Adserver\Model\StatsItem[]' !== 'string') {
+                        if ('\Adserver\Model\Payment[]' !== 'string') {
                             $content = json_decode($content);
                         }
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\Adserver\Model\StatsItem[]', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-                case 400:
-                    if ('\Adserver\Model\FormErrorResponse' === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, '\Adserver\Model\FormErrorResponse', []),
+                        ObjectSerializer::deserialize($content, '\Adserver\Model\Payment[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
             }
 
-            $returnType = '\Adserver\Model\StatsItem[]';
+            $returnType = '\Adserver\Model\Payment[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -244,15 +223,7 @@ class AdvReportsApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Adserver\Model\StatsItem[]',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
-                case 400:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Adserver\Model\FormErrorResponse',
+                        '\Adserver\Model\Payment[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -263,24 +234,21 @@ class AdvReportsApi
     }
 
     /**
-     * Operation advGetStatsAsync
+     * Operation getPaymentsListAsync
      *
-     * Advertiser&#39;s stats
+     * Payments list
      *
-     * @param  string $date_begin Beginning of date interval (required)
-     * @param  string $date_end Ending of date interval (required)
-     * @param  string $group Group by (required)
-     * @param  string $timezone Time zone (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idusergroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advGetStatsAsync($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
+    public function getPaymentsListAsync($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        return $this->advGetStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad)
+        return $this->getPaymentsListAsyncWithHttpInfo($page, $per_page, $sort, $filter)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -289,25 +257,22 @@ class AdvReportsApi
     }
 
     /**
-     * Operation advGetStatsAsyncWithHttpInfo
+     * Operation getPaymentsListAsyncWithHttpInfo
      *
-     * Advertiser&#39;s stats
+     * Payments list
      *
-     * @param  string $date_begin Beginning of date interval (required)
-     * @param  string $date_end Ending of date interval (required)
-     * @param  string $group Group by (required)
-     * @param  string $timezone Time zone (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idusergroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advGetStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
+    public function getPaymentsListAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        $returnType = '\Adserver\Model\StatsItem[]';
-        $request = $this->advGetStatsRequest($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad);
+        $returnType = '\Adserver\Model\Payment[]';
+        $request = $this->getPaymentsListRequest($page, $per_page, $sort, $filter);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -346,41 +311,20 @@ class AdvReportsApi
     }
 
     /**
-     * Create request for operation 'advGetStats'
+     * Create request for operation 'getPaymentsList'
      *
-     * @param  string $date_begin Beginning of date interval (required)
-     * @param  string $date_end Ending of date interval (required)
-     * @param  string $group Group by (required)
-     * @param  string $timezone Time zone (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idusergroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function advGetStatsRequest($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
+    public function getPaymentsListRequest($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        // verify the required parameter 'date_begin' is set
-        if ($date_begin === null || (is_array($date_begin) && count($date_begin) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $date_begin when calling advGetStats'
-            );
-        }
-        // verify the required parameter 'date_end' is set
-        if ($date_end === null || (is_array($date_end) && count($date_end) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $date_end when calling advGetStats'
-            );
-        }
-        // verify the required parameter 'group' is set
-        if ($group === null || (is_array($group) && count($group) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $group when calling advGetStats'
-            );
-        }
 
-        $resourcePath = '/advert/stats';
+        $resourcePath = '/payment';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -389,44 +333,8 @@ class AdvReportsApi
 
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $date_begin,
-            'dateBegin', // param base name
-            'string', // openApiType
-            'form', // style
-            true, // explode
-            true // required
-        ) ?? []);
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $date_end,
-            'dateEnd', // param base name
-            'string', // openApiType
-            'form', // style
-            true, // explode
-            true // required
-        ) ?? []);
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $group,
-            'group', // param base name
-            'string', // openApiType
-            'form', // style
-            true, // explode
-            true // required
-        ) ?? []);
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $timezone,
-            'timezone', // param base name
-            'string', // openApiType
-            'form', // style
-            true, // explode
-            false // required
-        ) ?? []);
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $idcampaign,
-            'idcampaign', // param base name
+            $page,
+            'page', // param base name
             'integer', // openApiType
             'form', // style
             true, // explode
@@ -434,8 +342,8 @@ class AdvReportsApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $idusergroup,
-            'idusergroup', // param base name
+            $per_page,
+            'per-page', // param base name
             'integer', // openApiType
             'form', // style
             true, // explode
@@ -443,9 +351,18 @@ class AdvReportsApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $idad,
-            'idad', // param base name
-            'integer', // openApiType
+            $sort,
+            'sort', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $filter,
+            'filter', // param base name
+            'array', // openApiType
             'form', // style
             true, // explode
             false // required

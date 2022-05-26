@@ -1,6 +1,6 @@
 <?php
 /**
- * AdVastLinear
+ * AdRequestDetails
  *
  * PHP version 7.4
  *
@@ -28,10 +28,9 @@ use \ArrayAccess;
 use \Adserver\ObjectSerializer;
 
 /**
- * AdVastLinear Class Doc Comment
+ * AdRequestDetails Class Doc Comment
  *
  * @category Class
- * @description Format-specific properties
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -39,7 +38,7 @@ use \Adserver\ObjectSerializer;
  * @template TKey int|null
  * @template TValue mixed|null
  */
-class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
+class AdRequestDetails implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -48,7 +47,7 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'AdVastLinear';
+    protected static $openAPIModelName = 'AdRequest_details';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -56,7 +55,10 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
+        'iddimension' => 'int',
         'file' => 'string',
+        'content_html' => 'string',
+        'counter_type' => 'string',
         'skipoffset' => 'int',
         'skipoffset_type' => 'string',
         'allow_skip' => 'int',
@@ -72,7 +74,10 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
+        'iddimension' => null,
         'file' => null,
+        'content_html' => null,
+        'counter_type' => null,
         'skipoffset' => null,
         'skipoffset_type' => null,
         'allow_skip' => null,
@@ -107,7 +112,10 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
+        'iddimension' => 'iddimension',
         'file' => 'file',
+        'content_html' => 'content_html',
+        'counter_type' => 'counter_type',
         'skipoffset' => 'skipoffset',
         'skipoffset_type' => 'skipoffset_type',
         'allow_skip' => 'allow_skip',
@@ -121,7 +129,10 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
+        'iddimension' => 'setIddimension',
         'file' => 'setFile',
+        'content_html' => 'setContentHtml',
+        'counter_type' => 'setCounterType',
         'skipoffset' => 'setSkipoffset',
         'skipoffset_type' => 'setSkipoffsetType',
         'allow_skip' => 'setAllowSkip',
@@ -135,7 +146,10 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
+        'iddimension' => 'getIddimension',
         'file' => 'getFile',
+        'content_html' => 'getContentHtml',
+        'counter_type' => 'getCounterType',
         'skipoffset' => 'getSkipoffset',
         'skipoffset_type' => 'getSkipoffsetType',
         'allow_skip' => 'getAllowSkip',
@@ -184,6 +198,8 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
+    public const COUNTER_TYPE_IMPRESSIONS = 'impressions';
+    public const COUNTER_TYPE_CLICKS = 'clicks';
     public const SKIPOFFSET_TYPE_TIME = 'Time';
     public const SKIPOFFSET_TYPE_PERCENT = 'Percent';
     public const ALLOW_SKIP_0 = 0;
@@ -192,6 +208,19 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
     public const MAINTAIN_ASPECT_RATIO_1 = 1;
     public const VIDEO_SCALABLE_0 = 0;
     public const VIDEO_SCALABLE_1 = 1;
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getCounterTypeAllowableValues()
+    {
+        return [
+            self::COUNTER_TYPE_IMPRESSIONS,
+            self::COUNTER_TYPE_CLICKS,
+        ];
+    }
 
     /**
      * Gets allowable values of the enum
@@ -260,7 +289,10 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
+        $this->container['iddimension'] = $data['iddimension'] ?? null;
         $this->container['file'] = $data['file'] ?? null;
+        $this->container['content_html'] = $data['content_html'] ?? null;
+        $this->container['counter_type'] = $data['counter_type'] ?? null;
         $this->container['skipoffset'] = $data['skipoffset'] ?? null;
         $this->container['skipoffset_type'] = $data['skipoffset_type'] ?? null;
         $this->container['allow_skip'] = $data['allow_skip'] ?? null;
@@ -276,6 +308,15 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
     public function listInvalidProperties()
     {
         $invalidProperties = [];
+
+        $allowedValues = $this->getCounterTypeAllowableValues();
+        if (!is_null($this->container['counter_type']) && !in_array($this->container['counter_type'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'counter_type', must be one of '%s'",
+                $this->container['counter_type'],
+                implode("', '", $allowedValues)
+            );
+        }
 
         $allowedValues = $this->getSkipoffsetTypeAllowableValues();
         if (!is_null($this->container['skipoffset_type']) && !in_array($this->container['skipoffset_type'], $allowedValues, true)) {
@@ -329,6 +370,30 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
+     * Gets iddimension
+     *
+     * @return int|null
+     */
+    public function getIddimension()
+    {
+        return $this->container['iddimension'];
+    }
+
+    /**
+     * Sets iddimension
+     *
+     * @param int|null $iddimension Ad dimension ID
+     *
+     * @return self
+     */
+    public function setIddimension($iddimension)
+    {
+        $this->container['iddimension'] = $iddimension;
+
+        return $this;
+    }
+
+    /**
      * Gets file
      *
      * @return string|null
@@ -348,6 +413,64 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
     public function setFile($file)
     {
         $this->container['file'] = $file;
+
+        return $this;
+    }
+
+    /**
+     * Gets content_html
+     *
+     * @return string|null
+     */
+    public function getContentHtml()
+    {
+        return $this->container['content_html'];
+    }
+
+    /**
+     * Sets content_html
+     *
+     * @param string|null $content_html HTML-content
+     *
+     * @return self
+     */
+    public function setContentHtml($content_html)
+    {
+        $this->container['content_html'] = $content_html;
+
+        return $this;
+    }
+
+    /**
+     * Gets counter_type
+     *
+     * @return string|null
+     */
+    public function getCounterType()
+    {
+        return $this->container['counter_type'];
+    }
+
+    /**
+     * Sets counter_type
+     *
+     * @param string|null $counter_type Counter type
+     *
+     * @return self
+     */
+    public function setCounterType($counter_type)
+    {
+        $allowedValues = $this->getCounterTypeAllowableValues();
+        if (!is_null($counter_type) && !in_array($counter_type, $allowedValues, true)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value '%s' for 'counter_type', must be one of '%s'",
+                    $counter_type,
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['counter_type'] = $counter_type;
 
         return $this;
     }

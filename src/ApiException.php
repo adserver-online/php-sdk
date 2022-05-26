@@ -1,7 +1,7 @@
 <?php
 /**
  * ApiException
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020 Adserver.Online
+ * Copyright (c) 2020-2022 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -35,7 +35,6 @@ use \Exception;
  */
 class ApiException extends Exception
 {
-
     /**
      * The HTTP body of the server response either as Json or string.
      *
@@ -93,7 +92,7 @@ class ApiException extends Exception
     }
 
     /**
-     * Sets the deseralized response object (during deserialization)
+     * Sets the deserialized response object (during deserialization)
      *
      * @param mixed $obj Deserialized response object
      *
@@ -105,7 +104,7 @@ class ApiException extends Exception
     }
 
     /**
-     * Gets the deseralized response object (during deserialization)
+     * Gets the deserialized response object (during deserialization)
      *
      * @return mixed the deserialized response object
      */

@@ -1,8 +1,8 @@
 <?php
 /**
- * InlineObject
+ * Transaction
  *
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020 Adserver.Online
+ * Copyright (c) 2020-2022 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -24,11 +24,11 @@
 
 namespace Adserver\Model;
 
-use \Adserver\ObjectSerializer;
 use \ArrayAccess;
+use \Adserver\ObjectSerializer;
 
 /**
- * InlineObject Class Doc Comment
+ * Transaction Class Doc Comment
  *
  * @category Class
  * @package  Adserver
@@ -36,9 +36,9 @@ use \ArrayAccess;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<TKey, TValue>
  * @template TKey int|null
- * @template TValue mixed|null  
+ * @template TValue mixed|null
  */
-class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
+class Transaction implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -47,7 +47,7 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'inline_object';
+    protected static $openAPIModelName = 'Transaction';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -55,7 +55,14 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'zones' => 'int[]'
+        'id' => 'int',
+        'user' => 'object',
+        'type' => 'object',
+        'direction' => 'string',
+        'amount' => 'float',
+        'descr' => 'string',
+        'created_at' => 'string',
+        'updated_at' => 'string'
     ];
 
     /**
@@ -66,7 +73,14 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'zones' => null
+        'id' => null,
+        'user' => null,
+        'type' => null,
+        'direction' => null,
+        'amount' => null,
+        'descr' => null,
+        'created_at' => null,
+        'updated_at' => null
     ];
 
     /**
@@ -96,7 +110,14 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'zones' => 'zones'
+        'id' => 'id',
+        'user' => 'user',
+        'type' => 'type',
+        'direction' => 'direction',
+        'amount' => 'amount',
+        'descr' => 'descr',
+        'created_at' => 'created_at',
+        'updated_at' => 'updated_at'
     ];
 
     /**
@@ -105,7 +126,14 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'zones' => 'setZones'
+        'id' => 'setId',
+        'user' => 'setUser',
+        'type' => 'setType',
+        'direction' => 'setDirection',
+        'amount' => 'setAmount',
+        'descr' => 'setDescr',
+        'created_at' => 'setCreatedAt',
+        'updated_at' => 'setUpdatedAt'
     ];
 
     /**
@@ -114,7 +142,14 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'zones' => 'getZones'
+        'id' => 'getId',
+        'user' => 'getUser',
+        'type' => 'getType',
+        'direction' => 'getDirection',
+        'amount' => 'getAmount',
+        'descr' => 'getDescr',
+        'created_at' => 'getCreatedAt',
+        'updated_at' => 'getUpdatedAt'
     ];
 
     /**
@@ -159,9 +194,6 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
 
-
-
-
     /**
      * Associative array for storing property values
      *
@@ -177,7 +209,14 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['zones'] = $data['zones'] ?? null;
+        $this->container['id'] = $data['id'] ?? null;
+        $this->container['user'] = $data['user'] ?? null;
+        $this->container['type'] = $data['type'] ?? null;
+        $this->container['direction'] = $data['direction'] ?? null;
+        $this->container['amount'] = $data['amount'] ?? null;
+        $this->container['descr'] = $data['descr'] ?? null;
+        $this->container['created_at'] = $data['created_at'] ?? null;
+        $this->container['updated_at'] = $data['updated_at'] ?? null;
     }
 
     /**
@@ -189,9 +228,6 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['zones'] === null) {
-            $invalidProperties[] = "'zones' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -208,25 +244,193 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets zones
+     * Gets id
      *
-     * @return int[]
+     * @return int|null
      */
-    public function getZones()
+    public function getId()
     {
-        return $this->container['zones'];
+        return $this->container['id'];
     }
 
     /**
-     * Sets zones
+     * Sets id
      *
-     * @param int[] $zones zones
+     * @param int|null $id id
      *
      * @return self
      */
-    public function setZones($zones)
+    public function setId($id)
     {
-        $this->container['zones'] = $zones;
+        $this->container['id'] = $id;
+
+        return $this;
+    }
+
+    /**
+     * Gets user
+     *
+     * @return object|null
+     */
+    public function getUser()
+    {
+        return $this->container['user'];
+    }
+
+    /**
+     * Sets user
+     *
+     * @param object|null $user user
+     *
+     * @return self
+     */
+    public function setUser($user)
+    {
+        $this->container['user'] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Gets type
+     *
+     * @return object|null
+     */
+    public function getType()
+    {
+        return $this->container['type'];
+    }
+
+    /**
+     * Sets type
+     *
+     * @param object|null $type type
+     *
+     * @return self
+     */
+    public function setType($type)
+    {
+        $this->container['type'] = $type;
+
+        return $this;
+    }
+
+    /**
+     * Gets direction
+     *
+     * @return string|null
+     */
+    public function getDirection()
+    {
+        return $this->container['direction'];
+    }
+
+    /**
+     * Sets direction
+     *
+     * @param string|null $direction direction
+     *
+     * @return self
+     */
+    public function setDirection($direction)
+    {
+        $this->container['direction'] = $direction;
+
+        return $this;
+    }
+
+    /**
+     * Gets amount
+     *
+     * @return float|null
+     */
+    public function getAmount()
+    {
+        return $this->container['amount'];
+    }
+
+    /**
+     * Sets amount
+     *
+     * @param float|null $amount amount
+     *
+     * @return self
+     */
+    public function setAmount($amount)
+    {
+        $this->container['amount'] = $amount;
+
+        return $this;
+    }
+
+    /**
+     * Gets descr
+     *
+     * @return string|null
+     */
+    public function getDescr()
+    {
+        return $this->container['descr'];
+    }
+
+    /**
+     * Sets descr
+     *
+     * @param string|null $descr descr
+     *
+     * @return self
+     */
+    public function setDescr($descr)
+    {
+        $this->container['descr'] = $descr;
+
+        return $this;
+    }
+
+    /**
+     * Gets created_at
+     *
+     * @return string|null
+     */
+    public function getCreatedAt()
+    {
+        return $this->container['created_at'];
+    }
+
+    /**
+     * Sets created_at
+     *
+     * @param string|null $created_at created_at
+     *
+     * @return self
+     */
+    public function setCreatedAt($created_at)
+    {
+        $this->container['created_at'] = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets updated_at
+     *
+     * @return string|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->container['updated_at'];
+    }
+
+    /**
+     * Sets updated_at
+     *
+     * @param string|null $updated_at updated_at
+     *
+     * @return self
+     */
+    public function setUpdatedAt($updated_at)
+    {
+        $this->container['updated_at'] = $updated_at;
 
         return $this;
     }
@@ -237,7 +441,7 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -249,6 +453,7 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return mixed|null
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -262,7 +467,7 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -278,7 +483,7 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->container[$offset]);
     }
@@ -290,6 +495,7 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
      * of any type other than a resource.
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
        return ObjectSerializer::sanitizeForSerialization($this);

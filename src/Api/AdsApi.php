@@ -1,7 +1,7 @@
 <?php
 /**
  * AdsApi
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020 Adserver.Online
+ * Copyright (c) 2020-2022 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -23,16 +23,17 @@
 
 namespace Adserver\Api;
 
-use Adserver\ApiException;
-use Adserver\Configuration;
-use Adserver\HeaderSelector;
-use Adserver\ObjectSerializer;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use Adserver\ApiException;
+use Adserver\Configuration;
+use Adserver\HeaderSelector;
+use Adserver\ObjectSerializer;
 
 /**
  * AdsApi Class Doc Comment
@@ -87,7 +88,7 @@ class AdsApi
      *
      * @param int $hostIndex Host index (required)
      */
-    public function setHostIndex($hostIndex)
+    public function setHostIndex($hostIndex): void
     {
         $this->hostIndex = $hostIndex;
     }
@@ -116,15 +117,15 @@ class AdsApi
      * Assign ad to zones
      *
      * @param  int $id id (required)
-     * @param  \Adserver\Model\InlineObject $inline_object inline_object (required)
+     * @param  \Adserver\Model\AssignAdToZonesRequest $assign_ad_to_zones_request assign_ad_to_zones_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function assignAdToZones($id, $inline_object)
+    public function assignAdToZones($id, $assign_ad_to_zones_request)
     {
-        $this->assignAdToZonesWithHttpInfo($id, $inline_object);
+        $this->assignAdToZonesWithHttpInfo($id, $assign_ad_to_zones_request);
     }
 
     /**
@@ -133,15 +134,15 @@ class AdsApi
      * Assign ad to zones
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\InlineObject $inline_object (required)
+     * @param  \Adserver\Model\AssignAdToZonesRequest $assign_ad_to_zones_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function assignAdToZonesWithHttpInfo($id, $inline_object)
+    public function assignAdToZonesWithHttpInfo($id, $assign_ad_to_zones_request)
     {
-        $request = $this->assignAdToZonesRequest($id, $inline_object);
+        $request = $this->assignAdToZonesRequest($id, $assign_ad_to_zones_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -150,9 +151,16 @@ class AdsApi
             } catch (RequestException $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
+                    (int) $e->getCode(),
                     $e->getResponse() ? $e->getResponse()->getHeaders() : null,
                     $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
                 );
             }
 
@@ -163,11 +171,11 @@ class AdsApi
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        $request->getUri()
+                        (string) $request->getUri()
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    $response->getBody()
+                    (string) $response->getBody()
                 );
             }
 
@@ -186,14 +194,14 @@ class AdsApi
      * Assign ad to zones
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\InlineObject $inline_object (required)
+     * @param  \Adserver\Model\AssignAdToZonesRequest $assign_ad_to_zones_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function assignAdToZonesAsync($id, $inline_object)
+    public function assignAdToZonesAsync($id, $assign_ad_to_zones_request)
     {
-        return $this->assignAdToZonesAsyncWithHttpInfo($id, $inline_object)
+        return $this->assignAdToZonesAsyncWithHttpInfo($id, $assign_ad_to_zones_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -207,15 +215,15 @@ class AdsApi
      * Assign ad to zones
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\InlineObject $inline_object (required)
+     * @param  \Adserver\Model\AssignAdToZonesRequest $assign_ad_to_zones_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function assignAdToZonesAsyncWithHttpInfo($id, $inline_object)
+    public function assignAdToZonesAsyncWithHttpInfo($id, $assign_ad_to_zones_request)
     {
         $returnType = '';
-        $request = $this->assignAdToZonesRequest($id, $inline_object);
+        $request = $this->assignAdToZonesRequest($id, $assign_ad_to_zones_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -234,7 +242,7 @@ class AdsApi
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        $response->getBody()
+                        (string) $response->getBody()
                     );
                 }
             );
@@ -244,12 +252,12 @@ class AdsApi
      * Create request for operation 'assignAdToZones'
      *
      * @param  int $id (required)
-     * @param  \Adserver\Model\InlineObject $inline_object (required)
+     * @param  \Adserver\Model\AssignAdToZonesRequest $assign_ad_to_zones_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function assignAdToZonesRequest($id, $inline_object)
+    public function assignAdToZonesRequest($id, $assign_ad_to_zones_request)
     {
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
@@ -257,10 +265,10 @@ class AdsApi
                 'Missing the required parameter $id when calling assignAdToZones'
             );
         }
-        // verify the required parameter 'inline_object' is set
-        if ($inline_object === null || (is_array($inline_object) && count($inline_object) === 0)) {
+        // verify the required parameter 'assign_ad_to_zones_request' is set
+        if ($assign_ad_to_zones_request === null || (is_array($assign_ad_to_zones_request) && count($assign_ad_to_zones_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $inline_object when calling assignAdToZones'
+                'Missing the required parameter $assign_ad_to_zones_request when calling assignAdToZones'
             );
         }
 
@@ -272,16 +280,14 @@ class AdsApi
         $multipart = false;
 
         // query params
-        if ($id !== null) {
-            if('form' === 'form' && is_array($id)) {
-                foreach($id as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['id'] = $id;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $id,
+            'id', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
 
 
 
@@ -298,11 +304,11 @@ class AdsApi
         }
 
         // for model (json/xml)
-        if (isset($inline_object)) {
+        if (isset($assign_ad_to_zones_request)) {
             if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($inline_object));
+                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($assign_ad_to_zones_request));
             } else {
-                $httpBody = $inline_object;
+                $httpBody = $assign_ad_to_zones_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -324,12 +330,12 @@ class AdsApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if ($this->config->getAccessToken() !== null) {
+        if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -344,7 +350,7 @@ class AdsApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
@@ -394,9 +400,16 @@ class AdsApi
             } catch (RequestException $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
+                    (int) $e->getCode(),
                     $e->getResponse() ? $e->getResponse()->getHeaders() : null,
                     $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
                 );
             }
 
@@ -407,21 +420,23 @@ class AdsApi
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        $request->getUri()
+                        (string) $request->getUri()
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    $response->getBody()
+                    (string) $response->getBody()
                 );
             }
 
-            $responseBody = $response->getBody();
             switch($statusCode) {
                 case 200:
                     if ('\Adserver\Model\Ad' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\Ad' !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -431,9 +446,12 @@ class AdsApi
                     ];
                 case 400:
                     if ('\Adserver\Model\FormErrorResponse' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\FormErrorResponse' !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -444,11 +462,13 @@ class AdsApi
             }
 
             $returnType = '\Adserver\Model\Ad';
-            $responseBody = $response->getBody();
             if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
+                $content = $response->getBody(); //stream goes to serializer
             } else {
-                $content = (string) $responseBody;
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
             }
 
             return [
@@ -521,11 +541,13 @@ class AdsApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    $responseBody = $response->getBody();
                     if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -545,7 +567,7 @@ class AdsApi
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        $response->getBody()
+                        (string) $response->getBody()
                     );
                 }
             );
@@ -583,16 +605,14 @@ class AdsApi
         $multipart = false;
 
         // query params
-        if ($idformat !== null) {
-            if('form' === 'form' && is_array($idformat)) {
-                foreach($idformat as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idformat'] = $idformat;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idformat,
+            'idformat', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
 
 
 
@@ -635,12 +655,12 @@ class AdsApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if ($this->config->getAccessToken() !== null) {
+        if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -655,7 +675,7 @@ class AdsApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
@@ -702,9 +722,16 @@ class AdsApi
             } catch (RequestException $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
+                    (int) $e->getCode(),
                     $e->getResponse() ? $e->getResponse()->getHeaders() : null,
                     $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
                 );
             }
 
@@ -715,11 +742,11 @@ class AdsApi
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        $request->getUri()
+                        (string) $request->getUri()
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    $response->getBody()
+                    (string) $response->getBody()
                 );
             }
 
@@ -784,7 +811,7 @@ class AdsApi
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        $response->getBody()
+                        (string) $response->getBody()
                     );
                 }
             );
@@ -858,12 +885,12 @@ class AdsApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if ($this->config->getAccessToken() !== null) {
+        if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -878,7 +905,7 @@ class AdsApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'DELETE',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
@@ -926,9 +953,16 @@ class AdsApi
             } catch (RequestException $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
+                    (int) $e->getCode(),
                     $e->getResponse() ? $e->getResponse()->getHeaders() : null,
                     $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
                 );
             }
 
@@ -939,21 +973,23 @@ class AdsApi
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        $request->getUri()
+                        (string) $request->getUri()
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    $response->getBody()
+                    (string) $response->getBody()
                 );
             }
 
-            $responseBody = $response->getBody();
             switch($statusCode) {
                 case 200:
                     if ('\Adserver\Model\Ad' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\Ad' !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -964,11 +1000,13 @@ class AdsApi
             }
 
             $returnType = '\Adserver\Model\Ad';
-            $responseBody = $response->getBody();
             if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
+                $content = $response->getBody(); //stream goes to serializer
             } else {
-                $content = (string) $responseBody;
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
             }
 
             return [
@@ -1031,11 +1069,13 @@ class AdsApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    $responseBody = $response->getBody();
                     if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -1055,7 +1095,7 @@ class AdsApi
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        $response->getBody()
+                        (string) $response->getBody()
                     );
                 }
             );
@@ -1129,12 +1169,12 @@ class AdsApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if ($this->config->getAccessToken() !== null) {
+        if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1149,7 +1189,7 @@ class AdsApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
@@ -1203,9 +1243,16 @@ class AdsApi
             } catch (RequestException $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
+                    (int) $e->getCode(),
                     $e->getResponse() ? $e->getResponse()->getHeaders() : null,
                     $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
                 );
             }
 
@@ -1216,21 +1263,23 @@ class AdsApi
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        $request->getUri()
+                        (string) $request->getUri()
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    $response->getBody()
+                    (string) $response->getBody()
                 );
             }
 
-            $responseBody = $response->getBody();
             switch($statusCode) {
                 case 200:
                     if ('\Adserver\Model\Ad[]' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\Ad[]' !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -1241,11 +1290,13 @@ class AdsApi
             }
 
             $returnType = '\Adserver\Model\Ad[]';
-            $responseBody = $response->getBody();
             if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
+                $content = $response->getBody(); //stream goes to serializer
             } else {
-                $content = (string) $responseBody;
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
             }
 
             return [
@@ -1314,11 +1365,13 @@ class AdsApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    $responseBody = $response->getBody();
                     if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -1338,7 +1391,7 @@ class AdsApi
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        $response->getBody()
+                        (string) $response->getBody()
                     );
                 }
             );
@@ -1366,49 +1419,41 @@ class AdsApi
         $multipart = false;
 
         // query params
-        if ($page !== null) {
-            if('form' === 'form' && is_array($page)) {
-                foreach($page as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['page'] = $page;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $page,
+            'page', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($per_page !== null) {
-            if('form' === 'form' && is_array($per_page)) {
-                foreach($per_page as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['per-page'] = $per_page;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $per_page,
+            'per-page', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($sort !== null) {
-            if('form' === 'form' && is_array($sort)) {
-                foreach($sort as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['sort'] = $sort;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $sort,
+            'sort', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($filter !== null) {
-            if('form' === 'form' && is_array($filter)) {
-                foreach($filter as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['filter'] = $filter;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $filter,
+            'filter', // param base name
+            'array', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
 
@@ -1445,12 +1490,12 @@ class AdsApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if ($this->config->getAccessToken() !== null) {
+        if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1465,7 +1510,7 @@ class AdsApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
@@ -1515,9 +1560,16 @@ class AdsApi
             } catch (RequestException $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
+                    (int) $e->getCode(),
                     $e->getResponse() ? $e->getResponse()->getHeaders() : null,
                     $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
                 );
             }
 
@@ -1528,21 +1580,23 @@ class AdsApi
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        $request->getUri()
+                        (string) $request->getUri()
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    $response->getBody()
+                    (string) $response->getBody()
                 );
             }
 
-            $responseBody = $response->getBody();
             switch($statusCode) {
                 case 200:
                     if ('\Adserver\Model\Ad' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\Ad' !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -1552,9 +1606,12 @@ class AdsApi
                     ];
                 case 400:
                     if ('\Adserver\Model\FormErrorResponse' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\FormErrorResponse' !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -1565,11 +1622,13 @@ class AdsApi
             }
 
             $returnType = '\Adserver\Model\Ad';
-            $responseBody = $response->getBody();
             if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
+                $content = $response->getBody(); //stream goes to serializer
             } else {
-                $content = (string) $responseBody;
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
             }
 
             return [
@@ -1642,11 +1701,13 @@ class AdsApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    $responseBody = $response->getBody();
                     if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -1666,7 +1727,7 @@ class AdsApi
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        $response->getBody()
+                        (string) $response->getBody()
                     );
                 }
             );
@@ -1753,12 +1814,12 @@ class AdsApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if ($this->config->getAccessToken() !== null) {
+        if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -1773,7 +1834,7 @@ class AdsApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'PUT',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),

@@ -1,6 +1,6 @@
 <?php
 /**
- * User
+ * Payout
  *
  * PHP version 7.4
  *
@@ -28,7 +28,7 @@ use \ArrayAccess;
 use \Adserver\ObjectSerializer;
 
 /**
- * User Class Doc Comment
+ * Payout Class Doc Comment
  *
  * @category Class
  * @package  Adserver
@@ -38,7 +38,7 @@ use \Adserver\ObjectSerializer;
  * @template TKey int|null
  * @template TValue mixed|null
  */
-class User implements ModelInterface, ArrayAccess, \JsonSerializable
+class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -47,7 +47,7 @@ class User implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'User';
+    protected static $openAPIModelName = 'Payout';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -56,15 +56,12 @@ class User implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPITypes = [
         'id' => 'int',
-        'role' => 'int',
-        'name' => 'string',
-        'email' => 'string',
-        'phone' => 'string',
-        'messenger' => 'object',
-        'timezone' => 'string',
-        'is_active' => 'bool',
-        'allow_login' => 'bool',
-        'campaigns_post_moderation' => 'bool',
+        'user' => 'object',
+        'method' => 'string',
+        'account' => 'string',
+        'status' => 'object',
+        'amount' => 'float',
+        'descr' => 'string',
         'created_at' => 'string',
         'updated_at' => 'string'
     ];
@@ -78,15 +75,12 @@ class User implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPIFormats = [
         'id' => null,
-        'role' => null,
-        'name' => null,
-        'email' => null,
-        'phone' => null,
-        'messenger' => null,
-        'timezone' => null,
-        'is_active' => null,
-        'allow_login' => null,
-        'campaigns_post_moderation' => null,
+        'user' => null,
+        'method' => null,
+        'account' => null,
+        'status' => null,
+        'amount' => null,
+        'descr' => null,
         'created_at' => null,
         'updated_at' => null
     ];
@@ -119,15 +113,12 @@ class User implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $attributeMap = [
         'id' => 'id',
-        'role' => 'role',
-        'name' => 'name',
-        'email' => 'email',
-        'phone' => 'phone',
-        'messenger' => 'messenger',
-        'timezone' => 'timezone',
-        'is_active' => 'is_active',
-        'allow_login' => 'allow_login',
-        'campaigns_post_moderation' => 'campaigns_post_moderation',
+        'user' => 'user',
+        'method' => 'method',
+        'account' => 'account',
+        'status' => 'status',
+        'amount' => 'amount',
+        'descr' => 'descr',
         'created_at' => 'created_at',
         'updated_at' => 'updated_at'
     ];
@@ -139,15 +130,12 @@ class User implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $setters = [
         'id' => 'setId',
-        'role' => 'setRole',
-        'name' => 'setName',
-        'email' => 'setEmail',
-        'phone' => 'setPhone',
-        'messenger' => 'setMessenger',
-        'timezone' => 'setTimezone',
-        'is_active' => 'setIsActive',
-        'allow_login' => 'setAllowLogin',
-        'campaigns_post_moderation' => 'setCampaignsPostModeration',
+        'user' => 'setUser',
+        'method' => 'setMethod',
+        'account' => 'setAccount',
+        'status' => 'setStatus',
+        'amount' => 'setAmount',
+        'descr' => 'setDescr',
         'created_at' => 'setCreatedAt',
         'updated_at' => 'setUpdatedAt'
     ];
@@ -159,15 +147,12 @@ class User implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $getters = [
         'id' => 'getId',
-        'role' => 'getRole',
-        'name' => 'getName',
-        'email' => 'getEmail',
-        'phone' => 'getPhone',
-        'messenger' => 'getMessenger',
-        'timezone' => 'getTimezone',
-        'is_active' => 'getIsActive',
-        'allow_login' => 'getAllowLogin',
-        'campaigns_post_moderation' => 'getCampaignsPostModeration',
+        'user' => 'getUser',
+        'method' => 'getMethod',
+        'account' => 'getAccount',
+        'status' => 'getStatus',
+        'amount' => 'getAmount',
+        'descr' => 'getDescr',
         'created_at' => 'getCreatedAt',
         'updated_at' => 'getUpdatedAt'
     ];
@@ -230,15 +215,12 @@ class User implements ModelInterface, ArrayAccess, \JsonSerializable
     public function __construct(array $data = null)
     {
         $this->container['id'] = $data['id'] ?? null;
-        $this->container['role'] = $data['role'] ?? null;
-        $this->container['name'] = $data['name'] ?? null;
-        $this->container['email'] = $data['email'] ?? null;
-        $this->container['phone'] = $data['phone'] ?? null;
-        $this->container['messenger'] = $data['messenger'] ?? null;
-        $this->container['timezone'] = $data['timezone'] ?? null;
-        $this->container['is_active'] = $data['is_active'] ?? null;
-        $this->container['allow_login'] = $data['allow_login'] ?? null;
-        $this->container['campaigns_post_moderation'] = $data['campaigns_post_moderation'] ?? null;
+        $this->container['user'] = $data['user'] ?? null;
+        $this->container['method'] = $data['method'] ?? null;
+        $this->container['account'] = $data['account'] ?? null;
+        $this->container['status'] = $data['status'] ?? null;
+        $this->container['amount'] = $data['amount'] ?? null;
+        $this->container['descr'] = $data['descr'] ?? null;
         $this->container['created_at'] = $data['created_at'] ?? null;
         $this->container['updated_at'] = $data['updated_at'] ?? null;
     }
@@ -292,217 +274,145 @@ class User implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets role
-     *
-     * @return int|null
-     */
-    public function getRole()
-    {
-        return $this->container['role'];
-    }
-
-    /**
-     * Sets role
-     *
-     * @param int|null $role role
-     *
-     * @return self
-     */
-    public function setRole($role)
-    {
-        $this->container['role'] = $role;
-
-        return $this;
-    }
-
-    /**
-     * Gets name
-     *
-     * @return string|null
-     */
-    public function getName()
-    {
-        return $this->container['name'];
-    }
-
-    /**
-     * Sets name
-     *
-     * @param string|null $name name
-     *
-     * @return self
-     */
-    public function setName($name)
-    {
-        $this->container['name'] = $name;
-
-        return $this;
-    }
-
-    /**
-     * Gets email
-     *
-     * @return string|null
-     */
-    public function getEmail()
-    {
-        return $this->container['email'];
-    }
-
-    /**
-     * Sets email
-     *
-     * @param string|null $email email
-     *
-     * @return self
-     */
-    public function setEmail($email)
-    {
-        $this->container['email'] = $email;
-
-        return $this;
-    }
-
-    /**
-     * Gets phone
-     *
-     * @return string|null
-     */
-    public function getPhone()
-    {
-        return $this->container['phone'];
-    }
-
-    /**
-     * Sets phone
-     *
-     * @param string|null $phone phone
-     *
-     * @return self
-     */
-    public function setPhone($phone)
-    {
-        $this->container['phone'] = $phone;
-
-        return $this;
-    }
-
-    /**
-     * Gets messenger
+     * Gets user
      *
      * @return object|null
      */
-    public function getMessenger()
+    public function getUser()
     {
-        return $this->container['messenger'];
+        return $this->container['user'];
     }
 
     /**
-     * Sets messenger
+     * Sets user
      *
-     * @param object|null $messenger messenger
+     * @param object|null $user user
      *
      * @return self
      */
-    public function setMessenger($messenger)
+    public function setUser($user)
     {
-        $this->container['messenger'] = $messenger;
+        $this->container['user'] = $user;
 
         return $this;
     }
 
     /**
-     * Gets timezone
+     * Gets method
      *
      * @return string|null
      */
-    public function getTimezone()
+    public function getMethod()
     {
-        return $this->container['timezone'];
+        return $this->container['method'];
     }
 
     /**
-     * Sets timezone
+     * Sets method
      *
-     * @param string|null $timezone timezone
+     * @param string|null $method method
      *
      * @return self
      */
-    public function setTimezone($timezone)
+    public function setMethod($method)
     {
-        $this->container['timezone'] = $timezone;
+        $this->container['method'] = $method;
 
         return $this;
     }
 
     /**
-     * Gets is_active
+     * Gets account
      *
-     * @return bool|null
+     * @return string|null
      */
-    public function getIsActive()
+    public function getAccount()
     {
-        return $this->container['is_active'];
+        return $this->container['account'];
     }
 
     /**
-     * Sets is_active
+     * Sets account
      *
-     * @param bool|null $is_active is_active
+     * @param string|null $account account
      *
      * @return self
      */
-    public function setIsActive($is_active)
+    public function setAccount($account)
     {
-        $this->container['is_active'] = $is_active;
+        $this->container['account'] = $account;
 
         return $this;
     }
 
     /**
-     * Gets allow_login
+     * Gets status
      *
-     * @return bool|null
+     * @return object|null
      */
-    public function getAllowLogin()
+    public function getStatus()
     {
-        return $this->container['allow_login'];
+        return $this->container['status'];
     }
 
     /**
-     * Sets allow_login
+     * Sets status
      *
-     * @param bool|null $allow_login allow_login
+     * @param object|null $status status
      *
      * @return self
      */
-    public function setAllowLogin($allow_login)
+    public function setStatus($status)
     {
-        $this->container['allow_login'] = $allow_login;
+        $this->container['status'] = $status;
 
         return $this;
     }
 
     /**
-     * Gets campaigns_post_moderation
+     * Gets amount
      *
-     * @return bool|null
+     * @return float|null
      */
-    public function getCampaignsPostModeration()
+    public function getAmount()
     {
-        return $this->container['campaigns_post_moderation'];
+        return $this->container['amount'];
     }
 
     /**
-     * Sets campaigns_post_moderation
+     * Sets amount
      *
-     * @param bool|null $campaigns_post_moderation campaigns_post_moderation
+     * @param float|null $amount amount
      *
      * @return self
      */
-    public function setCampaignsPostModeration($campaigns_post_moderation)
+    public function setAmount($amount)
     {
-        $this->container['campaigns_post_moderation'] = $campaigns_post_moderation;
+        $this->container['amount'] = $amount;
+
+        return $this;
+    }
+
+    /**
+     * Gets descr
+     *
+     * @return string|null
+     */
+    public function getDescr()
+    {
+        return $this->container['descr'];
+    }
+
+    /**
+     * Sets descr
+     *
+     * @param string|null $descr descr
+     *
+     * @return self
+     */
+    public function setDescr($descr)
+    {
+        $this->container['descr'] = $descr;
 
         return $this;
     }

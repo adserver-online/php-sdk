@@ -1,7 +1,7 @@
 <?php
 /**
  * OtherApi
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020 Adserver.Online
+ * Copyright (c) 2020-2022 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -23,16 +23,17 @@
 
 namespace Adserver\Api;
 
-use Adserver\ApiException;
-use Adserver\Configuration;
-use Adserver\HeaderSelector;
-use Adserver\ObjectSerializer;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use Adserver\ApiException;
+use Adserver\Configuration;
+use Adserver\HeaderSelector;
+use Adserver\ObjectSerializer;
 
 /**
  * OtherApi Class Doc Comment
@@ -87,7 +88,7 @@ class OtherApi
      *
      * @param int $hostIndex Host index (required)
      */
-    public function setHostIndex($hostIndex)
+    public function setHostIndex($hostIndex): void
     {
         $this->hostIndex = $hostIndex;
     }
@@ -113,7 +114,7 @@ class OtherApi
     /**
      * Operation getDictionaries
      *
-     * Return data dictionaries
+     * Data dictionaries
      *
      *
      * @throws \Adserver\ApiException on non-2xx response
@@ -129,7 +130,7 @@ class OtherApi
     /**
      * Operation getDictionariesWithHttpInfo
      *
-     * Return data dictionaries
+     * Data dictionaries
      *
      *
      * @throws \Adserver\ApiException on non-2xx response
@@ -147,9 +148,16 @@ class OtherApi
             } catch (RequestException $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
+                    (int) $e->getCode(),
                     $e->getResponse() ? $e->getResponse()->getHeaders() : null,
                     $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
                 );
             }
 
@@ -160,21 +168,23 @@ class OtherApi
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        $request->getUri()
+                        (string) $request->getUri()
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    $response->getBody()
+                    (string) $response->getBody()
                 );
             }
 
-            $responseBody = $response->getBody();
             switch($statusCode) {
                 case 200:
                     if ('\Adserver\Model\Dict' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\Dict' !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -185,11 +195,13 @@ class OtherApi
             }
 
             $returnType = '\Adserver\Model\Dict';
-            $responseBody = $response->getBody();
             if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
+                $content = $response->getBody(); //stream goes to serializer
             } else {
-                $content = (string) $responseBody;
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
             }
 
             return [
@@ -216,7 +228,7 @@ class OtherApi
     /**
      * Operation getDictionariesAsync
      *
-     * Return data dictionaries
+     * Data dictionaries
      *
      *
      * @throws \InvalidArgumentException
@@ -235,7 +247,7 @@ class OtherApi
     /**
      * Operation getDictionariesAsyncWithHttpInfo
      *
-     * Return data dictionaries
+     * Data dictionaries
      *
      *
      * @throws \InvalidArgumentException
@@ -250,11 +262,13 @@ class OtherApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    $responseBody = $response->getBody();
                     if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -274,7 +288,7 @@ class OtherApi
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        $response->getBody()
+                        (string) $response->getBody()
                     );
                 }
             );
@@ -333,12 +347,12 @@ class OtherApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if ($this->config->getAccessToken() !== null) {
+        if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -353,7 +367,7 @@ class OtherApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),

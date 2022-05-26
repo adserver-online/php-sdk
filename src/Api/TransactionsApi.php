@@ -1,6 +1,6 @@
 <?php
 /**
- * CampaignsApi
+ * TransactionsApi
  * PHP version 7.4
  *
  * @category Class
@@ -36,14 +36,14 @@ use Adserver\HeaderSelector;
 use Adserver\ObjectSerializer;
 
 /**
- * CampaignsApi Class Doc Comment
+ * TransactionsApi Class Doc Comment
  *
  * @category Class
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class CampaignsApi
+class TransactionsApi
 {
     /**
      * @var ClientInterface
@@ -112,36 +112,36 @@ class CampaignsApi
     }
 
     /**
-     * Operation createCampaign
+     * Operation createTransaction
      *
-     * Create campaign
+     * Create transaction
      *
-     * @param  \Adserver\Model\CampaignRequest $campaign_request campaign_request (required)
+     * @param  \Adserver\Model\TransactionRequest $transaction_request transaction_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return \Adserver\Model\Campaign|\Adserver\Model\FormErrorResponse
+     * @return \Adserver\Model\Transaction|\Adserver\Model\FormErrorResponse
      */
-    public function createCampaign($campaign_request)
+    public function createTransaction($transaction_request)
     {
-        list($response) = $this->createCampaignWithHttpInfo($campaign_request);
+        list($response) = $this->createTransactionWithHttpInfo($transaction_request);
         return $response;
     }
 
     /**
-     * Operation createCampaignWithHttpInfo
+     * Operation createTransactionWithHttpInfo
      *
-     * Create campaign
+     * Create transaction
      *
-     * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
+     * @param  \Adserver\Model\TransactionRequest $transaction_request (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of \Adserver\Model\Campaign|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Adserver\Model\Transaction|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function createCampaignWithHttpInfo($campaign_request)
+    public function createTransactionWithHttpInfo($transaction_request)
     {
-        $request = $this->createCampaignRequest($campaign_request);
+        $request = $this->createTransactionRequest($transaction_request);
 
         try {
             $options = $this->createHttpClientOption();
@@ -180,17 +180,17 @@ class CampaignsApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\Adserver\Model\Campaign' === '\SplFileObject') {
+                    if ('\Adserver\Model\Transaction' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\Adserver\Model\Campaign' !== 'string') {
+                        if ('\Adserver\Model\Transaction' !== 'string') {
                             $content = json_decode($content);
                         }
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\Adserver\Model\Campaign', []),
+                        ObjectSerializer::deserialize($content, '\Adserver\Model\Transaction', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -211,7 +211,7 @@ class CampaignsApi
                     ];
             }
 
-            $returnType = '\Adserver\Model\Campaign';
+            $returnType = '\Adserver\Model\Transaction';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -232,7 +232,7 @@ class CampaignsApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Adserver\Model\Campaign',
+                        '\Adserver\Model\Transaction',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -251,18 +251,18 @@ class CampaignsApi
     }
 
     /**
-     * Operation createCampaignAsync
+     * Operation createTransactionAsync
      *
-     * Create campaign
+     * Create transaction
      *
-     * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
+     * @param  \Adserver\Model\TransactionRequest $transaction_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createCampaignAsync($campaign_request)
+    public function createTransactionAsync($transaction_request)
     {
-        return $this->createCampaignAsyncWithHttpInfo($campaign_request)
+        return $this->createTransactionAsyncWithHttpInfo($transaction_request)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -271,19 +271,19 @@ class CampaignsApi
     }
 
     /**
-     * Operation createCampaignAsyncWithHttpInfo
+     * Operation createTransactionAsyncWithHttpInfo
      *
-     * Create campaign
+     * Create transaction
      *
-     * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
+     * @param  \Adserver\Model\TransactionRequest $transaction_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createCampaignAsyncWithHttpInfo($campaign_request)
+    public function createTransactionAsyncWithHttpInfo($transaction_request)
     {
-        $returnType = '\Adserver\Model\Campaign';
-        $request = $this->createCampaignRequest($campaign_request);
+        $returnType = '\Adserver\Model\Transaction';
+        $request = $this->createTransactionRequest($transaction_request);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -322,23 +322,23 @@ class CampaignsApi
     }
 
     /**
-     * Create request for operation 'createCampaign'
+     * Create request for operation 'createTransaction'
      *
-     * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
+     * @param  \Adserver\Model\TransactionRequest $transaction_request (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function createCampaignRequest($campaign_request)
+    public function createTransactionRequest($transaction_request)
     {
-        // verify the required parameter 'campaign_request' is set
-        if ($campaign_request === null || (is_array($campaign_request) && count($campaign_request) === 0)) {
+        // verify the required parameter 'transaction_request' is set
+        if ($transaction_request === null || (is_array($transaction_request) && count($transaction_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $campaign_request when calling createCampaign'
+                'Missing the required parameter $transaction_request when calling createTransaction'
             );
         }
 
-        $resourcePath = '/campaign';
+        $resourcePath = '/transaction';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -361,11 +361,11 @@ class CampaignsApi
         }
 
         // for model (json/xml)
-        if (isset($campaign_request)) {
+        if (isset($transaction_request)) {
             if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($campaign_request));
+                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($transaction_request));
             } else {
-                $httpBody = $campaign_request;
+                $httpBody = $transaction_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -417,266 +417,36 @@ class CampaignsApi
     }
 
     /**
-     * Operation deleteCampaign
+     * Operation getTransaction
      *
-     * Delete campaign
-     *
-     * @param  int $id id (required)
-     *
-     * @throws \Adserver\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return void
-     */
-    public function deleteCampaign($id)
-    {
-        $this->deleteCampaignWithHttpInfo($id);
-    }
-
-    /**
-     * Operation deleteCampaignWithHttpInfo
-     *
-     * Delete campaign
-     *
-     * @param  int $id (required)
-     *
-     * @throws \Adserver\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
-     */
-    public function deleteCampaignWithHttpInfo($id)
-    {
-        $request = $this->deleteCampaignRequest($id);
-
-        try {
-            $options = $this->createHttpClientOption();
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
-                );
-            } catch (ConnectException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    null,
-                    null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-            if ($statusCode < 200 || $statusCode > 299) {
-                throw new ApiException(
-                    sprintf(
-                        '[%d] Error connecting to the API (%s)',
-                        $statusCode,
-                        (string) $request->getUri()
-                    ),
-                    $statusCode,
-                    $response->getHeaders(),
-                    (string) $response->getBody()
-                );
-            }
-
-            return [null, $statusCode, $response->getHeaders()];
-
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-            }
-            throw $e;
-        }
-    }
-
-    /**
-     * Operation deleteCampaignAsync
-     *
-     * Delete campaign
-     *
-     * @param  int $id (required)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function deleteCampaignAsync($id)
-    {
-        return $this->deleteCampaignAsyncWithHttpInfo($id)
-            ->then(
-                function ($response) {
-                    return $response[0];
-                }
-            );
-    }
-
-    /**
-     * Operation deleteCampaignAsyncWithHttpInfo
-     *
-     * Delete campaign
-     *
-     * @param  int $id (required)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function deleteCampaignAsyncWithHttpInfo($id)
-    {
-        $returnType = '';
-        $request = $this->deleteCampaignRequest($id);
-
-        return $this->client
-            ->sendAsync($request, $this->createHttpClientOption())
-            ->then(
-                function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
-                },
-                function ($exception) {
-                    $response = $exception->getResponse();
-                    $statusCode = $response->getStatusCode();
-                    throw new ApiException(
-                        sprintf(
-                            '[%d] Error connecting to the API (%s)',
-                            $statusCode,
-                            $exception->getRequest()->getUri()
-                        ),
-                        $statusCode,
-                        $response->getHeaders(),
-                        (string) $response->getBody()
-                    );
-                }
-            );
-    }
-
-    /**
-     * Create request for operation 'deleteCampaign'
-     *
-     * @param  int $id (required)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    public function deleteCampaignRequest($id)
-    {
-        // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $id when calling deleteCampaign'
-            );
-        }
-
-        $resourcePath = '/campaign/{id}';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-
-
-        // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
-
-
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                []
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                [],
-                []
-            );
-        }
-
-        // for model (json/xml)
-        if (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
-                    foreach ($formParamValueItems as $formParamValueItem) {
-                        $multipartContents[] = [
-                            'name' => $formParamName,
-                            'contents' => $formParamValueItem
-                        ];
-                    }
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
-            } else {
-                // for HTTP post (form)
-                $httpBody = ObjectSerializer::buildQuery($formParams);
-            }
-        }
-
-        // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
-            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
-        }
-
-        $defaultHeaders = [];
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $headers
-        );
-
-        $query = ObjectSerializer::buildQuery($queryParams);
-        return new Request(
-            'DELETE',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
-     * Operation getCampaign
-     *
-     * Get campaign
+     * Get transaction
      *
      * @param  int $id id (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return \Adserver\Model\Campaign
+     * @return \Adserver\Model\Transaction
      */
-    public function getCampaign($id)
+    public function getTransaction($id)
     {
-        list($response) = $this->getCampaignWithHttpInfo($id);
+        list($response) = $this->getTransactionWithHttpInfo($id);
         return $response;
     }
 
     /**
-     * Operation getCampaignWithHttpInfo
+     * Operation getTransactionWithHttpInfo
      *
-     * Get campaign
+     * Get transaction
      *
      * @param  int $id (required)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of \Adserver\Model\Campaign, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Adserver\Model\Transaction, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getCampaignWithHttpInfo($id)
+    public function getTransactionWithHttpInfo($id)
     {
-        $request = $this->getCampaignRequest($id);
+        $request = $this->getTransactionRequest($id);
 
         try {
             $options = $this->createHttpClientOption();
@@ -715,23 +485,23 @@ class CampaignsApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\Adserver\Model\Campaign' === '\SplFileObject') {
+                    if ('\Adserver\Model\Transaction' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\Adserver\Model\Campaign' !== 'string') {
+                        if ('\Adserver\Model\Transaction' !== 'string') {
                             $content = json_decode($content);
                         }
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\Adserver\Model\Campaign', []),
+                        ObjectSerializer::deserialize($content, '\Adserver\Model\Transaction', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
             }
 
-            $returnType = '\Adserver\Model\Campaign';
+            $returnType = '\Adserver\Model\Transaction';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -752,7 +522,7 @@ class CampaignsApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Adserver\Model\Campaign',
+                        '\Adserver\Model\Transaction',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -763,18 +533,18 @@ class CampaignsApi
     }
 
     /**
-     * Operation getCampaignAsync
+     * Operation getTransactionAsync
      *
-     * Get campaign
+     * Get transaction
      *
      * @param  int $id (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getCampaignAsync($id)
+    public function getTransactionAsync($id)
     {
-        return $this->getCampaignAsyncWithHttpInfo($id)
+        return $this->getTransactionAsyncWithHttpInfo($id)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -783,19 +553,19 @@ class CampaignsApi
     }
 
     /**
-     * Operation getCampaignAsyncWithHttpInfo
+     * Operation getTransactionAsyncWithHttpInfo
      *
-     * Get campaign
+     * Get transaction
      *
      * @param  int $id (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getCampaignAsyncWithHttpInfo($id)
+    public function getTransactionAsyncWithHttpInfo($id)
     {
-        $returnType = '\Adserver\Model\Campaign';
-        $request = $this->getCampaignRequest($id);
+        $returnType = '\Adserver\Model\Transaction';
+        $request = $this->getTransactionRequest($id);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -834,23 +604,23 @@ class CampaignsApi
     }
 
     /**
-     * Create request for operation 'getCampaign'
+     * Create request for operation 'getTransaction'
      *
      * @param  int $id (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getCampaignRequest($id)
+    public function getTransactionRequest($id)
     {
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $id when calling getCampaign'
+                'Missing the required parameter $id when calling getTransaction'
             );
         }
 
-        $resourcePath = '/campaign/{id}';
+        $resourcePath = '/transaction/{id}';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -931,42 +701,42 @@ class CampaignsApi
     }
 
     /**
-     * Operation getCampaignsList
+     * Operation getTransactionsList
      *
-     * Campaigns list
+     * Transactions list
      *
      * @param  int $page page (optional)
      * @param  int $per_page per_page (optional)
      * @param  string $sort sort (optional)
-     * @param  object[] $filter filter (optional)
+     * @param  object[] $filter Example: filter[iduser]&#x3D;123&amp;filter[created_at]&#x3D;2021-01-01 - 2021-04-01 (optional)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return \Adserver\Model\Campaign[]
+     * @return \Adserver\Model\Transaction[]
      */
-    public function getCampaignsList($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getTransactionsList($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        list($response) = $this->getCampaignsListWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getTransactionsListWithHttpInfo($page, $per_page, $sort, $filter);
         return $response;
     }
 
     /**
-     * Operation getCampaignsListWithHttpInfo
+     * Operation getTransactionsListWithHttpInfo
      *
-     * Campaigns list
+     * Transactions list
      *
      * @param  int $page (optional)
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
-     * @param  object[] $filter (optional)
+     * @param  object[] $filter Example: filter[iduser]&#x3D;123&amp;filter[created_at]&#x3D;2021-01-01 - 2021-04-01 (optional)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of \Adserver\Model\Campaign[], HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Adserver\Model\Transaction[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getCampaignsListWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getTransactionsListWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        $request = $this->getCampaignsListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getTransactionsListRequest($page, $per_page, $sort, $filter);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1005,23 +775,23 @@ class CampaignsApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\Adserver\Model\Campaign[]' === '\SplFileObject') {
+                    if ('\Adserver\Model\Transaction[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\Adserver\Model\Campaign[]' !== 'string') {
+                        if ('\Adserver\Model\Transaction[]' !== 'string') {
                             $content = json_decode($content);
                         }
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\Adserver\Model\Campaign[]', []),
+                        ObjectSerializer::deserialize($content, '\Adserver\Model\Transaction[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
             }
 
-            $returnType = '\Adserver\Model\Campaign[]';
+            $returnType = '\Adserver\Model\Transaction[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -1042,7 +812,7 @@ class CampaignsApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Adserver\Model\Campaign[]',
+                        '\Adserver\Model\Transaction[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1053,21 +823,21 @@ class CampaignsApi
     }
 
     /**
-     * Operation getCampaignsListAsync
+     * Operation getTransactionsListAsync
      *
-     * Campaigns list
+     * Transactions list
      *
      * @param  int $page (optional)
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
-     * @param  object[] $filter (optional)
+     * @param  object[] $filter Example: filter[iduser]&#x3D;123&amp;filter[created_at]&#x3D;2021-01-01 - 2021-04-01 (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getCampaignsListAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getTransactionsListAsync($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        return $this->getCampaignsListAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getTransactionsListAsyncWithHttpInfo($page, $per_page, $sort, $filter)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1076,22 +846,22 @@ class CampaignsApi
     }
 
     /**
-     * Operation getCampaignsListAsyncWithHttpInfo
+     * Operation getTransactionsListAsyncWithHttpInfo
      *
-     * Campaigns list
+     * Transactions list
      *
      * @param  int $page (optional)
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
-     * @param  object[] $filter (optional)
+     * @param  object[] $filter Example: filter[iduser]&#x3D;123&amp;filter[created_at]&#x3D;2021-01-01 - 2021-04-01 (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getCampaignsListAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getTransactionsListAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        $returnType = '\Adserver\Model\Campaign[]';
-        $request = $this->getCampaignsListRequest($page, $per_page, $sort, $filter);
+        $returnType = '\Adserver\Model\Transaction[]';
+        $request = $this->getTransactionsListRequest($page, $per_page, $sort, $filter);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1130,20 +900,20 @@ class CampaignsApi
     }
 
     /**
-     * Create request for operation 'getCampaignsList'
+     * Create request for operation 'getTransactionsList'
      *
      * @param  int $page (optional)
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
-     * @param  object[] $filter (optional)
+     * @param  object[] $filter Example: filter[iduser]&#x3D;123&amp;filter[created_at]&#x3D;2021-01-01 - 2021-04-01 (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getCampaignsListRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getTransactionsListRequest($page = null, $per_page = null, $sort = null, $filter = null)
     {
 
-        $resourcePath = '/campaign';
+        $resourcePath = '/transaction';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -1245,330 +1015,6 @@ class CampaignsApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
-     * Operation updateCampaign
-     *
-     * Update campaign
-     *
-     * @param  int $id id (required)
-     * @param  \Adserver\Model\CampaignRequest $campaign_request campaign_request (required)
-     *
-     * @throws \Adserver\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return \Adserver\Model\Campaign|\Adserver\Model\FormErrorResponse
-     */
-    public function updateCampaign($id, $campaign_request)
-    {
-        list($response) = $this->updateCampaignWithHttpInfo($id, $campaign_request);
-        return $response;
-    }
-
-    /**
-     * Operation updateCampaignWithHttpInfo
-     *
-     * Update campaign
-     *
-     * @param  int $id (required)
-     * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
-     *
-     * @throws \Adserver\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return array of \Adserver\Model\Campaign|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
-     */
-    public function updateCampaignWithHttpInfo($id, $campaign_request)
-    {
-        $request = $this->updateCampaignRequest($id, $campaign_request);
-
-        try {
-            $options = $this->createHttpClientOption();
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
-                );
-            } catch (ConnectException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    null,
-                    null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-            if ($statusCode < 200 || $statusCode > 299) {
-                throw new ApiException(
-                    sprintf(
-                        '[%d] Error connecting to the API (%s)',
-                        $statusCode,
-                        (string) $request->getUri()
-                    ),
-                    $statusCode,
-                    $response->getHeaders(),
-                    (string) $response->getBody()
-                );
-            }
-
-            switch($statusCode) {
-                case 200:
-                    if ('\Adserver\Model\Campaign' === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ('\Adserver\Model\Campaign' !== 'string') {
-                            $content = json_decode($content);
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, '\Adserver\Model\Campaign', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-                case 400:
-                    if ('\Adserver\Model\FormErrorResponse' === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, '\Adserver\Model\FormErrorResponse', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-            }
-
-            $returnType = '\Adserver\Model\Campaign';
-            if ($returnType === '\SplFileObject') {
-                $content = $response->getBody(); //stream goes to serializer
-            } else {
-                $content = (string) $response->getBody();
-                if ($returnType !== 'string') {
-                    $content = json_decode($content);
-                }
-            }
-
-            return [
-                ObjectSerializer::deserialize($content, $returnType, []),
-                $response->getStatusCode(),
-                $response->getHeaders()
-            ];
-
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Adserver\Model\Campaign',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
-                case 400:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Adserver\Model\FormErrorResponse',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
-            }
-            throw $e;
-        }
-    }
-
-    /**
-     * Operation updateCampaignAsync
-     *
-     * Update campaign
-     *
-     * @param  int $id (required)
-     * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function updateCampaignAsync($id, $campaign_request)
-    {
-        return $this->updateCampaignAsyncWithHttpInfo($id, $campaign_request)
-            ->then(
-                function ($response) {
-                    return $response[0];
-                }
-            );
-    }
-
-    /**
-     * Operation updateCampaignAsyncWithHttpInfo
-     *
-     * Update campaign
-     *
-     * @param  int $id (required)
-     * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function updateCampaignAsyncWithHttpInfo($id, $campaign_request)
-    {
-        $returnType = '\Adserver\Model\Campaign';
-        $request = $this->updateCampaignRequest($id, $campaign_request);
-
-        return $this->client
-            ->sendAsync($request, $this->createHttpClientOption())
-            ->then(
-                function ($response) use ($returnType) {
-                    if ($returnType === '\SplFileObject') {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, $returnType, []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-                },
-                function ($exception) {
-                    $response = $exception->getResponse();
-                    $statusCode = $response->getStatusCode();
-                    throw new ApiException(
-                        sprintf(
-                            '[%d] Error connecting to the API (%s)',
-                            $statusCode,
-                            $exception->getRequest()->getUri()
-                        ),
-                        $statusCode,
-                        $response->getHeaders(),
-                        (string) $response->getBody()
-                    );
-                }
-            );
-    }
-
-    /**
-     * Create request for operation 'updateCampaign'
-     *
-     * @param  int $id (required)
-     * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    public function updateCampaignRequest($id, $campaign_request)
-    {
-        // verify the required parameter 'id' is set
-        if ($id === null || (is_array($id) && count($id) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $id when calling updateCampaign'
-            );
-        }
-        // verify the required parameter 'campaign_request' is set
-        if ($campaign_request === null || (is_array($campaign_request) && count($campaign_request) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $campaign_request when calling updateCampaign'
-            );
-        }
-
-        $resourcePath = '/campaign/{id}';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-
-
-        // path params
-        if ($id !== null) {
-            $resourcePath = str_replace(
-                '{' . 'id' . '}',
-                ObjectSerializer::toPathValue($id),
-                $resourcePath
-            );
-        }
-
-
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
-
-        // for model (json/xml)
-        if (isset($campaign_request)) {
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($campaign_request));
-            } else {
-                $httpBody = $campaign_request;
-            }
-        } elseif (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
-                    foreach ($formParamValueItems as $formParamValueItem) {
-                        $multipartContents[] = [
-                            'name' => $formParamName,
-                            'contents' => $formParamValueItem
-                        ];
-                    }
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
-            } else {
-                // for HTTP post (form)
-                $httpBody = ObjectSerializer::buildQuery($formParams);
-            }
-        }
-
-        // this endpoint requires Bearer authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
-            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
-        }
-
-        $defaultHeaders = [];
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $headers
-        );
-
-        $query = ObjectSerializer::buildQuery($queryParams);
-        return new Request(
-            'PUT',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody

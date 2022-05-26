@@ -2,7 +2,7 @@
 /**
  * StatsCustomRtbItem
  *
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020 Adserver.Online
+ * Copyright (c) 2020-2022 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -24,8 +24,8 @@
 
 namespace Adserver\Model;
 
-use \Adserver\ObjectSerializer;
 use \ArrayAccess;
+use \Adserver\ObjectSerializer;
 
 /**
  * StatsCustomRtbItem Class Doc Comment
@@ -36,7 +36,7 @@ use \ArrayAccess;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<TKey, TValue>
  * @template TKey int|null
- * @template TValue mixed|null  
+ * @template TValue mixed|null
  */
 class StatsCustomRtbItem implements ModelInterface, ArrayAccess, \JsonSerializable
 {
@@ -178,9 +178,6 @@ class StatsCustomRtbItem implements ModelInterface, ArrayAccess, \JsonSerializab
         return self::$openAPIModelName;
     }
 
-    
-
-    
 
     /**
      * Associative array for storing property values
@@ -354,7 +351,7 @@ class StatsCustomRtbItem implements ModelInterface, ArrayAccess, \JsonSerializab
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -366,6 +363,7 @@ class StatsCustomRtbItem implements ModelInterface, ArrayAccess, \JsonSerializab
      *
      * @return mixed|null
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -379,7 +377,7 @@ class StatsCustomRtbItem implements ModelInterface, ArrayAccess, \JsonSerializab
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -395,7 +393,7 @@ class StatsCustomRtbItem implements ModelInterface, ArrayAccess, \JsonSerializab
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->container[$offset]);
     }
@@ -407,6 +405,7 @@ class StatsCustomRtbItem implements ModelInterface, ArrayAccess, \JsonSerializab
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
      * of any type other than a resource.
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
        return ObjectSerializer::sanitizeForSerialization($this);

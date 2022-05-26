@@ -1,7 +1,7 @@
 <?php
 /**
  * ApiException
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020 Adserver.Online
+ * Copyright (c) 2020-2022 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -35,7 +35,6 @@ use \Exception;
  */
 class HeaderSelector
 {
-
     /**
      * @param string[] $accept
      * @param string[] $contentTypes
@@ -102,4 +101,3 @@ class HeaderSelector
         }
     }
 }
-

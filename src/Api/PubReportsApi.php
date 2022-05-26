@@ -1,7 +1,7 @@
 <?php
 /**
  * PubReportsApi
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020 Adserver.Online
+ * Copyright (c) 2020-2022 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -23,16 +23,17 @@
 
 namespace Adserver\Api;
 
-use Adserver\ApiException;
-use Adserver\Configuration;
-use Adserver\HeaderSelector;
-use Adserver\ObjectSerializer;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use Adserver\ApiException;
+use Adserver\Configuration;
+use Adserver\HeaderSelector;
+use Adserver\ObjectSerializer;
 
 /**
  * PubReportsApi Class Doc Comment
@@ -87,7 +88,7 @@ class PubReportsApi
      *
      * @param int $hostIndex Host index (required)
      */
-    public function setHostIndex($hostIndex)
+    public function setHostIndex($hostIndex): void
     {
         $this->hostIndex = $hostIndex;
     }
@@ -113,7 +114,7 @@ class PubReportsApi
     /**
      * Operation pubGetCustomRtbReport
      *
-     * Publisher's RTB report
+     * Publisher&#39;s RTB report
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
@@ -134,7 +135,7 @@ class PubReportsApi
     /**
      * Operation pubGetCustomRtbReportWithHttpInfo
      *
-     * Publisher's RTB report
+     * Publisher&#39;s RTB report
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
@@ -157,9 +158,16 @@ class PubReportsApi
             } catch (RequestException $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
+                    (int) $e->getCode(),
                     $e->getResponse() ? $e->getResponse()->getHeaders() : null,
                     $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
                 );
             }
 
@@ -170,21 +178,23 @@ class PubReportsApi
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        $request->getUri()
+                        (string) $request->getUri()
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    $response->getBody()
+                    (string) $response->getBody()
                 );
             }
 
-            $responseBody = $response->getBody();
             switch($statusCode) {
                 case 200:
                     if ('\Adserver\Model\StatsCustomRtbItem[]' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\StatsCustomRtbItem[]' !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -194,9 +204,12 @@ class PubReportsApi
                     ];
                 case 400:
                     if ('\Adserver\Model\FormErrorResponse' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\FormErrorResponse' !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -207,11 +220,13 @@ class PubReportsApi
             }
 
             $returnType = '\Adserver\Model\StatsCustomRtbItem[]';
-            $responseBody = $response->getBody();
             if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
+                $content = $response->getBody(); //stream goes to serializer
             } else {
-                $content = (string) $responseBody;
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
             }
 
             return [
@@ -246,7 +261,7 @@ class PubReportsApi
     /**
      * Operation pubGetCustomRtbReportAsync
      *
-     * Publisher's RTB report
+     * Publisher&#39;s RTB report
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
@@ -270,7 +285,7 @@ class PubReportsApi
     /**
      * Operation pubGetCustomRtbReportAsyncWithHttpInfo
      *
-     * Publisher's RTB report
+     * Publisher&#39;s RTB report
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
@@ -290,11 +305,13 @@ class PubReportsApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    $responseBody = $response->getBody();
                     if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -314,7 +331,7 @@ class PubReportsApi
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        $response->getBody()
+                        (string) $response->getBody()
                     );
                 }
             );
@@ -355,60 +372,50 @@ class PubReportsApi
         $multipart = false;
 
         // query params
-        if ($date_begin !== null) {
-            if('form' === 'form' && is_array($date_begin)) {
-                foreach($date_begin as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['dateBegin'] = $date_begin;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $date_begin,
+            'dateBegin', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
         // query params
-        if ($date_end !== null) {
-            if('form' === 'form' && is_array($date_end)) {
-                foreach($date_end as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['dateEnd'] = $date_end;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $date_end,
+            'dateEnd', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
         // query params
-        if ($timezone !== null) {
-            if('form' === 'form' && is_array($timezone)) {
-                foreach($timezone as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['timezone'] = $timezone;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $timezone,
+            'timezone', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idsite !== null) {
-            if('form' === 'form' && is_array($idsite)) {
-                foreach($idsite as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idsite'] = $idsite;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idsite,
+            'idsite', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idzone !== null) {
-            if('form' === 'form' && is_array($idzone)) {
-                foreach($idzone as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idzone'] = $idzone;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idzone,
+            'idzone', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
 
@@ -445,12 +452,12 @@ class PubReportsApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if ($this->config->getAccessToken() !== null) {
+        if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -465,7 +472,7 @@ class PubReportsApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
@@ -477,11 +484,11 @@ class PubReportsApi
     /**
      * Operation pubGetStats
      *
-     * Publisher's stats
+     * Publisher&#39;s stats
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
-     * @param  string $group Group report by this dimension (required)
+     * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idsite Filter by site&#39;s ID (optional)
      * @param  int $idzone Filter by zone&#39;s ID (optional)
@@ -499,11 +506,11 @@ class PubReportsApi
     /**
      * Operation pubGetStatsWithHttpInfo
      *
-     * Publisher's stats
+     * Publisher&#39;s stats
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
-     * @param  string $group Group report by this dimension (required)
+     * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idsite Filter by site&#39;s ID (optional)
      * @param  int $idzone Filter by zone&#39;s ID (optional)
@@ -523,9 +530,16 @@ class PubReportsApi
             } catch (RequestException $e) {
                 throw new ApiException(
                     "[{$e->getCode()}] {$e->getMessage()}",
-                    $e->getCode(),
+                    (int) $e->getCode(),
                     $e->getResponse() ? $e->getResponse()->getHeaders() : null,
                     $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
                 );
             }
 
@@ -536,21 +550,23 @@ class PubReportsApi
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
                         $statusCode,
-                        $request->getUri()
+                        (string) $request->getUri()
                     ),
                     $statusCode,
                     $response->getHeaders(),
-                    $response->getBody()
+                    (string) $response->getBody()
                 );
             }
 
-            $responseBody = $response->getBody();
             switch($statusCode) {
                 case 200:
                     if ('\Adserver\Model\StatsItem[]' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\StatsItem[]' !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -560,9 +576,12 @@ class PubReportsApi
                     ];
                 case 400:
                     if ('\Adserver\Model\FormErrorResponse' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\FormErrorResponse' !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -573,11 +592,13 @@ class PubReportsApi
             }
 
             $returnType = '\Adserver\Model\StatsItem[]';
-            $responseBody = $response->getBody();
             if ($returnType === '\SplFileObject') {
-                $content = $responseBody; //stream goes to serializer
+                $content = $response->getBody(); //stream goes to serializer
             } else {
-                $content = (string) $responseBody;
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    $content = json_decode($content);
+                }
             }
 
             return [
@@ -612,11 +633,11 @@ class PubReportsApi
     /**
      * Operation pubGetStatsAsync
      *
-     * Publisher's stats
+     * Publisher&#39;s stats
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
-     * @param  string $group Group report by this dimension (required)
+     * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idsite Filter by site&#39;s ID (optional)
      * @param  int $idzone Filter by zone&#39;s ID (optional)
@@ -637,11 +658,11 @@ class PubReportsApi
     /**
      * Operation pubGetStatsAsyncWithHttpInfo
      *
-     * Publisher's stats
+     * Publisher&#39;s stats
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
-     * @param  string $group Group report by this dimension (required)
+     * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idsite Filter by site&#39;s ID (optional)
      * @param  int $idzone Filter by zone&#39;s ID (optional)
@@ -658,11 +679,13 @@ class PubReportsApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    $responseBody = $response->getBody();
                     if ($returnType === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
+                        $content = $response->getBody(); //stream goes to serializer
                     } else {
-                        $content = (string) $responseBody;
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
                     }
 
                     return [
@@ -682,7 +705,7 @@ class PubReportsApi
                         ),
                         $statusCode,
                         $response->getHeaders(),
-                        $response->getBody()
+                        (string) $response->getBody()
                     );
                 }
             );
@@ -693,7 +716,7 @@ class PubReportsApi
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
-     * @param  string $group Group report by this dimension (required)
+     * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idsite Filter by site&#39;s ID (optional)
      * @param  int $idzone Filter by zone&#39;s ID (optional)
@@ -730,71 +753,59 @@ class PubReportsApi
         $multipart = false;
 
         // query params
-        if ($date_begin !== null) {
-            if('form' === 'form' && is_array($date_begin)) {
-                foreach($date_begin as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['dateBegin'] = $date_begin;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $date_begin,
+            'dateBegin', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
         // query params
-        if ($date_end !== null) {
-            if('form' === 'form' && is_array($date_end)) {
-                foreach($date_end as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['dateEnd'] = $date_end;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $date_end,
+            'dateEnd', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
         // query params
-        if ($group !== null) {
-            if('form' === 'form' && is_array($group)) {
-                foreach($group as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['group'] = $group;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $group,
+            'group', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
         // query params
-        if ($timezone !== null) {
-            if('form' === 'form' && is_array($timezone)) {
-                foreach($timezone as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['timezone'] = $timezone;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $timezone,
+            'timezone', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idsite !== null) {
-            if('form' === 'form' && is_array($idsite)) {
-                foreach($idsite as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idsite'] = $idsite;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idsite,
+            'idsite', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
-        if ($idzone !== null) {
-            if('form' === 'form' && is_array($idzone)) {
-                foreach($idzone as $key => $value) {
-                    $queryParams[$key] = $value;
-                }
-            }
-            else {
-                $queryParams['idzone'] = $idzone;
-            }
-        }
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idzone,
+            'idzone', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
 
@@ -831,12 +842,12 @@ class PubReportsApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = ObjectSerializer::buildQuery($formParams);
             }
         }
 
         // this endpoint requires Bearer authentication (access token)
-        if ($this->config->getAccessToken() !== null) {
+        if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
@@ -851,7 +862,7 @@ class PubReportsApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),

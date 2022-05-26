@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
+# brew install openapi-generator
+
 openapi-generator generate \
-    -i http://adserver.loc/site/openapi \
+    -i http://adserver.online/site/openapi \
     -g php \
     -t ./templates \
     -o . \
@@ -15,7 +17,7 @@ rm -r ./.openapi-generator
 rm ./.travis.yml
 rm ./git_push.sh
 rm ./phpunit.xml.dist
-rm ./.php_cs.cache
+rm ./.php-cs-fixer.cache
 
 composer update
 

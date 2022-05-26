@@ -2,7 +2,7 @@
 /**
  * LoginResponse
  *
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020 Adserver.Online
+ * Copyright (c) 2022 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -24,8 +24,8 @@
 
 namespace Adserver\Model;
 
-use \Adserver\ObjectSerializer;
 use \ArrayAccess;
+use \Adserver\ObjectSerializer;
 
 /**
  * LoginResponse Class Doc Comment
@@ -36,7 +36,7 @@ use \ArrayAccess;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<TKey, TValue>
  * @template TKey int|null
- * @template TValue mixed|null  
+ * @template TValue mixed|null
  */
 class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 {
@@ -56,7 +56,8 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPITypes = [
         'token' => 'string',
-        'expiration_at' => 'string'
+        'token_type' => 'string',
+        'expires_in' => 'int'
     ];
 
     /**
@@ -68,7 +69,8 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPIFormats = [
         'token' => null,
-        'expiration_at' => null
+        'token_type' => null,
+        'expires_in' => null
     ];
 
     /**
@@ -99,7 +101,8 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $attributeMap = [
         'token' => 'token',
-        'expiration_at' => 'expiration_at'
+        'token_type' => 'token_type',
+        'expires_in' => 'expires_in'
     ];
 
     /**
@@ -109,7 +112,8 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $setters = [
         'token' => 'setToken',
-        'expiration_at' => 'setExpirationAt'
+        'token_type' => 'setTokenType',
+        'expires_in' => 'setExpiresIn'
     ];
 
     /**
@@ -119,7 +123,8 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     protected static $getters = [
         'token' => 'getToken',
-        'expiration_at' => 'getExpirationAt'
+        'token_type' => 'getTokenType',
+        'expires_in' => 'getExpiresIn'
     ];
 
     /**
@@ -163,9 +168,6 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
-    
-
-    
 
     /**
      * Associative array for storing property values
@@ -183,7 +185,8 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
     public function __construct(array $data = null)
     {
         $this->container['token'] = $data['token'] ?? null;
-        $this->container['expiration_at'] = $data['expiration_at'] ?? null;
+        $this->container['token_type'] = $data['token_type'] ?? null;
+        $this->container['expires_in'] = $data['expires_in'] ?? null;
     }
 
     /**
@@ -226,7 +229,7 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets token
      *
-     * @param string $token token
+     * @param string $token A valid access token.
      *
      * @return self
      */
@@ -238,25 +241,49 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets expiration_at
+     * Gets token_type
      *
      * @return string|null
      */
-    public function getExpirationAt()
+    public function getTokenType()
     {
-        return $this->container['expiration_at'];
+        return $this->container['token_type'];
     }
 
     /**
-     * Sets expiration_at
+     * Sets token_type
      *
-     * @param string|null $expiration_at expiration_at
+     * @param string|null $token_type token_type
      *
      * @return self
      */
-    public function setExpirationAt($expiration_at)
+    public function setTokenType($token_type)
     {
-        $this->container['expiration_at'] = $expiration_at;
+        $this->container['token_type'] = $token_type;
+
+        return $this;
+    }
+
+    /**
+     * Gets expires_in
+     *
+     * @return int|null
+     */
+    public function getExpiresIn()
+    {
+        return $this->container['expires_in'];
+    }
+
+    /**
+     * Sets expires_in
+     *
+     * @param int|null $expires_in The length of time (in seconds) that the provided access token are valid for.
+     *
+     * @return self
+     */
+    public function setExpiresIn($expires_in)
+    {
+        $this->container['expires_in'] = $expires_in;
 
         return $this;
     }
@@ -267,7 +294,7 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -279,6 +306,7 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return mixed|null
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -292,7 +320,7 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -308,7 +336,7 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->container[$offset]);
     }
@@ -320,6 +348,7 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
      * of any type other than a resource.
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
        return ObjectSerializer::sanitizeForSerialization($this);

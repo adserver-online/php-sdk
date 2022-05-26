@@ -2,7 +2,7 @@
 /**
  * AdvCampaignRequest
  *
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020 Adserver.Online
+ * Copyright (c) 2020-2022 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -24,8 +24,8 @@
 
 namespace Adserver\Model;
 
-use \Adserver\ObjectSerializer;
 use \ArrayAccess;
+use \Adserver\ObjectSerializer;
 
 /**
  * AdvCampaignRequest Class Doc Comment
@@ -36,7 +36,7 @@ use \ArrayAccess;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<TKey, TValue>
  * @template TKey int|null
- * @template TValue mixed|null  
+ * @template TValue mixed|null
  */
 class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
 {
@@ -60,8 +60,8 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'idrunstatus' => 'int',
         'idpricemodel' => 'int',
         'rate' => 'float',
-        'start_at' => 'string',
-        'finish_at' => 'string',
+        'start_date' => 'string',
+        'finish_date' => 'string',
         'timetargeting' => 'string'
     ];
 
@@ -78,8 +78,8 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'idrunstatus' => null,
         'idpricemodel' => null,
         'rate' => null,
-        'start_at' => null,
-        'finish_at' => null,
+        'start_date' => null,
+        'finish_date' => null,
         'timetargeting' => null
     ];
 
@@ -115,8 +115,8 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'idrunstatus' => 'idrunstatus',
         'idpricemodel' => 'idpricemodel',
         'rate' => 'rate',
-        'start_at' => 'start_at',
-        'finish_at' => 'finish_at',
+        'start_date' => 'start_date',
+        'finish_date' => 'finish_date',
         'timetargeting' => 'timetargeting'
     ];
 
@@ -131,8 +131,8 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'idrunstatus' => 'setIdrunstatus',
         'idpricemodel' => 'setIdpricemodel',
         'rate' => 'setRate',
-        'start_at' => 'setStartAt',
-        'finish_at' => 'setFinishAt',
+        'start_date' => 'setStartDate',
+        'finish_date' => 'setFinishDate',
         'timetargeting' => 'setTimetargeting'
     ];
 
@@ -147,8 +147,8 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'idrunstatus' => 'getIdrunstatus',
         'idpricemodel' => 'getIdpricemodel',
         'rate' => 'getRate',
-        'start_at' => 'getStartAt',
-        'finish_at' => 'getFinishAt',
+        'start_date' => 'getStartDate',
+        'finish_date' => 'getFinishDate',
         'timetargeting' => 'getTimetargeting'
     ];
 
@@ -193,12 +193,10 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         return self::$openAPIModelName;
     }
 
-    const IDRUNSTATUS_4010 = 4010;
-    const IDRUNSTATUS_4020 = 4020;
-    const IDRUNSTATUS_4030 = 4030;
-    
+    public const IDRUNSTATUS_4010 = 4010;
+    public const IDRUNSTATUS_4020 = 4020;
+    public const IDRUNSTATUS_4030 = 4030;
 
-    
     /**
      * Gets allowable values of the enum
      *
@@ -212,7 +210,6 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
             self::IDRUNSTATUS_4030,
         ];
     }
-    
 
     /**
      * Associative array for storing property values
@@ -234,8 +231,8 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         $this->container['idrunstatus'] = $data['idrunstatus'] ?? null;
         $this->container['idpricemodel'] = $data['idpricemodel'] ?? null;
         $this->container['rate'] = $data['rate'] ?? null;
-        $this->container['start_at'] = $data['start_at'] ?? null;
-        $this->container['finish_at'] = $data['finish_at'] ?? null;
+        $this->container['start_date'] = $data['start_date'] ?? null;
+        $this->container['finish_date'] = $data['finish_date'] ?? null;
         $this->container['timetargeting'] = $data['timetargeting'] ?? null;
     }
 
@@ -403,49 +400,49 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     }
 
     /**
-     * Gets start_at
+     * Gets start_date
      *
      * @return string|null
      */
-    public function getStartAt()
+    public function getStartDate()
     {
-        return $this->container['start_at'];
+        return $this->container['start_date'];
     }
 
     /**
-     * Sets start_at
+     * Sets start_date
      *
-     * @param string|null $start_at start_at
+     * @param string|null $start_date start_date
      *
      * @return self
      */
-    public function setStartAt($start_at)
+    public function setStartDate($start_date)
     {
-        $this->container['start_at'] = $start_at;
+        $this->container['start_date'] = $start_date;
 
         return $this;
     }
 
     /**
-     * Gets finish_at
+     * Gets finish_date
      *
      * @return string|null
      */
-    public function getFinishAt()
+    public function getFinishDate()
     {
-        return $this->container['finish_at'];
+        return $this->container['finish_date'];
     }
 
     /**
-     * Sets finish_at
+     * Sets finish_date
      *
-     * @param string|null $finish_at finish_at
+     * @param string|null $finish_date finish_date
      *
      * @return self
      */
-    public function setFinishAt($finish_at)
+    public function setFinishDate($finish_date)
     {
-        $this->container['finish_at'] = $finish_at;
+        $this->container['finish_date'] = $finish_date;
 
         return $this;
     }
@@ -480,7 +477,7 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -492,6 +489,7 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
      *
      * @return mixed|null
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -505,7 +503,7 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -521,7 +519,7 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->container[$offset]);
     }
@@ -533,6 +531,7 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
      * of any type other than a resource.
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
        return ObjectSerializer::sanitizeForSerialization($this);
