@@ -209,8 +209,9 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     public const ALLOW_LOGIN_1 = 1;
     public const CAMPAIGNS_POST_MODERATION_0 = 0;
     public const CAMPAIGNS_POST_MODERATION_1 = 1;
-    public const IDCLOUDROLE_1 = 1;
     public const IDCLOUDROLE_2 = 2;
+    public const IDCLOUDROLE_3 = 3;
+    public const IDCLOUDROLE_4 = 4;
 
     /**
      * Gets allowable values of the enum
@@ -272,8 +273,9 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     public function getIdcloudroleAllowableValues()
     {
         return [
-            self::IDCLOUDROLE_1,
             self::IDCLOUDROLE_2,
+            self::IDCLOUDROLE_3,
+            self::IDCLOUDROLE_4,
         ];
     }
 
