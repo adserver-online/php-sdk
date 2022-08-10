@@ -223,9 +223,6 @@ class AdvAdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['name'] === null) {
-            $invalidProperties[] = "'name' can't be null";
-        }
         if ($this->container['idcampaign'] === null) {
             $invalidProperties[] = "'idcampaign' can't be null";
         }
@@ -256,7 +253,7 @@ class AdvAdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets name
      *
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
@@ -266,7 +263,7 @@ class AdvAdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets name
      *
-     * @param string $name name
+     * @param string|null $name name
      *
      * @return self
      */

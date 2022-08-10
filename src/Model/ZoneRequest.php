@@ -240,9 +240,6 @@ class ZoneRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['name'] === null) {
-            $invalidProperties[] = "'name' can't be null";
-        }
         $allowedValues = $this->getIsActiveAllowableValues();
         if (!is_null($this->container['is_active']) && !in_array($this->container['is_active'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -285,7 +282,7 @@ class ZoneRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets name
      *
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
@@ -295,7 +292,7 @@ class ZoneRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets name
      *
-     * @param string $name name
+     * @param string|null $name name
      *
      * @return self
      */

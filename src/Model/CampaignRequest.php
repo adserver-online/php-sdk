@@ -341,6 +341,12 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
+        if ($this->container['name'] === null) {
+            $invalidProperties[] = "'name' can't be null";
+        }
+        if ($this->container['idadvertiser'] === null) {
+            $invalidProperties[] = "'idadvertiser' can't be null";
+        }
         $allowedValues = $this->getIdstatusAllowableValues();
         if (!is_null($this->container['idstatus']) && !in_array($this->container['idstatus'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -386,7 +392,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets name
      *
-     * @return string|null
+     * @return string
      */
     public function getName()
     {
@@ -396,7 +402,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets name
      *
-     * @param string|null $name name
+     * @param string $name name
      *
      * @return self
      */
@@ -410,7 +416,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets idadvertiser
      *
-     * @return int|null
+     * @return int
      */
     public function getIdadvertiser()
     {
@@ -420,7 +426,7 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets idadvertiser
      *
-     * @param int|null $idadvertiser idadvertiser
+     * @param int $idadvertiser idadvertiser
      *
      * @return self
      */

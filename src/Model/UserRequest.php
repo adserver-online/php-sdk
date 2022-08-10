@@ -357,6 +357,9 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
             );
         }
 
+        if ($this->container['idcloudrole'] === null) {
+            $invalidProperties[] = "'idcloudrole' can't be null";
+        }
         $allowedValues = $this->getIdcloudroleAllowableValues();
         if (!is_null($this->container['idcloudrole']) && !in_array($this->container['idcloudrole'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -640,7 +643,7 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets idcloudrole
      *
-     * @return int|null
+     * @return int
      */
     public function getIdcloudrole()
     {
@@ -650,14 +653,14 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets idcloudrole
      *
-     * @param int|null $idcloudrole Roles:  * 2 - manager  * 3 - advertiser  * 4 - publisher
+     * @param int $idcloudrole Roles:  * 2 - manager  * 3 - advertiser  * 4 - publisher
      *
      * @return self
      */
     public function setIdcloudrole($idcloudrole)
     {
         $allowedValues = $this->getIdcloudroleAllowableValues();
-        if (!is_null($idcloudrole) && !in_array($idcloudrole, $allowedValues, true)) {
+        if (!in_array($idcloudrole, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     "Invalid value '%s' for 'idcloudrole', must be one of '%s'",

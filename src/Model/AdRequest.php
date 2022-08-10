@@ -246,9 +246,6 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['name'] === null) {
-            $invalidProperties[] = "'name' can't be null";
-        }
         if ($this->container['idcampaign'] === null) {
             $invalidProperties[] = "'idcampaign' can't be null";
         }
@@ -261,9 +258,6 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
             );
         }
 
-        if ($this->container['idstatus'] === null) {
-            $invalidProperties[] = "'idstatus' can't be null";
-        }
         $allowedValues = $this->getIdstatusAllowableValues();
         if (!is_null($this->container['idstatus']) && !in_array($this->container['idstatus'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -291,7 +285,7 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets name
      *
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
@@ -301,7 +295,7 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets name
      *
-     * @param string $name name
+     * @param string|null $name name
      *
      * @return self
      */
@@ -397,7 +391,7 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets idstatus
      *
-     * @return int
+     * @return int|null
      */
     public function getIdstatus()
     {
@@ -407,14 +401,14 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets idstatus
      *
-     * @param int $idstatus Moderation statuses:  * 3000 - pending  * 3010 - approved  * 3030 - blocked
+     * @param int|null $idstatus Moderation statuses:  * 3000 - pending  * 3010 - approved  * 3030 - blocked
      *
      * @return self
      */
     public function setIdstatus($idstatus)
     {
         $allowedValues = $this->getIdstatusAllowableValues();
-        if (!in_array($idstatus, $allowedValues, true)) {
+        if (!is_null($idstatus) && !in_array($idstatus, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     "Invalid value '%s' for 'idstatus', must be one of '%s'",

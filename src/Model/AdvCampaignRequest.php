@@ -243,6 +243,9 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     {
         $invalidProperties = [];
 
+        if ($this->container['idcategory'] === null) {
+            $invalidProperties[] = "'idcategory' can't be null";
+        }
         $allowedValues = $this->getIdrunstatusAllowableValues();
         if (!is_null($this->container['idrunstatus']) && !in_array($this->container['idrunstatus'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -252,6 +255,9 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
             );
         }
 
+        if ($this->container['idpricemodel'] === null) {
+            $invalidProperties[] = "'idpricemodel' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -294,7 +300,7 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Gets idcategory
      *
-     * @return int|null
+     * @return int
      */
     public function getIdcategory()
     {
@@ -304,7 +310,7 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets idcategory
      *
-     * @param int|null $idcategory idcategory
+     * @param int $idcategory idcategory
      *
      * @return self
      */
@@ -352,7 +358,7 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Gets idpricemodel
      *
-     * @return int|null
+     * @return int
      */
     public function getIdpricemodel()
     {
@@ -362,7 +368,7 @@ class AdvCampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets idpricemodel
      *
-     * @param int|null $idpricemodel idpricemodel
+     * @param int $idpricemodel idpricemodel
      *
      * @return self
      */
