@@ -35,9 +35,7 @@ use \Adserver\ObjectSerializer;
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<TKey, TValue>
- * @template TKey int|null
- * @template TValue mixed|null
+ * @implements \ArrayAccess<string, mixed>
  */
 class AdBannerZip implements ModelInterface, ArrayAccess, \JsonSerializable
 {

@@ -34,9 +34,7 @@ use \Adserver\ObjectSerializer;
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<TKey, TValue>
- * @template TKey int|null
- * @template TValue mixed|null
+ * @implements \ArrayAccess<string, mixed>
  */
 class User implements ModelInterface, ArrayAccess, \JsonSerializable
 {
@@ -56,7 +54,7 @@ class User implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPITypes = [
         'id' => 'int',
-        'role' => 'int',
+        'role' => 'object',
         'name' => 'string',
         'email' => 'string',
         'phone' => 'string',
@@ -294,7 +292,7 @@ class User implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets role
      *
-     * @return int|null
+     * @return object|null
      */
     public function getRole()
     {
@@ -304,7 +302,7 @@ class User implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets role
      *
-     * @param int|null $role role
+     * @param object|null $role role
      *
      * @return self
      */

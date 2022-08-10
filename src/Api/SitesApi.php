@@ -931,7 +931,7 @@ class SitesApi
     }
 
     /**
-     * Operation getSitesList
+     * Operation getSites
      *
      * Sites list
      *
@@ -944,14 +944,14 @@ class SitesApi
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Site[]
      */
-    public function getSitesList($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getSites($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        list($response) = $this->getSitesListWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getSitesWithHttpInfo($page, $per_page, $sort, $filter);
         return $response;
     }
 
     /**
-     * Operation getSitesListWithHttpInfo
+     * Operation getSitesWithHttpInfo
      *
      * Sites list
      *
@@ -964,9 +964,9 @@ class SitesApi
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Site[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getSitesListWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getSitesWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        $request = $this->getSitesListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getSitesRequest($page, $per_page, $sort, $filter);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1053,7 +1053,7 @@ class SitesApi
     }
 
     /**
-     * Operation getSitesListAsync
+     * Operation getSitesAsync
      *
      * Sites list
      *
@@ -1065,9 +1065,9 @@ class SitesApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getSitesListAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getSitesAsync($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        return $this->getSitesListAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getSitesAsyncWithHttpInfo($page, $per_page, $sort, $filter)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1076,7 +1076,7 @@ class SitesApi
     }
 
     /**
-     * Operation getSitesListAsyncWithHttpInfo
+     * Operation getSitesAsyncWithHttpInfo
      *
      * Sites list
      *
@@ -1088,10 +1088,10 @@ class SitesApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getSitesListAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getSitesAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
         $returnType = '\Adserver\Model\Site[]';
-        $request = $this->getSitesListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getSitesRequest($page, $per_page, $sort, $filter);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1130,7 +1130,7 @@ class SitesApi
     }
 
     /**
-     * Create request for operation 'getSitesList'
+     * Create request for operation 'getSites'
      *
      * @param  int $page (optional)
      * @param  int $per_page (optional)
@@ -1140,7 +1140,7 @@ class SitesApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getSitesListRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getSitesRequest($page = null, $per_page = null, $sort = null, $filter = null)
     {
 
         $resourcePath = '/site';

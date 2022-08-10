@@ -701,7 +701,7 @@ class TransactionsApi
     }
 
     /**
-     * Operation getTransactionsList
+     * Operation getTransactions
      *
      * Transactions list
      *
@@ -714,14 +714,14 @@ class TransactionsApi
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Transaction[]
      */
-    public function getTransactionsList($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getTransactions($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        list($response) = $this->getTransactionsListWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getTransactionsWithHttpInfo($page, $per_page, $sort, $filter);
         return $response;
     }
 
     /**
-     * Operation getTransactionsListWithHttpInfo
+     * Operation getTransactionsWithHttpInfo
      *
      * Transactions list
      *
@@ -734,9 +734,9 @@ class TransactionsApi
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Transaction[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getTransactionsListWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getTransactionsWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        $request = $this->getTransactionsListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getTransactionsRequest($page, $per_page, $sort, $filter);
 
         try {
             $options = $this->createHttpClientOption();
@@ -823,7 +823,7 @@ class TransactionsApi
     }
 
     /**
-     * Operation getTransactionsListAsync
+     * Operation getTransactionsAsync
      *
      * Transactions list
      *
@@ -835,9 +835,9 @@ class TransactionsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getTransactionsListAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getTransactionsAsync($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        return $this->getTransactionsListAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getTransactionsAsyncWithHttpInfo($page, $per_page, $sort, $filter)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -846,7 +846,7 @@ class TransactionsApi
     }
 
     /**
-     * Operation getTransactionsListAsyncWithHttpInfo
+     * Operation getTransactionsAsyncWithHttpInfo
      *
      * Transactions list
      *
@@ -858,10 +858,10 @@ class TransactionsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getTransactionsListAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getTransactionsAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
         $returnType = '\Adserver\Model\Transaction[]';
-        $request = $this->getTransactionsListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getTransactionsRequest($page, $per_page, $sort, $filter);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -900,7 +900,7 @@ class TransactionsApi
     }
 
     /**
-     * Create request for operation 'getTransactionsList'
+     * Create request for operation 'getTransactions'
      *
      * @param  int $page (optional)
      * @param  int $per_page (optional)
@@ -910,7 +910,7 @@ class TransactionsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getTransactionsListRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getTransactionsRequest($page = null, $per_page = null, $sort = null, $filter = null)
     {
 
         $resourcePath = '/transaction';

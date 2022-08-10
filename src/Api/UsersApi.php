@@ -931,7 +931,7 @@ class UsersApi
     }
 
     /**
-     * Operation getUsersList
+     * Operation getUsers
      *
      * Users list
      *
@@ -944,14 +944,14 @@ class UsersApi
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\User[]
      */
-    public function getUsersList($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getUsers($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        list($response) = $this->getUsersListWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getUsersWithHttpInfo($page, $per_page, $sort, $filter);
         return $response;
     }
 
     /**
-     * Operation getUsersListWithHttpInfo
+     * Operation getUsersWithHttpInfo
      *
      * Users list
      *
@@ -964,9 +964,9 @@ class UsersApi
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\User[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getUsersListWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getUsersWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        $request = $this->getUsersListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getUsersRequest($page, $per_page, $sort, $filter);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1053,7 +1053,7 @@ class UsersApi
     }
 
     /**
-     * Operation getUsersListAsync
+     * Operation getUsersAsync
      *
      * Users list
      *
@@ -1065,9 +1065,9 @@ class UsersApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getUsersListAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getUsersAsync($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        return $this->getUsersListAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getUsersAsyncWithHttpInfo($page, $per_page, $sort, $filter)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1076,7 +1076,7 @@ class UsersApi
     }
 
     /**
-     * Operation getUsersListAsyncWithHttpInfo
+     * Operation getUsersAsyncWithHttpInfo
      *
      * Users list
      *
@@ -1088,10 +1088,10 @@ class UsersApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getUsersListAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getUsersAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
         $returnType = '\Adserver\Model\User[]';
-        $request = $this->getUsersListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getUsersRequest($page, $per_page, $sort, $filter);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1130,7 +1130,7 @@ class UsersApi
     }
 
     /**
-     * Create request for operation 'getUsersList'
+     * Create request for operation 'getUsers'
      *
      * @param  int $page (optional)
      * @param  int $per_page (optional)
@@ -1140,7 +1140,7 @@ class UsersApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getUsersListRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getUsersRequest($page = null, $per_page = null, $sort = null, $filter = null)
     {
 
         $resourcePath = '/user';

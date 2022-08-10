@@ -931,7 +931,7 @@ class CampaignsApi
     }
 
     /**
-     * Operation getCampaignsList
+     * Operation getCampaigns
      *
      * Campaigns list
      *
@@ -944,14 +944,14 @@ class CampaignsApi
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Campaign[]
      */
-    public function getCampaignsList($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getCampaigns($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        list($response) = $this->getCampaignsListWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getCampaignsWithHttpInfo($page, $per_page, $sort, $filter);
         return $response;
     }
 
     /**
-     * Operation getCampaignsListWithHttpInfo
+     * Operation getCampaignsWithHttpInfo
      *
      * Campaigns list
      *
@@ -964,9 +964,9 @@ class CampaignsApi
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Campaign[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getCampaignsListWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getCampaignsWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        $request = $this->getCampaignsListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getCampaignsRequest($page, $per_page, $sort, $filter);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1053,7 +1053,7 @@ class CampaignsApi
     }
 
     /**
-     * Operation getCampaignsListAsync
+     * Operation getCampaignsAsync
      *
      * Campaigns list
      *
@@ -1065,9 +1065,9 @@ class CampaignsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getCampaignsListAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getCampaignsAsync($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        return $this->getCampaignsListAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getCampaignsAsyncWithHttpInfo($page, $per_page, $sort, $filter)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1076,7 +1076,7 @@ class CampaignsApi
     }
 
     /**
-     * Operation getCampaignsListAsyncWithHttpInfo
+     * Operation getCampaignsAsyncWithHttpInfo
      *
      * Campaigns list
      *
@@ -1088,10 +1088,10 @@ class CampaignsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getCampaignsListAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getCampaignsAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
         $returnType = '\Adserver\Model\Campaign[]';
-        $request = $this->getCampaignsListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getCampaignsRequest($page, $per_page, $sort, $filter);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1130,7 +1130,7 @@ class CampaignsApi
     }
 
     /**
-     * Create request for operation 'getCampaignsList'
+     * Create request for operation 'getCampaigns'
      *
      * @param  int $page (optional)
      * @param  int $per_page (optional)
@@ -1140,7 +1140,7 @@ class CampaignsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getCampaignsListRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getCampaignsRequest($page = null, $per_page = null, $sort = null, $filter = null)
     {
 
         $resourcePath = '/campaign';

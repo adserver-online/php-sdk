@@ -112,7 +112,7 @@ class PayoutsApi
     }
 
     /**
-     * Operation getPayoutsList
+     * Operation getPayouts
      *
      * Payouts list
      *
@@ -125,14 +125,14 @@ class PayoutsApi
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Payout[]
      */
-    public function getPayoutsList($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getPayouts($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        list($response) = $this->getPayoutsListWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getPayoutsWithHttpInfo($page, $per_page, $sort, $filter);
         return $response;
     }
 
     /**
-     * Operation getPayoutsListWithHttpInfo
+     * Operation getPayoutsWithHttpInfo
      *
      * Payouts list
      *
@@ -145,9 +145,9 @@ class PayoutsApi
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Payout[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getPayoutsListWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getPayoutsWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        $request = $this->getPayoutsListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getPayoutsRequest($page, $per_page, $sort, $filter);
 
         try {
             $options = $this->createHttpClientOption();
@@ -234,7 +234,7 @@ class PayoutsApi
     }
 
     /**
-     * Operation getPayoutsListAsync
+     * Operation getPayoutsAsync
      *
      * Payouts list
      *
@@ -246,9 +246,9 @@ class PayoutsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getPayoutsListAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getPayoutsAsync($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        return $this->getPayoutsListAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getPayoutsAsyncWithHttpInfo($page, $per_page, $sort, $filter)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -257,7 +257,7 @@ class PayoutsApi
     }
 
     /**
-     * Operation getPayoutsListAsyncWithHttpInfo
+     * Operation getPayoutsAsyncWithHttpInfo
      *
      * Payouts list
      *
@@ -269,10 +269,10 @@ class PayoutsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getPayoutsListAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getPayoutsAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
         $returnType = '\Adserver\Model\Payout[]';
-        $request = $this->getPayoutsListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getPayoutsRequest($page, $per_page, $sort, $filter);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -311,7 +311,7 @@ class PayoutsApi
     }
 
     /**
-     * Create request for operation 'getPayoutsList'
+     * Create request for operation 'getPayouts'
      *
      * @param  int $page (optional)
      * @param  int $per_page (optional)
@@ -321,7 +321,7 @@ class PayoutsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getPayoutsListRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getPayoutsRequest($page = null, $per_page = null, $sort = null, $filter = null)
     {
 
         $resourcePath = '/payout';

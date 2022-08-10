@@ -1199,42 +1199,44 @@ class AdsApi
     }
 
     /**
-     * Operation getAdsList
+     * Operation getAds
      *
      * Ads list
      *
+     * @param  int $idcampaign idcampaign (required)
      * @param  int $page page (optional)
      * @param  int $per_page per_page (optional)
      * @param  string $sort sort (optional)
-     * @param  object[] $filter Example: filter[idcampaign]&#x3D;123 (optional)
+     * @param  object[] $filter filter (optional)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Ad[]
      */
-    public function getAdsList($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getAds($idcampaign, $page = null, $per_page = null, $sort = null, $filter = null)
     {
-        list($response) = $this->getAdsListWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getAdsWithHttpInfo($idcampaign, $page, $per_page, $sort, $filter);
         return $response;
     }
 
     /**
-     * Operation getAdsListWithHttpInfo
+     * Operation getAdsWithHttpInfo
      *
      * Ads list
      *
+     * @param  int $idcampaign (required)
      * @param  int $page (optional)
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
-     * @param  object[] $filter Example: filter[idcampaign]&#x3D;123 (optional)
+     * @param  object[] $filter (optional)
      *
      * @throws \Adserver\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Ad[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getAdsListWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getAdsWithHttpInfo($idcampaign, $page = null, $per_page = null, $sort = null, $filter = null)
     {
-        $request = $this->getAdsListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getAdsRequest($idcampaign, $page, $per_page, $sort, $filter);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1321,21 +1323,22 @@ class AdsApi
     }
 
     /**
-     * Operation getAdsListAsync
+     * Operation getAdsAsync
      *
      * Ads list
      *
+     * @param  int $idcampaign (required)
      * @param  int $page (optional)
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
-     * @param  object[] $filter Example: filter[idcampaign]&#x3D;123 (optional)
+     * @param  object[] $filter (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getAdsListAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getAdsAsync($idcampaign, $page = null, $per_page = null, $sort = null, $filter = null)
     {
-        return $this->getAdsListAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getAdsAsyncWithHttpInfo($idcampaign, $page, $per_page, $sort, $filter)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1344,22 +1347,23 @@ class AdsApi
     }
 
     /**
-     * Operation getAdsListAsyncWithHttpInfo
+     * Operation getAdsAsyncWithHttpInfo
      *
      * Ads list
      *
+     * @param  int $idcampaign (required)
      * @param  int $page (optional)
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
-     * @param  object[] $filter Example: filter[idcampaign]&#x3D;123 (optional)
+     * @param  object[] $filter (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getAdsListAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getAdsAsyncWithHttpInfo($idcampaign, $page = null, $per_page = null, $sort = null, $filter = null)
     {
         $returnType = '\Adserver\Model\Ad[]';
-        $request = $this->getAdsListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getAdsRequest($idcampaign, $page, $per_page, $sort, $filter);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1398,18 +1402,25 @@ class AdsApi
     }
 
     /**
-     * Create request for operation 'getAdsList'
+     * Create request for operation 'getAds'
      *
+     * @param  int $idcampaign (required)
      * @param  int $page (optional)
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
-     * @param  object[] $filter Example: filter[idcampaign]&#x3D;123 (optional)
+     * @param  object[] $filter (optional)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getAdsListRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getAdsRequest($idcampaign, $page = null, $per_page = null, $sort = null, $filter = null)
     {
+        // verify the required parameter 'idcampaign' is set
+        if ($idcampaign === null || (is_array($idcampaign) && count($idcampaign) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $idcampaign when calling getAds'
+            );
+        }
 
         $resourcePath = '/ad';
         $formParams = [];
@@ -1418,6 +1429,15 @@ class AdsApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idcampaign,
+            'idcampaign', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $page,

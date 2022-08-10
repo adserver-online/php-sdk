@@ -112,7 +112,7 @@ class PaymentsApi
     }
 
     /**
-     * Operation getPaymentsList
+     * Operation getPayments
      *
      * Payments list
      *
@@ -125,14 +125,14 @@ class PaymentsApi
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Payment[]
      */
-    public function getPaymentsList($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getPayments($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        list($response) = $this->getPaymentsListWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getPaymentsWithHttpInfo($page, $per_page, $sort, $filter);
         return $response;
     }
 
     /**
-     * Operation getPaymentsListWithHttpInfo
+     * Operation getPaymentsWithHttpInfo
      *
      * Payments list
      *
@@ -145,9 +145,9 @@ class PaymentsApi
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Payment[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getPaymentsListWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getPaymentsWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        $request = $this->getPaymentsListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getPaymentsRequest($page, $per_page, $sort, $filter);
 
         try {
             $options = $this->createHttpClientOption();
@@ -234,7 +234,7 @@ class PaymentsApi
     }
 
     /**
-     * Operation getPaymentsListAsync
+     * Operation getPaymentsAsync
      *
      * Payments list
      *
@@ -246,9 +246,9 @@ class PaymentsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getPaymentsListAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getPaymentsAsync($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        return $this->getPaymentsListAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getPaymentsAsyncWithHttpInfo($page, $per_page, $sort, $filter)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -257,7 +257,7 @@ class PaymentsApi
     }
 
     /**
-     * Operation getPaymentsListAsyncWithHttpInfo
+     * Operation getPaymentsAsyncWithHttpInfo
      *
      * Payments list
      *
@@ -269,10 +269,10 @@ class PaymentsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getPaymentsListAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getPaymentsAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
         $returnType = '\Adserver\Model\Payment[]';
-        $request = $this->getPaymentsListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getPaymentsRequest($page, $per_page, $sort, $filter);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -311,7 +311,7 @@ class PaymentsApi
     }
 
     /**
-     * Create request for operation 'getPaymentsList'
+     * Create request for operation 'getPayments'
      *
      * @param  int $page (optional)
      * @param  int $per_page (optional)
@@ -321,7 +321,7 @@ class PaymentsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getPaymentsListRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getPaymentsRequest($page = null, $per_page = null, $sort = null, $filter = null)
     {
 
         $resourcePath = '/payment';

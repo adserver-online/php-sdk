@@ -34,9 +34,7 @@ use \Adserver\ObjectSerializer;
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<TKey, TValue>
- * @template TKey int|null
- * @template TValue mixed|null
+ * @implements \ArrayAccess<string, mixed>
  */
 class AssignAdToZonesRequest implements ModelInterface, ArrayAccess, \JsonSerializable
 {
@@ -47,7 +45,7 @@ class AssignAdToZonesRequest implements ModelInterface, ArrayAccess, \JsonSerial
       *
       * @var string
       */
-    protected static $openAPIModelName = 'AssignAdToZones_request';
+    protected static $openAPIModelName = 'assignAdToZones_request';
 
     /**
       * Array of property to type mappings. Used for (de)serialization

@@ -35,9 +35,7 @@ use \Adserver\ObjectSerializer;
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<TKey, TValue>
- * @template TKey int|null
- * @template TValue mixed|null
+ * @implements \ArrayAccess<string, mixed>
  */
 class AdDirectLink implements ModelInterface, ArrayAccess, \JsonSerializable
 {
@@ -239,7 +237,7 @@ class AdDirectLink implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets counter_type
      *
-     * @param string|null $counter_type Counter type
+     * @param string|null $counter_type Counter type. It applies to CPA pricing model only. In other cases, the system selects it automatically base on campaign's pricing model.
      *
      * @return self
      */

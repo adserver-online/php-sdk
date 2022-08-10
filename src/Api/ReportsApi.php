@@ -112,9 +112,9 @@ class ReportsApi
     }
 
     /**
-     * Operation getConversionsList
+     * Operation getConversions
      *
-     * Conversions list
+     * Conversions
      *
      * @param  int $page page (optional)
      * @param  int $per_page per_page (optional)
@@ -125,16 +125,16 @@ class ReportsApi
      * @throws \InvalidArgumentException
      * @return object[]
      */
-    public function getConversionsList($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getConversions($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        list($response) = $this->getConversionsListWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getConversionsWithHttpInfo($page, $per_page, $sort, $filter);
         return $response;
     }
 
     /**
-     * Operation getConversionsListWithHttpInfo
+     * Operation getConversionsWithHttpInfo
      *
-     * Conversions list
+     * Conversions
      *
      * @param  int $page (optional)
      * @param  int $per_page (optional)
@@ -145,9 +145,9 @@ class ReportsApi
      * @throws \InvalidArgumentException
      * @return array of object[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getConversionsListWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getConversionsWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        $request = $this->getConversionsListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getConversionsRequest($page, $per_page, $sort, $filter);
 
         try {
             $options = $this->createHttpClientOption();
@@ -234,9 +234,9 @@ class ReportsApi
     }
 
     /**
-     * Operation getConversionsListAsync
+     * Operation getConversionsAsync
      *
-     * Conversions list
+     * Conversions
      *
      * @param  int $page (optional)
      * @param  int $per_page (optional)
@@ -246,9 +246,9 @@ class ReportsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getConversionsListAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getConversionsAsync($page = null, $per_page = null, $sort = null, $filter = null)
     {
-        return $this->getConversionsListAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getConversionsAsyncWithHttpInfo($page, $per_page, $sort, $filter)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -257,9 +257,9 @@ class ReportsApi
     }
 
     /**
-     * Operation getConversionsListAsyncWithHttpInfo
+     * Operation getConversionsAsyncWithHttpInfo
      *
-     * Conversions list
+     * Conversions
      *
      * @param  int $page (optional)
      * @param  int $per_page (optional)
@@ -269,10 +269,10 @@ class ReportsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getConversionsListAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getConversionsAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
     {
         $returnType = 'object[]';
-        $request = $this->getConversionsListRequest($page, $per_page, $sort, $filter);
+        $request = $this->getConversionsRequest($page, $per_page, $sort, $filter);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -311,7 +311,7 @@ class ReportsApi
     }
 
     /**
-     * Create request for operation 'getConversionsList'
+     * Create request for operation 'getConversions'
      *
      * @param  int $page (optional)
      * @param  int $per_page (optional)
@@ -321,7 +321,7 @@ class ReportsApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getConversionsListRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getConversionsRequest($page = null, $per_page = null, $sort = null, $filter = null)
     {
 
         $resourcePath = '/conversion';
@@ -435,7 +435,7 @@ class ReportsApi
     /**
      * Operation getEvents
      *
-     * Events report
+     * Video events
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
@@ -463,7 +463,7 @@ class ReportsApi
     /**
      * Operation getEventsWithHttpInfo
      *
-     * Events report
+     * Video events
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
@@ -596,7 +596,7 @@ class ReportsApi
     /**
      * Operation getEventsAsync
      *
-     * Events report
+     * Video events
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
@@ -627,7 +627,7 @@ class ReportsApi
     /**
      * Operation getEventsAsyncWithHttpInfo
      *
-     * Events report
+     * Video events
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
@@ -1236,7 +1236,7 @@ class ReportsApi
     /**
      * Operation getStats
      *
-     * Stats report
+     * Statistics
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
@@ -1264,7 +1264,7 @@ class ReportsApi
     /**
      * Operation getStatsWithHttpInfo
      *
-     * Stats report
+     * Statistics
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
@@ -1397,7 +1397,7 @@ class ReportsApi
     /**
      * Operation getStatsAsync
      *
-     * Stats report
+     * Statistics
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
@@ -1428,7 +1428,7 @@ class ReportsApi
     /**
      * Operation getStatsAsyncWithHttpInfo
      *
-     * Stats report
+     * Statistics
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
