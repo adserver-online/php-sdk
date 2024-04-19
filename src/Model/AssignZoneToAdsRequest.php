@@ -1,8 +1,8 @@
 <?php
 /**
- * InlineObject
+ * AssignZoneToAdsRequest
  *
- * PHP version 7.2
+ * PHP version 7.4
  *
  * @category Class
  * @package  Adserver
@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -24,21 +24,19 @@
 
 namespace Adserver\Model;
 
-use \Adserver\ObjectSerializer;
 use \ArrayAccess;
+use \Adserver\ObjectSerializer;
 
 /**
- * InlineObject Class Doc Comment
+ * AssignZoneToAdsRequest Class Doc Comment
  *
  * @category Class
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<TKey, TValue>
- * @template TKey int|null
- * @template TValue mixed|null  
+ * @implements \ArrayAccess<string, mixed>
  */
-class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
+class AssignZoneToAdsRequest implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -47,7 +45,7 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'inline_object';
+    protected static $openAPIModelName = 'assignZoneToAds_request';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -55,7 +53,7 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'zones' => 'int[]'
+        'ads' => 'int[]'
     ];
 
     /**
@@ -66,8 +64,24 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'zones' => null
+        'ads' => null
     ];
+
+    /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'ads' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -90,13 +104,65 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+    }
+
+    /**
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
      * @var string[]
      */
     protected static $attributeMap = [
-        'zones' => 'zones'
+        'ads' => 'ads'
     ];
 
     /**
@@ -105,7 +171,7 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'zones' => 'setZones'
+        'ads' => 'setAds'
     ];
 
     /**
@@ -114,7 +180,7 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'zones' => 'getZones'
+        'ads' => 'getAds'
     ];
 
     /**
@@ -159,9 +225,6 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
 
-
-
-
     /**
      * Associative array for storing property values
      *
@@ -177,7 +240,25 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['zones'] = $data['zones'] ?? null;
+        $this->setIfExists('ads', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -189,8 +270,8 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['zones'] === null) {
-            $invalidProperties[] = "'zones' can't be null";
+        if ($this->container['ads'] === null) {
+            $invalidProperties[] = "'ads' can't be null";
         }
         return $invalidProperties;
     }
@@ -208,25 +289,28 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets zones
+     * Gets ads
      *
      * @return int[]
      */
-    public function getZones()
+    public function getAds()
     {
-        return $this->container['zones'];
+        return $this->container['ads'];
     }
 
     /**
-     * Sets zones
+     * Sets ads
      *
-     * @param int[] $zones zones
+     * @param int[] $ads ads
      *
      * @return self
      */
-    public function setZones($zones)
+    public function setAds($ads)
     {
-        $this->container['zones'] = $zones;
+        if (is_null($ads)) {
+            throw new \InvalidArgumentException('non-nullable ads cannot be null');
+        }
+        $this->container['ads'] = $ads;
 
         return $this;
     }
@@ -237,7 +321,7 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->container[$offset]);
     }
@@ -249,6 +333,7 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return mixed|null
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->container[$offset] ?? null;
@@ -262,7 +347,7 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -278,7 +363,7 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->container[$offset]);
     }
@@ -290,6 +375,7 @@ class InlineObject implements ModelInterface, ArrayAccess, \JsonSerializable
      * @return mixed Returns data which can be serialized by json_encode(), which is a value
      * of any type other than a resource.
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
        return ObjectSerializer::sanitizeForSerialization($this);

@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -65,6 +65,25 @@ class UsersApi
      */
     protected $hostIndex;
 
+    /** @var string[] $contentTypes **/
+    public const contentTypes = [
+        'createUser' => [
+            'application/json',
+        ],
+        'deleteUser' => [
+            'application/json',
+        ],
+        'getUser' => [
+            'application/json',
+        ],
+        'getUsers' => [
+            'application/json',
+        ],
+        'updateUser' => [
+            'application/json',
+        ],
+    ];
+
     /**
      * @param ClientInterface $client
      * @param Configuration   $config
@@ -117,14 +136,15 @@ class UsersApi
      * Create user
      *
      * @param  \Adserver\Model\UserRequest $user_request user_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createUser'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\User|\Adserver\Model\FormErrorResponse
      */
-    public function createUser($user_request)
+    public function createUser($user_request, string $contentType = self::contentTypes['createUser'][0])
     {
-        list($response) = $this->createUserWithHttpInfo($user_request);
+        list($response) = $this->createUserWithHttpInfo($user_request, $contentType);
         return $response;
     }
 
@@ -134,14 +154,15 @@ class UsersApi
      * Create user
      *
      * @param  \Adserver\Model\UserRequest $user_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createUser'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\User|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function createUserWithHttpInfo($user_request)
+    public function createUserWithHttpInfo($user_request, string $contentType = self::contentTypes['createUser'][0])
     {
-        $request = $this->createUserRequest($user_request);
+        $request = $this->createUserRequest($user_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -185,7 +206,19 @@ class UsersApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\User' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -200,7 +233,19 @@ class UsersApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -217,7 +262,19 @@ class UsersApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -256,13 +313,14 @@ class UsersApi
      * Create user
      *
      * @param  \Adserver\Model\UserRequest $user_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createUser'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createUserAsync($user_request)
+    public function createUserAsync($user_request, string $contentType = self::contentTypes['createUser'][0])
     {
-        return $this->createUserAsyncWithHttpInfo($user_request)
+        return $this->createUserAsyncWithHttpInfo($user_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -276,14 +334,15 @@ class UsersApi
      * Create user
      *
      * @param  \Adserver\Model\UserRequest $user_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createUser'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createUserAsyncWithHttpInfo($user_request)
+    public function createUserAsyncWithHttpInfo($user_request, string $contentType = self::contentTypes['createUser'][0])
     {
         $returnType = '\Adserver\Model\User';
-        $request = $this->createUserRequest($user_request);
+        $request = $this->createUserRequest($user_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -325,18 +384,21 @@ class UsersApi
      * Create request for operation 'createUser'
      *
      * @param  \Adserver\Model\UserRequest $user_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createUser'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function createUserRequest($user_request)
+    public function createUserRequest($user_request, string $contentType = self::contentTypes['createUser'][0])
     {
+
         // verify the required parameter 'user_request' is set
         if ($user_request === null || (is_array($user_request) && count($user_request) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $user_request when calling createUser'
             );
         }
+
 
         $resourcePath = '/user';
         $formParams = [];
@@ -349,21 +411,17 @@ class UsersApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (isset($user_request)) {
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($user_request));
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($user_request));
             } else {
                 $httpBody = $user_request;
             }
@@ -382,9 +440,9 @@ class UsersApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -407,10 +465,11 @@ class UsersApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -422,14 +481,15 @@ class UsersApi
      * Delete user
      *
      * @param  int $id id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteUser'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function deleteUser($id)
+    public function deleteUser($id, string $contentType = self::contentTypes['deleteUser'][0])
     {
-        $this->deleteUserWithHttpInfo($id);
+        $this->deleteUserWithHttpInfo($id, $contentType);
     }
 
     /**
@@ -438,14 +498,15 @@ class UsersApi
      * Delete user
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteUser'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function deleteUserWithHttpInfo($id)
+    public function deleteUserWithHttpInfo($id, string $contentType = self::contentTypes['deleteUser'][0])
     {
-        $request = $this->deleteUserRequest($id);
+        $request = $this->deleteUserRequest($id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -497,13 +558,14 @@ class UsersApi
      * Delete user
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteUser'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function deleteUserAsync($id)
+    public function deleteUserAsync($id, string $contentType = self::contentTypes['deleteUser'][0])
     {
-        return $this->deleteUserAsyncWithHttpInfo($id)
+        return $this->deleteUserAsyncWithHttpInfo($id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -517,14 +579,15 @@ class UsersApi
      * Delete user
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteUser'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function deleteUserAsyncWithHttpInfo($id)
+    public function deleteUserAsyncWithHttpInfo($id, string $contentType = self::contentTypes['deleteUser'][0])
     {
         $returnType = '';
-        $request = $this->deleteUserRequest($id);
+        $request = $this->deleteUserRequest($id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -553,18 +616,21 @@ class UsersApi
      * Create request for operation 'deleteUser'
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteUser'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function deleteUserRequest($id)
+    public function deleteUserRequest($id, string $contentType = self::contentTypes['deleteUser'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling deleteUser'
             );
         }
+
 
         $resourcePath = '/user/{id}';
         $formParams = [];
@@ -585,16 +651,11 @@ class UsersApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                []
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                [],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            [],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -612,9 +673,9 @@ class UsersApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -637,10 +698,11 @@ class UsersApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'DELETE',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -652,14 +714,16 @@ class UsersApi
      * Get user
      *
      * @param  int $id id (required)
+     * @param  int $with_balances If equal to 1, related balances will be calculated and added to the response (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getUser'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\User
      */
-    public function getUser($id)
+    public function getUser($id, $with_balances = null, string $contentType = self::contentTypes['getUser'][0])
     {
-        list($response) = $this->getUserWithHttpInfo($id);
+        list($response) = $this->getUserWithHttpInfo($id, $with_balances, $contentType);
         return $response;
     }
 
@@ -669,14 +733,16 @@ class UsersApi
      * Get user
      *
      * @param  int $id (required)
+     * @param  int $with_balances If equal to 1, related balances will be calculated and added to the response (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getUser'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\User, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getUserWithHttpInfo($id)
+    public function getUserWithHttpInfo($id, $with_balances = null, string $contentType = self::contentTypes['getUser'][0])
     {
-        $request = $this->getUserRequest($id);
+        $request = $this->getUserRequest($id, $with_balances, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -720,7 +786,19 @@ class UsersApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\User' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -737,7 +815,19 @@ class UsersApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -768,13 +858,15 @@ class UsersApi
      * Get user
      *
      * @param  int $id (required)
+     * @param  int $with_balances If equal to 1, related balances will be calculated and added to the response (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getUser'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getUserAsync($id)
+    public function getUserAsync($id, $with_balances = null, string $contentType = self::contentTypes['getUser'][0])
     {
-        return $this->getUserAsyncWithHttpInfo($id)
+        return $this->getUserAsyncWithHttpInfo($id, $with_balances, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -788,14 +880,16 @@ class UsersApi
      * Get user
      *
      * @param  int $id (required)
+     * @param  int $with_balances If equal to 1, related balances will be calculated and added to the response (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getUser'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getUserAsyncWithHttpInfo($id)
+    public function getUserAsyncWithHttpInfo($id, $with_balances = null, string $contentType = self::contentTypes['getUser'][0])
     {
         $returnType = '\Adserver\Model\User';
-        $request = $this->getUserRequest($id);
+        $request = $this->getUserRequest($id, $with_balances, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -837,18 +931,23 @@ class UsersApi
      * Create request for operation 'getUser'
      *
      * @param  int $id (required)
+     * @param  int $with_balances If equal to 1, related balances will be calculated and added to the response (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getUser'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getUserRequest($id)
+    public function getUserRequest($id, $with_balances = null, string $contentType = self::contentTypes['getUser'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling getUser'
             );
         }
+
+
 
         $resourcePath = '/user/{id}';
         $formParams = [];
@@ -857,6 +956,15 @@ class UsersApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $with_balances,
+            'with_balances', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
         // path params
@@ -869,16 +977,11 @@ class UsersApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -896,9 +999,9 @@ class UsersApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -921,10 +1024,11 @@ class UsersApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -939,14 +1043,15 @@ class UsersApi
      * @param  int $per_page per_page (optional)
      * @param  string $sort sort (optional)
      * @param  object[] $filter filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getUsers'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\User[]
      */
-    public function getUsers($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getUsers($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getUsers'][0])
     {
-        list($response) = $this->getUsersWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getUsersWithHttpInfo($page, $per_page, $sort, $filter, $contentType);
         return $response;
     }
 
@@ -959,14 +1064,15 @@ class UsersApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getUsers'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\User[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getUsersWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getUsersWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getUsers'][0])
     {
-        $request = $this->getUsersRequest($page, $per_page, $sort, $filter);
+        $request = $this->getUsersRequest($page, $per_page, $sort, $filter, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1010,7 +1116,19 @@ class UsersApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\User[]' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1027,7 +1145,19 @@ class UsersApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -1061,13 +1191,14 @@ class UsersApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getUsers'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getUsersAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getUsersAsync($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getUsers'][0])
     {
-        return $this->getUsersAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getUsersAsyncWithHttpInfo($page, $per_page, $sort, $filter, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1084,14 +1215,15 @@ class UsersApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getUsers'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getUsersAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getUsersAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getUsers'][0])
     {
         $returnType = '\Adserver\Model\User[]';
-        $request = $this->getUsersRequest($page, $per_page, $sort, $filter);
+        $request = $this->getUsersRequest($page, $per_page, $sort, $filter, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1136,12 +1268,18 @@ class UsersApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getUsers'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getUsersRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getUsersRequest($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getUsers'][0])
     {
+
+
+
+
+
 
         $resourcePath = '/user';
         $formParams = [];
@@ -1190,16 +1328,11 @@ class UsersApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -1217,9 +1350,9 @@ class UsersApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1242,10 +1375,11 @@ class UsersApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -1258,14 +1392,15 @@ class UsersApi
      *
      * @param  int $id id (required)
      * @param  \Adserver\Model\UserRequest $user_request user_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateUser'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\User|\Adserver\Model\FormErrorResponse
      */
-    public function updateUser($id, $user_request)
+    public function updateUser($id, $user_request, string $contentType = self::contentTypes['updateUser'][0])
     {
-        list($response) = $this->updateUserWithHttpInfo($id, $user_request);
+        list($response) = $this->updateUserWithHttpInfo($id, $user_request, $contentType);
         return $response;
     }
 
@@ -1276,14 +1411,15 @@ class UsersApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\UserRequest $user_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateUser'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\User|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function updateUserWithHttpInfo($id, $user_request)
+    public function updateUserWithHttpInfo($id, $user_request, string $contentType = self::contentTypes['updateUser'][0])
     {
-        $request = $this->updateUserRequest($id, $user_request);
+        $request = $this->updateUserRequest($id, $user_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1327,7 +1463,19 @@ class UsersApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\User' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1342,7 +1490,19 @@ class UsersApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1359,7 +1519,19 @@ class UsersApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -1399,13 +1571,14 @@ class UsersApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\UserRequest $user_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateUser'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function updateUserAsync($id, $user_request)
+    public function updateUserAsync($id, $user_request, string $contentType = self::contentTypes['updateUser'][0])
     {
-        return $this->updateUserAsyncWithHttpInfo($id, $user_request)
+        return $this->updateUserAsyncWithHttpInfo($id, $user_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1420,14 +1593,15 @@ class UsersApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\UserRequest $user_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateUser'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function updateUserAsyncWithHttpInfo($id, $user_request)
+    public function updateUserAsyncWithHttpInfo($id, $user_request, string $contentType = self::contentTypes['updateUser'][0])
     {
         $returnType = '\Adserver\Model\User';
-        $request = $this->updateUserRequest($id, $user_request);
+        $request = $this->updateUserRequest($id, $user_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1470,24 +1644,28 @@ class UsersApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\UserRequest $user_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateUser'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function updateUserRequest($id, $user_request)
+    public function updateUserRequest($id, $user_request, string $contentType = self::contentTypes['updateUser'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling updateUser'
             );
         }
+
         // verify the required parameter 'user_request' is set
         if ($user_request === null || (is_array($user_request) && count($user_request) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $user_request when calling updateUser'
             );
         }
+
 
         $resourcePath = '/user/{id}';
         $formParams = [];
@@ -1508,21 +1686,17 @@ class UsersApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (isset($user_request)) {
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($user_request));
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($user_request));
             } else {
                 $httpBody = $user_request;
             }
@@ -1541,9 +1715,9 @@ class UsersApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1566,10 +1740,11 @@ class UsersApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'PUT',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );

@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -64,6 +64,22 @@ class ReportsApi
      * @var int Host index
      */
     protected $hostIndex;
+
+    /** @var string[] $contentTypes **/
+    public const contentTypes = [
+        'getConversions' => [
+            'application/json',
+        ],
+        'getEvents' => [
+            'application/json',
+        ],
+        'getStatement' => [
+            'application/json',
+        ],
+        'getStats' => [
+            'application/json',
+        ],
+    ];
 
     /**
      * @param ClientInterface $client
@@ -120,14 +136,15 @@ class ReportsApi
      * @param  int $per_page per_page (optional)
      * @param  string $sort sort (optional)
      * @param  object[] $filter filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getConversions'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return object[]
      */
-    public function getConversions($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getConversions($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getConversions'][0])
     {
-        list($response) = $this->getConversionsWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getConversionsWithHttpInfo($page, $per_page, $sort, $filter, $contentType);
         return $response;
     }
 
@@ -140,14 +157,15 @@ class ReportsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getConversions'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of object[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getConversionsWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getConversionsWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getConversions'][0])
     {
-        $request = $this->getConversionsRequest($page, $per_page, $sort, $filter);
+        $request = $this->getConversionsRequest($page, $per_page, $sort, $filter, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -191,7 +209,19 @@ class ReportsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('object[]' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -208,7 +238,19 @@ class ReportsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -242,13 +284,14 @@ class ReportsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getConversions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getConversionsAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getConversionsAsync($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getConversions'][0])
     {
-        return $this->getConversionsAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getConversionsAsyncWithHttpInfo($page, $per_page, $sort, $filter, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -265,14 +308,15 @@ class ReportsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getConversions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getConversionsAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getConversionsAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getConversions'][0])
     {
         $returnType = 'object[]';
-        $request = $this->getConversionsRequest($page, $per_page, $sort, $filter);
+        $request = $this->getConversionsRequest($page, $per_page, $sort, $filter, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -317,12 +361,18 @@ class ReportsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getConversions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getConversionsRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getConversionsRequest($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getConversions'][0])
     {
+
+
+
+
+
 
         $resourcePath = '/conversion';
         $formParams = [];
@@ -371,16 +421,11 @@ class ReportsApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -398,9 +443,9 @@ class ReportsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -423,10 +468,11 @@ class ReportsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -439,24 +485,25 @@ class ReportsApi
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
-     * @param  int $report Report types:  * 1 - Linear VAST  * 2 - Video banner  * 10 - blocked (required)
+     * @param  int $report Report types:  * 1 - VAST  * 2 - Video banner (required)
      * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idgroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
-     * @param  int $idpublisher Filter by publisher&#39;s ID (optional)
-     * @param  int $idsite Filter by site&#39;s ID (optional)
-     * @param  int $idzone Filter by zone&#39;s ID (optional)
+     * @param  int $idadvertiser Filter by advertiser ID (optional)
+     * @param  int $idcampaign Filter by campaign ID (optional)
+     * @param  int $idgroup Filter by campaign group ID (optional)
+     * @param  int $idad Filter by ad ID (optional)
+     * @param  int $idpublisher Filter by publisher ID (optional)
+     * @param  int $idsite Filter by site ID (optional)
+     * @param  int $idzone Filter by zone ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getEvents'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return object[]|\Adserver\Model\FormErrorResponse
      */
-    public function getEvents($date_begin, $date_end, $report, $group, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
+    public function getEvents($date_begin, $date_end, $report, $group, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null, string $contentType = self::contentTypes['getEvents'][0])
     {
-        list($response) = $this->getEventsWithHttpInfo($date_begin, $date_end, $report, $group, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone);
+        list($response) = $this->getEventsWithHttpInfo($date_begin, $date_end, $report, $group, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone, $contentType);
         return $response;
     }
 
@@ -467,24 +514,25 @@ class ReportsApi
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
-     * @param  int $report Report types:  * 1 - Linear VAST  * 2 - Video banner  * 10 - blocked (required)
+     * @param  int $report Report types:  * 1 - VAST  * 2 - Video banner (required)
      * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idgroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
-     * @param  int $idpublisher Filter by publisher&#39;s ID (optional)
-     * @param  int $idsite Filter by site&#39;s ID (optional)
-     * @param  int $idzone Filter by zone&#39;s ID (optional)
+     * @param  int $idadvertiser Filter by advertiser ID (optional)
+     * @param  int $idcampaign Filter by campaign ID (optional)
+     * @param  int $idgroup Filter by campaign group ID (optional)
+     * @param  int $idad Filter by ad ID (optional)
+     * @param  int $idpublisher Filter by publisher ID (optional)
+     * @param  int $idsite Filter by site ID (optional)
+     * @param  int $idzone Filter by zone ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getEvents'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of object[]|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getEventsWithHttpInfo($date_begin, $date_end, $report, $group, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
+    public function getEventsWithHttpInfo($date_begin, $date_end, $report, $group, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null, string $contentType = self::contentTypes['getEvents'][0])
     {
-        $request = $this->getEventsRequest($date_begin, $date_end, $report, $group, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone);
+        $request = $this->getEventsRequest($date_begin, $date_end, $report, $group, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -528,7 +576,19 @@ class ReportsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('object[]' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -543,7 +603,19 @@ class ReportsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -560,7 +632,19 @@ class ReportsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -600,23 +684,24 @@ class ReportsApi
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
-     * @param  int $report Report types:  * 1 - Linear VAST  * 2 - Video banner  * 10 - blocked (required)
+     * @param  int $report Report types:  * 1 - VAST  * 2 - Video banner (required)
      * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idgroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
-     * @param  int $idpublisher Filter by publisher&#39;s ID (optional)
-     * @param  int $idsite Filter by site&#39;s ID (optional)
-     * @param  int $idzone Filter by zone&#39;s ID (optional)
+     * @param  int $idadvertiser Filter by advertiser ID (optional)
+     * @param  int $idcampaign Filter by campaign ID (optional)
+     * @param  int $idgroup Filter by campaign group ID (optional)
+     * @param  int $idad Filter by ad ID (optional)
+     * @param  int $idpublisher Filter by publisher ID (optional)
+     * @param  int $idsite Filter by site ID (optional)
+     * @param  int $idzone Filter by zone ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getEvents'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getEventsAsync($date_begin, $date_end, $report, $group, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
+    public function getEventsAsync($date_begin, $date_end, $report, $group, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null, string $contentType = self::contentTypes['getEvents'][0])
     {
-        return $this->getEventsAsyncWithHttpInfo($date_begin, $date_end, $report, $group, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone)
+        return $this->getEventsAsyncWithHttpInfo($date_begin, $date_end, $report, $group, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -631,24 +716,25 @@ class ReportsApi
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
-     * @param  int $report Report types:  * 1 - Linear VAST  * 2 - Video banner  * 10 - blocked (required)
+     * @param  int $report Report types:  * 1 - VAST  * 2 - Video banner (required)
      * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idgroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
-     * @param  int $idpublisher Filter by publisher&#39;s ID (optional)
-     * @param  int $idsite Filter by site&#39;s ID (optional)
-     * @param  int $idzone Filter by zone&#39;s ID (optional)
+     * @param  int $idadvertiser Filter by advertiser ID (optional)
+     * @param  int $idcampaign Filter by campaign ID (optional)
+     * @param  int $idgroup Filter by campaign group ID (optional)
+     * @param  int $idad Filter by ad ID (optional)
+     * @param  int $idpublisher Filter by publisher ID (optional)
+     * @param  int $idsite Filter by site ID (optional)
+     * @param  int $idzone Filter by zone ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getEvents'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getEventsAsyncWithHttpInfo($date_begin, $date_end, $report, $group, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
+    public function getEventsAsyncWithHttpInfo($date_begin, $date_end, $report, $group, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null, string $contentType = self::contentTypes['getEvents'][0])
     {
         $returnType = 'object[]';
-        $request = $this->getEventsRequest($date_begin, $date_end, $report, $group, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone);
+        $request = $this->getEventsRequest($date_begin, $date_end, $report, $group, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -691,46 +777,60 @@ class ReportsApi
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
-     * @param  int $report Report types:  * 1 - Linear VAST  * 2 - Video banner  * 10 - blocked (required)
+     * @param  int $report Report types:  * 1 - VAST  * 2 - Video banner (required)
      * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idgroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
-     * @param  int $idpublisher Filter by publisher&#39;s ID (optional)
-     * @param  int $idsite Filter by site&#39;s ID (optional)
-     * @param  int $idzone Filter by zone&#39;s ID (optional)
+     * @param  int $idadvertiser Filter by advertiser ID (optional)
+     * @param  int $idcampaign Filter by campaign ID (optional)
+     * @param  int $idgroup Filter by campaign group ID (optional)
+     * @param  int $idad Filter by ad ID (optional)
+     * @param  int $idpublisher Filter by publisher ID (optional)
+     * @param  int $idsite Filter by site ID (optional)
+     * @param  int $idzone Filter by zone ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getEvents'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getEventsRequest($date_begin, $date_end, $report, $group, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
+    public function getEventsRequest($date_begin, $date_end, $report, $group, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null, string $contentType = self::contentTypes['getEvents'][0])
     {
+
         // verify the required parameter 'date_begin' is set
         if ($date_begin === null || (is_array($date_begin) && count($date_begin) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $date_begin when calling getEvents'
             );
         }
+
         // verify the required parameter 'date_end' is set
         if ($date_end === null || (is_array($date_end) && count($date_end) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $date_end when calling getEvents'
             );
         }
+
         // verify the required parameter 'report' is set
         if ($report === null || (is_array($report) && count($report) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $report when calling getEvents'
             );
         }
+
         // verify the required parameter 'group' is set
         if ($group === null || (is_array($group) && count($group) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $group when calling getEvents'
             );
         }
+
+
+
+
+
+
+
+
+
 
         $resourcePath = '/events';
         $formParams = [];
@@ -851,16 +951,11 @@ class ReportsApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -878,9 +973,9 @@ class ReportsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -903,10 +998,11 @@ class ReportsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -920,15 +1016,16 @@ class ReportsApi
      * @param  int $page page (optional)
      * @param  int $per_page per_page (optional)
      * @param  string $sort sort (optional)
-     * @param  object[] $filter Example:filter[iduser]&#x3D;123&amp;filter[date_range]&#x3D;2021-02-09 - 2021-03-09&amp;filter[showStats]&#x3D;0 (optional)
+     * @param  object[] $filter Example:filter[iduser]&#x3D;123&amp;filter[dateBegin]&#x3D;2021-02-09&amp;filter[dateEnd]&#x3D;2021-03-09&amp;filter[showStats]&#x3D;0 (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getStatement'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Statement[]
      */
-    public function getStatement($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getStatement($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getStatement'][0])
     {
-        list($response) = $this->getStatementWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getStatementWithHttpInfo($page, $per_page, $sort, $filter, $contentType);
         return $response;
     }
 
@@ -940,15 +1037,16 @@ class ReportsApi
      * @param  int $page (optional)
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
-     * @param  object[] $filter Example:filter[iduser]&#x3D;123&amp;filter[date_range]&#x3D;2021-02-09 - 2021-03-09&amp;filter[showStats]&#x3D;0 (optional)
+     * @param  object[] $filter Example:filter[iduser]&#x3D;123&amp;filter[dateBegin]&#x3D;2021-02-09&amp;filter[dateEnd]&#x3D;2021-03-09&amp;filter[showStats]&#x3D;0 (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getStatement'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Statement[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getStatementWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getStatementWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getStatement'][0])
     {
-        $request = $this->getStatementRequest($page, $per_page, $sort, $filter);
+        $request = $this->getStatementRequest($page, $per_page, $sort, $filter, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -992,7 +1090,19 @@ class ReportsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Statement[]' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1009,7 +1119,19 @@ class ReportsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -1042,14 +1164,15 @@ class ReportsApi
      * @param  int $page (optional)
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
-     * @param  object[] $filter Example:filter[iduser]&#x3D;123&amp;filter[date_range]&#x3D;2021-02-09 - 2021-03-09&amp;filter[showStats]&#x3D;0 (optional)
+     * @param  object[] $filter Example:filter[iduser]&#x3D;123&amp;filter[dateBegin]&#x3D;2021-02-09&amp;filter[dateEnd]&#x3D;2021-03-09&amp;filter[showStats]&#x3D;0 (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getStatement'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getStatementAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getStatementAsync($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getStatement'][0])
     {
-        return $this->getStatementAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getStatementAsyncWithHttpInfo($page, $per_page, $sort, $filter, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1065,15 +1188,16 @@ class ReportsApi
      * @param  int $page (optional)
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
-     * @param  object[] $filter Example:filter[iduser]&#x3D;123&amp;filter[date_range]&#x3D;2021-02-09 - 2021-03-09&amp;filter[showStats]&#x3D;0 (optional)
+     * @param  object[] $filter Example:filter[iduser]&#x3D;123&amp;filter[dateBegin]&#x3D;2021-02-09&amp;filter[dateEnd]&#x3D;2021-03-09&amp;filter[showStats]&#x3D;0 (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getStatement'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getStatementAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getStatementAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getStatement'][0])
     {
         $returnType = '\Adserver\Model\Statement[]';
-        $request = $this->getStatementRequest($page, $per_page, $sort, $filter);
+        $request = $this->getStatementRequest($page, $per_page, $sort, $filter, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1117,13 +1241,19 @@ class ReportsApi
      * @param  int $page (optional)
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
-     * @param  object[] $filter Example:filter[iduser]&#x3D;123&amp;filter[date_range]&#x3D;2021-02-09 - 2021-03-09&amp;filter[showStats]&#x3D;0 (optional)
+     * @param  object[] $filter Example:filter[iduser]&#x3D;123&amp;filter[dateBegin]&#x3D;2021-02-09&amp;filter[dateEnd]&#x3D;2021-03-09&amp;filter[showStats]&#x3D;0 (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getStatement'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getStatementRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getStatementRequest($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getStatement'][0])
     {
+
+
+
+
+
 
         $resourcePath = '/statement';
         $formParams = [];
@@ -1172,16 +1302,11 @@ class ReportsApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -1199,9 +1324,9 @@ class ReportsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1224,10 +1349,11 @@ class ReportsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -1243,21 +1369,24 @@ class ReportsApi
      * @param  string $group Group by (required)
      * @param  string $group2 Extra group by (optional)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idgroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
-     * @param  int $idpublisher Filter by publisher&#39;s ID (optional)
-     * @param  int $idsite Filter by site&#39;s ID (optional)
-     * @param  int $idzone Filter by zone&#39;s ID (optional)
+     * @param  int $idadvertiser Filter by advertiser ID (optional)
+     * @param  int $idcampaign Filter by campaign ID (optional)
+     * @param  int $idgroup Filter by campaign group ID (optional)
+     * @param  int $idad Filter by ad ID (optional)
+     * @param  int $idpublisher Filter by publisher ID (optional)
+     * @param  int $idsite Filter by site ID (optional)
+     * @param  int $idzone Filter by zone ID (optional)
+     * @param  int $with_trafq If equal to 1, TrafQ column will be added to the response (optional)
+     * @param  int $with_pub_metrics If equal to 1, impressions_pub and clicks_pub columns will be added to the response. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getStats'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\StatsItem[]|\Adserver\Model\FormErrorResponse
      */
-    public function getStats($date_begin, $date_end, $group, $group2 = null, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
+    public function getStats($date_begin, $date_end, $group, $group2 = null, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null, $with_trafq = null, $with_pub_metrics = null, string $contentType = self::contentTypes['getStats'][0])
     {
-        list($response) = $this->getStatsWithHttpInfo($date_begin, $date_end, $group, $group2, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone);
+        list($response) = $this->getStatsWithHttpInfo($date_begin, $date_end, $group, $group2, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone, $with_trafq, $with_pub_metrics, $contentType);
         return $response;
     }
 
@@ -1271,21 +1400,24 @@ class ReportsApi
      * @param  string $group Group by (required)
      * @param  string $group2 Extra group by (optional)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idgroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
-     * @param  int $idpublisher Filter by publisher&#39;s ID (optional)
-     * @param  int $idsite Filter by site&#39;s ID (optional)
-     * @param  int $idzone Filter by zone&#39;s ID (optional)
+     * @param  int $idadvertiser Filter by advertiser ID (optional)
+     * @param  int $idcampaign Filter by campaign ID (optional)
+     * @param  int $idgroup Filter by campaign group ID (optional)
+     * @param  int $idad Filter by ad ID (optional)
+     * @param  int $idpublisher Filter by publisher ID (optional)
+     * @param  int $idsite Filter by site ID (optional)
+     * @param  int $idzone Filter by zone ID (optional)
+     * @param  int $with_trafq If equal to 1, TrafQ column will be added to the response (optional)
+     * @param  int $with_pub_metrics If equal to 1, impressions_pub and clicks_pub columns will be added to the response. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getStats'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\StatsItem[]|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getStatsWithHttpInfo($date_begin, $date_end, $group, $group2 = null, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
+    public function getStatsWithHttpInfo($date_begin, $date_end, $group, $group2 = null, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null, $with_trafq = null, $with_pub_metrics = null, string $contentType = self::contentTypes['getStats'][0])
     {
-        $request = $this->getStatsRequest($date_begin, $date_end, $group, $group2, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone);
+        $request = $this->getStatsRequest($date_begin, $date_end, $group, $group2, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone, $with_trafq, $with_pub_metrics, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1329,7 +1461,19 @@ class ReportsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\StatsItem[]' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1344,7 +1488,19 @@ class ReportsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1361,7 +1517,19 @@ class ReportsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -1404,20 +1572,23 @@ class ReportsApi
      * @param  string $group Group by (required)
      * @param  string $group2 Extra group by (optional)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idgroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
-     * @param  int $idpublisher Filter by publisher&#39;s ID (optional)
-     * @param  int $idsite Filter by site&#39;s ID (optional)
-     * @param  int $idzone Filter by zone&#39;s ID (optional)
+     * @param  int $idadvertiser Filter by advertiser ID (optional)
+     * @param  int $idcampaign Filter by campaign ID (optional)
+     * @param  int $idgroup Filter by campaign group ID (optional)
+     * @param  int $idad Filter by ad ID (optional)
+     * @param  int $idpublisher Filter by publisher ID (optional)
+     * @param  int $idsite Filter by site ID (optional)
+     * @param  int $idzone Filter by zone ID (optional)
+     * @param  int $with_trafq If equal to 1, TrafQ column will be added to the response (optional)
+     * @param  int $with_pub_metrics If equal to 1, impressions_pub and clicks_pub columns will be added to the response. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getStats'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getStatsAsync($date_begin, $date_end, $group, $group2 = null, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
+    public function getStatsAsync($date_begin, $date_end, $group, $group2 = null, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null, $with_trafq = null, $with_pub_metrics = null, string $contentType = self::contentTypes['getStats'][0])
     {
-        return $this->getStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $group2, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone)
+        return $this->getStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $group2, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone, $with_trafq, $with_pub_metrics, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1435,21 +1606,24 @@ class ReportsApi
      * @param  string $group Group by (required)
      * @param  string $group2 Extra group by (optional)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idgroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
-     * @param  int $idpublisher Filter by publisher&#39;s ID (optional)
-     * @param  int $idsite Filter by site&#39;s ID (optional)
-     * @param  int $idzone Filter by zone&#39;s ID (optional)
+     * @param  int $idadvertiser Filter by advertiser ID (optional)
+     * @param  int $idcampaign Filter by campaign ID (optional)
+     * @param  int $idgroup Filter by campaign group ID (optional)
+     * @param  int $idad Filter by ad ID (optional)
+     * @param  int $idpublisher Filter by publisher ID (optional)
+     * @param  int $idsite Filter by site ID (optional)
+     * @param  int $idzone Filter by zone ID (optional)
+     * @param  int $with_trafq If equal to 1, TrafQ column will be added to the response (optional)
+     * @param  int $with_pub_metrics If equal to 1, impressions_pub and clicks_pub columns will be added to the response. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getStats'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $group2 = null, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
+    public function getStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $group2 = null, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null, $with_trafq = null, $with_pub_metrics = null, string $contentType = self::contentTypes['getStats'][0])
     {
         $returnType = '\Adserver\Model\StatsItem[]';
-        $request = $this->getStatsRequest($date_begin, $date_end, $group, $group2, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone);
+        $request = $this->getStatsRequest($date_begin, $date_end, $group, $group2, $timezone, $idadvertiser, $idcampaign, $idgroup, $idad, $idpublisher, $idsite, $idzone, $with_trafq, $with_pub_metrics, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1495,37 +1669,55 @@ class ReportsApi
      * @param  string $group Group by (required)
      * @param  string $group2 Extra group by (optional)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idadvertiser Filter by advertiser&#39;s ID (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idgroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
-     * @param  int $idpublisher Filter by publisher&#39;s ID (optional)
-     * @param  int $idsite Filter by site&#39;s ID (optional)
-     * @param  int $idzone Filter by zone&#39;s ID (optional)
+     * @param  int $idadvertiser Filter by advertiser ID (optional)
+     * @param  int $idcampaign Filter by campaign ID (optional)
+     * @param  int $idgroup Filter by campaign group ID (optional)
+     * @param  int $idad Filter by ad ID (optional)
+     * @param  int $idpublisher Filter by publisher ID (optional)
+     * @param  int $idsite Filter by site ID (optional)
+     * @param  int $idzone Filter by zone ID (optional)
+     * @param  int $with_trafq If equal to 1, TrafQ column will be added to the response (optional)
+     * @param  int $with_pub_metrics If equal to 1, impressions_pub and clicks_pub columns will be added to the response. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getStats'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getStatsRequest($date_begin, $date_end, $group, $group2 = null, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null)
+    public function getStatsRequest($date_begin, $date_end, $group, $group2 = null, $timezone = null, $idadvertiser = null, $idcampaign = null, $idgroup = null, $idad = null, $idpublisher = null, $idsite = null, $idzone = null, $with_trafq = null, $with_pub_metrics = null, string $contentType = self::contentTypes['getStats'][0])
     {
+
         // verify the required parameter 'date_begin' is set
         if ($date_begin === null || (is_array($date_begin) && count($date_begin) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $date_begin when calling getStats'
             );
         }
+
         // verify the required parameter 'date_end' is set
         if ($date_end === null || (is_array($date_end) && count($date_end) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $date_end when calling getStats'
             );
         }
+
         // verify the required parameter 'group' is set
         if ($group === null || (is_array($group) && count($group) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $group when calling getStats'
             );
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
         $resourcePath = '/stats';
         $formParams = [];
@@ -1642,20 +1834,33 @@ class ReportsApi
             true, // explode
             false // required
         ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $with_trafq,
+            'with_trafq', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $with_pub_metrics,
+            'with_pub_metrics', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -1673,9 +1878,9 @@ class ReportsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1698,10 +1903,11 @@ class ReportsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );

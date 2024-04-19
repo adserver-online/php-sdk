@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -53,11 +53,19 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'categories' => 'array<string,string>',
         'ad_formats' => 'array<string,string>',
         'zone_formats' => 'array<string,string>',
         'price_models' => 'array<string,string>',
-        'transaction_types' => 'array<string,string>'
+        'revenue_models' => 'array<string,string>',
+        'transaction_types' => 'array<string,string>',
+        'dimensions' => 'array<string,string>',
+        'categories' => 'array<string,string>',
+        'countries' => 'array<string,string>',
+        'payout_methods' => 'array<string,string>',
+        'targeting_modes' => 'array<string,string>',
+        'devices' => 'array<string,string>',
+        'os' => 'array<string,string>',
+        'browsers' => 'array<string,string>'
     ];
 
     /**
@@ -68,12 +76,48 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'categories' => null,
         'ad_formats' => null,
         'zone_formats' => null,
         'price_models' => null,
-        'transaction_types' => null
+        'revenue_models' => null,
+        'transaction_types' => null,
+        'dimensions' => null,
+        'categories' => null,
+        'countries' => null,
+        'payout_methods' => null,
+        'targeting_modes' => null,
+        'devices' => null,
+        'os' => null,
+        'browsers' => null
     ];
+
+    /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'ad_formats' => false,
+        'zone_formats' => false,
+        'price_models' => false,
+        'revenue_models' => false,
+        'transaction_types' => false,
+        'dimensions' => false,
+        'categories' => false,
+        'countries' => false,
+        'payout_methods' => false,
+        'targeting_modes' => false,
+        'devices' => false,
+        'os' => false,
+        'browsers' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -96,17 +140,77 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+    }
+
+    /**
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
      * @var string[]
      */
     protected static $attributeMap = [
-        'categories' => 'categories',
         'ad_formats' => 'ad_formats',
         'zone_formats' => 'zone_formats',
         'price_models' => 'price_models',
-        'transaction_types' => 'transaction_types'
+        'revenue_models' => 'revenue_models',
+        'transaction_types' => 'transaction_types',
+        'dimensions' => 'dimensions',
+        'categories' => 'categories',
+        'countries' => 'countries',
+        'payout_methods' => 'payout_methods',
+        'targeting_modes' => 'targeting_modes',
+        'devices' => 'devices',
+        'os' => 'os',
+        'browsers' => 'browsers'
     ];
 
     /**
@@ -115,11 +219,19 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'categories' => 'setCategories',
         'ad_formats' => 'setAdFormats',
         'zone_formats' => 'setZoneFormats',
         'price_models' => 'setPriceModels',
-        'transaction_types' => 'setTransactionTypes'
+        'revenue_models' => 'setRevenueModels',
+        'transaction_types' => 'setTransactionTypes',
+        'dimensions' => 'setDimensions',
+        'categories' => 'setCategories',
+        'countries' => 'setCountries',
+        'payout_methods' => 'setPayoutMethods',
+        'targeting_modes' => 'setTargetingModes',
+        'devices' => 'setDevices',
+        'os' => 'setOs',
+        'browsers' => 'setBrowsers'
     ];
 
     /**
@@ -128,11 +240,19 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'categories' => 'getCategories',
         'ad_formats' => 'getAdFormats',
         'zone_formats' => 'getZoneFormats',
         'price_models' => 'getPriceModels',
-        'transaction_types' => 'getTransactionTypes'
+        'revenue_models' => 'getRevenueModels',
+        'transaction_types' => 'getTransactionTypes',
+        'dimensions' => 'getDimensions',
+        'categories' => 'getCategories',
+        'countries' => 'getCountries',
+        'payout_methods' => 'getPayoutMethods',
+        'targeting_modes' => 'getTargetingModes',
+        'devices' => 'getDevices',
+        'os' => 'getOs',
+        'browsers' => 'getBrowsers'
     ];
 
     /**
@@ -192,11 +312,37 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['categories'] = $data['categories'] ?? null;
-        $this->container['ad_formats'] = $data['ad_formats'] ?? null;
-        $this->container['zone_formats'] = $data['zone_formats'] ?? null;
-        $this->container['price_models'] = $data['price_models'] ?? null;
-        $this->container['transaction_types'] = $data['transaction_types'] ?? null;
+        $this->setIfExists('ad_formats', $data ?? [], null);
+        $this->setIfExists('zone_formats', $data ?? [], null);
+        $this->setIfExists('price_models', $data ?? [], null);
+        $this->setIfExists('revenue_models', $data ?? [], null);
+        $this->setIfExists('transaction_types', $data ?? [], null);
+        $this->setIfExists('dimensions', $data ?? [], null);
+        $this->setIfExists('categories', $data ?? [], null);
+        $this->setIfExists('countries', $data ?? [], null);
+        $this->setIfExists('payout_methods', $data ?? [], null);
+        $this->setIfExists('targeting_modes', $data ?? [], null);
+        $this->setIfExists('devices', $data ?? [], null);
+        $this->setIfExists('os', $data ?? [], null);
+        $this->setIfExists('browsers', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -224,30 +370,6 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets categories
-     *
-     * @return array<string,string>|null
-     */
-    public function getCategories()
-    {
-        return $this->container['categories'];
-    }
-
-    /**
-     * Sets categories
-     *
-     * @param array<string,string>|null $categories categories
-     *
-     * @return self
-     */
-    public function setCategories($categories)
-    {
-        $this->container['categories'] = $categories;
-
-        return $this;
-    }
-
-    /**
      * Gets ad_formats
      *
      * @return array<string,string>|null
@@ -266,6 +388,9 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setAdFormats($ad_formats)
     {
+        if (is_null($ad_formats)) {
+            throw new \InvalidArgumentException('non-nullable ad_formats cannot be null');
+        }
         $this->container['ad_formats'] = $ad_formats;
 
         return $this;
@@ -290,6 +415,9 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setZoneFormats($zone_formats)
     {
+        if (is_null($zone_formats)) {
+            throw new \InvalidArgumentException('non-nullable zone_formats cannot be null');
+        }
         $this->container['zone_formats'] = $zone_formats;
 
         return $this;
@@ -314,7 +442,37 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setPriceModels($price_models)
     {
+        if (is_null($price_models)) {
+            throw new \InvalidArgumentException('non-nullable price_models cannot be null');
+        }
         $this->container['price_models'] = $price_models;
+
+        return $this;
+    }
+
+    /**
+     * Gets revenue_models
+     *
+     * @return array<string,string>|null
+     */
+    public function getRevenueModels()
+    {
+        return $this->container['revenue_models'];
+    }
+
+    /**
+     * Sets revenue_models
+     *
+     * @param array<string,string>|null $revenue_models revenue_models
+     *
+     * @return self
+     */
+    public function setRevenueModels($revenue_models)
+    {
+        if (is_null($revenue_models)) {
+            throw new \InvalidArgumentException('non-nullable revenue_models cannot be null');
+        }
+        $this->container['revenue_models'] = $revenue_models;
 
         return $this;
     }
@@ -338,7 +496,226 @@ class Dict implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setTransactionTypes($transaction_types)
     {
+        if (is_null($transaction_types)) {
+            throw new \InvalidArgumentException('non-nullable transaction_types cannot be null');
+        }
         $this->container['transaction_types'] = $transaction_types;
+
+        return $this;
+    }
+
+    /**
+     * Gets dimensions
+     *
+     * @return array<string,string>|null
+     */
+    public function getDimensions()
+    {
+        return $this->container['dimensions'];
+    }
+
+    /**
+     * Sets dimensions
+     *
+     * @param array<string,string>|null $dimensions dimensions
+     *
+     * @return self
+     */
+    public function setDimensions($dimensions)
+    {
+        if (is_null($dimensions)) {
+            throw new \InvalidArgumentException('non-nullable dimensions cannot be null');
+        }
+        $this->container['dimensions'] = $dimensions;
+
+        return $this;
+    }
+
+    /**
+     * Gets categories
+     *
+     * @return array<string,string>|null
+     */
+    public function getCategories()
+    {
+        return $this->container['categories'];
+    }
+
+    /**
+     * Sets categories
+     *
+     * @param array<string,string>|null $categories categories
+     *
+     * @return self
+     */
+    public function setCategories($categories)
+    {
+        if (is_null($categories)) {
+            throw new \InvalidArgumentException('non-nullable categories cannot be null');
+        }
+        $this->container['categories'] = $categories;
+
+        return $this;
+    }
+
+    /**
+     * Gets countries
+     *
+     * @return array<string,string>|null
+     */
+    public function getCountries()
+    {
+        return $this->container['countries'];
+    }
+
+    /**
+     * Sets countries
+     *
+     * @param array<string,string>|null $countries countries
+     *
+     * @return self
+     */
+    public function setCountries($countries)
+    {
+        if (is_null($countries)) {
+            throw new \InvalidArgumentException('non-nullable countries cannot be null');
+        }
+        $this->container['countries'] = $countries;
+
+        return $this;
+    }
+
+    /**
+     * Gets payout_methods
+     *
+     * @return array<string,string>|null
+     */
+    public function getPayoutMethods()
+    {
+        return $this->container['payout_methods'];
+    }
+
+    /**
+     * Sets payout_methods
+     *
+     * @param array<string,string>|null $payout_methods payout_methods
+     *
+     * @return self
+     */
+    public function setPayoutMethods($payout_methods)
+    {
+        if (is_null($payout_methods)) {
+            throw new \InvalidArgumentException('non-nullable payout_methods cannot be null');
+        }
+        $this->container['payout_methods'] = $payout_methods;
+
+        return $this;
+    }
+
+    /**
+     * Gets targeting_modes
+     *
+     * @return array<string,string>|null
+     */
+    public function getTargetingModes()
+    {
+        return $this->container['targeting_modes'];
+    }
+
+    /**
+     * Sets targeting_modes
+     *
+     * @param array<string,string>|null $targeting_modes targeting_modes
+     *
+     * @return self
+     */
+    public function setTargetingModes($targeting_modes)
+    {
+        if (is_null($targeting_modes)) {
+            throw new \InvalidArgumentException('non-nullable targeting_modes cannot be null');
+        }
+        $this->container['targeting_modes'] = $targeting_modes;
+
+        return $this;
+    }
+
+    /**
+     * Gets devices
+     *
+     * @return array<string,string>|null
+     */
+    public function getDevices()
+    {
+        return $this->container['devices'];
+    }
+
+    /**
+     * Sets devices
+     *
+     * @param array<string,string>|null $devices devices
+     *
+     * @return self
+     */
+    public function setDevices($devices)
+    {
+        if (is_null($devices)) {
+            throw new \InvalidArgumentException('non-nullable devices cannot be null');
+        }
+        $this->container['devices'] = $devices;
+
+        return $this;
+    }
+
+    /**
+     * Gets os
+     *
+     * @return array<string,string>|null
+     */
+    public function getOs()
+    {
+        return $this->container['os'];
+    }
+
+    /**
+     * Sets os
+     *
+     * @param array<string,string>|null $os os
+     *
+     * @return self
+     */
+    public function setOs($os)
+    {
+        if (is_null($os)) {
+            throw new \InvalidArgumentException('non-nullable os cannot be null');
+        }
+        $this->container['os'] = $os;
+
+        return $this;
+    }
+
+    /**
+     * Gets browsers
+     *
+     * @return array<string,string>|null
+     */
+    public function getBrowsers()
+    {
+        return $this->container['browsers'];
+    }
+
+    /**
+     * Sets browsers
+     *
+     * @param array<string,string>|null $browsers browsers
+     *
+     * @return self
+     */
+    public function setBrowsers($browsers)
+    {
+        if (is_null($browsers)) {
+            throw new \InvalidArgumentException('non-nullable browsers cannot be null');
+        }
+        $this->container['browsers'] = $browsers;
 
         return $this;
     }

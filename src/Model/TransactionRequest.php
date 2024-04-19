@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -56,7 +56,7 @@ class TransactionRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'iduser' => 'int',
         'idtransactiontype' => 'int',
         'amount' => 'float',
-        'description' => 'string',
+        'descr' => 'string',
         'created_datetime' => 'string'
     ];
 
@@ -71,9 +71,29 @@ class TransactionRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'iduser' => null,
         'idtransactiontype' => null,
         'amount' => null,
-        'description' => null,
+        'descr' => null,
         'created_datetime' => null
     ];
+
+    /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'iduser' => false,
+        'idtransactiontype' => false,
+        'amount' => false,
+        'descr' => false,
+        'created_datetime' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -96,6 +116,58 @@ class TransactionRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     }
 
     /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+    }
+
+    /**
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
@@ -105,7 +177,7 @@ class TransactionRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'iduser' => 'iduser',
         'idtransactiontype' => 'idtransactiontype',
         'amount' => 'amount',
-        'description' => 'description',
+        'descr' => 'descr',
         'created_datetime' => 'created_datetime'
     ];
 
@@ -118,7 +190,7 @@ class TransactionRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'iduser' => 'setIduser',
         'idtransactiontype' => 'setIdtransactiontype',
         'amount' => 'setAmount',
-        'description' => 'setDescription',
+        'descr' => 'setDescr',
         'created_datetime' => 'setCreatedDatetime'
     ];
 
@@ -131,7 +203,7 @@ class TransactionRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         'iduser' => 'getIduser',
         'idtransactiontype' => 'getIdtransactiontype',
         'amount' => 'getAmount',
-        'description' => 'getDescription',
+        'descr' => 'getDescr',
         'created_datetime' => 'getCreatedDatetime'
     ];
 
@@ -176,6 +248,37 @@ class TransactionRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         return self::$openAPIModelName;
     }
 
+    public const IDTRANSACTIONTYPE_1 = 1;
+    public const IDTRANSACTIONTYPE_2 = 2;
+    public const IDTRANSACTIONTYPE_3 = 3;
+    public const IDTRANSACTIONTYPE_4 = 4;
+    public const IDTRANSACTIONTYPE_5 = 5;
+    public const IDTRANSACTIONTYPE_6 = 6;
+    public const IDTRANSACTIONTYPE_8 = 8;
+    public const IDTRANSACTIONTYPE_9 = 9;
+    public const IDTRANSACTIONTYPE_10 = 10;
+    public const IDTRANSACTIONTYPE_11 = 11;
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getIdtransactiontypeAllowableValues()
+    {
+        return [
+            self::IDTRANSACTIONTYPE_1,
+            self::IDTRANSACTIONTYPE_2,
+            self::IDTRANSACTIONTYPE_3,
+            self::IDTRANSACTIONTYPE_4,
+            self::IDTRANSACTIONTYPE_5,
+            self::IDTRANSACTIONTYPE_6,
+            self::IDTRANSACTIONTYPE_8,
+            self::IDTRANSACTIONTYPE_9,
+            self::IDTRANSACTIONTYPE_10,
+            self::IDTRANSACTIONTYPE_11,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -192,11 +295,29 @@ class TransactionRequest implements ModelInterface, ArrayAccess, \JsonSerializab
      */
     public function __construct(array $data = null)
     {
-        $this->container['iduser'] = $data['iduser'] ?? null;
-        $this->container['idtransactiontype'] = $data['idtransactiontype'] ?? null;
-        $this->container['amount'] = $data['amount'] ?? null;
-        $this->container['description'] = $data['description'] ?? null;
-        $this->container['created_datetime'] = $data['created_datetime'] ?? null;
+        $this->setIfExists('iduser', $data ?? [], null);
+        $this->setIfExists('idtransactiontype', $data ?? [], null);
+        $this->setIfExists('amount', $data ?? [], null);
+        $this->setIfExists('descr', $data ?? [], null);
+        $this->setIfExists('created_datetime', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -214,11 +335,17 @@ class TransactionRequest implements ModelInterface, ArrayAccess, \JsonSerializab
         if ($this->container['idtransactiontype'] === null) {
             $invalidProperties[] = "'idtransactiontype' can't be null";
         }
+        $allowedValues = $this->getIdtransactiontypeAllowableValues();
+        if (!is_null($this->container['idtransactiontype']) && !in_array($this->container['idtransactiontype'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'idtransactiontype', must be one of '%s'",
+                $this->container['idtransactiontype'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         if ($this->container['amount'] === null) {
             $invalidProperties[] = "'amount' can't be null";
-        }
-        if ($this->container['description'] === null) {
-            $invalidProperties[] = "'description' can't be null";
         }
         return $invalidProperties;
     }
@@ -254,6 +381,9 @@ class TransactionRequest implements ModelInterface, ArrayAccess, \JsonSerializab
      */
     public function setIduser($iduser)
     {
+        if (is_null($iduser)) {
+            throw new \InvalidArgumentException('non-nullable iduser cannot be null');
+        }
         $this->container['iduser'] = $iduser;
 
         return $this;
@@ -272,12 +402,25 @@ class TransactionRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets idtransactiontype
      *
-     * @param int $idtransactiontype transaction types can be obtained in /dict method
+     * @param int $idtransactiontype Types:   * 1 - Deposit   * 2 - Billing   * 3 - Payout   * 4 - Refund   * 5 - Adv.other IN   * 6 - Adv.other OUT   * 8 - Revenue   * 9 - Pub.reward   * 10 - Pub.other IN   * 11 - Pub.other OUT
      *
      * @return self
      */
     public function setIdtransactiontype($idtransactiontype)
     {
+        if (is_null($idtransactiontype)) {
+            throw new \InvalidArgumentException('non-nullable idtransactiontype cannot be null');
+        }
+        $allowedValues = $this->getIdtransactiontypeAllowableValues();
+        if (!in_array($idtransactiontype, $allowedValues, true)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value '%s' for 'idtransactiontype', must be one of '%s'",
+                    $idtransactiontype,
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
         $this->container['idtransactiontype'] = $idtransactiontype;
 
         return $this;
@@ -302,31 +445,37 @@ class TransactionRequest implements ModelInterface, ArrayAccess, \JsonSerializab
      */
     public function setAmount($amount)
     {
+        if (is_null($amount)) {
+            throw new \InvalidArgumentException('non-nullable amount cannot be null');
+        }
         $this->container['amount'] = $amount;
 
         return $this;
     }
 
     /**
-     * Gets description
+     * Gets descr
      *
-     * @return string
+     * @return string|null
      */
-    public function getDescription()
+    public function getDescr()
     {
-        return $this->container['description'];
+        return $this->container['descr'];
     }
 
     /**
-     * Sets description
+     * Sets descr
      *
-     * @param string $description description
+     * @param string|null $descr descr
      *
      * @return self
      */
-    public function setDescription($description)
+    public function setDescr($descr)
     {
-        $this->container['description'] = $description;
+        if (is_null($descr)) {
+            throw new \InvalidArgumentException('non-nullable descr cannot be null');
+        }
+        $this->container['descr'] = $descr;
 
         return $this;
     }
@@ -344,12 +493,15 @@ class TransactionRequest implements ModelInterface, ArrayAccess, \JsonSerializab
     /**
      * Sets created_datetime
      *
-     * @param string|null $created_datetime Format: 2021-02-28 10:11:12
+     * @param string|null $created_datetime Format: YYYY-MM-DD HH:MM:SS
      *
      * @return self
      */
     public function setCreatedDatetime($created_datetime)
     {
+        if (is_null($created_datetime)) {
+            throw new \InvalidArgumentException('non-nullable created_datetime cannot be null');
+        }
         $this->container['created_datetime'] = $created_datetime;
 
         return $this;

@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -54,7 +54,7 @@ class Transaction implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPITypes = [
         'id' => 'int',
-        'user' => 'object',
+        'user' => '\Adserver\Model\UserBase',
         'type' => 'object',
         'direction' => 'string',
         'amount' => 'float',
@@ -82,6 +82,29 @@ class Transaction implements ModelInterface, ArrayAccess, \JsonSerializable
     ];
 
     /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'id' => false,
+        'user' => false,
+        'type' => false,
+        'direction' => false,
+        'amount' => false,
+        'descr' => false,
+        'created_at' => false,
+        'updated_at' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
+
+    /**
      * Array of property to type mappings. Used for (de)serialization
      *
      * @return array
@@ -99,6 +122,58 @@ class Transaction implements ModelInterface, ArrayAccess, \JsonSerializable
     public static function openAPIFormats()
     {
         return self::$openAPIFormats;
+    }
+
+    /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
     }
 
     /**
@@ -207,14 +282,32 @@ class Transaction implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['id'] = $data['id'] ?? null;
-        $this->container['user'] = $data['user'] ?? null;
-        $this->container['type'] = $data['type'] ?? null;
-        $this->container['direction'] = $data['direction'] ?? null;
-        $this->container['amount'] = $data['amount'] ?? null;
-        $this->container['descr'] = $data['descr'] ?? null;
-        $this->container['created_at'] = $data['created_at'] ?? null;
-        $this->container['updated_at'] = $data['updated_at'] ?? null;
+        $this->setIfExists('id', $data ?? [], null);
+        $this->setIfExists('user', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
+        $this->setIfExists('direction', $data ?? [], null);
+        $this->setIfExists('amount', $data ?? [], null);
+        $this->setIfExists('descr', $data ?? [], null);
+        $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('updated_at', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -260,6 +353,9 @@ class Transaction implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setId($id)
     {
+        if (is_null($id)) {
+            throw new \InvalidArgumentException('non-nullable id cannot be null');
+        }
         $this->container['id'] = $id;
 
         return $this;
@@ -268,7 +364,7 @@ class Transaction implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets user
      *
-     * @return object|null
+     * @return \Adserver\Model\UserBase|null
      */
     public function getUser()
     {
@@ -278,12 +374,15 @@ class Transaction implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets user
      *
-     * @param object|null $user user
+     * @param \Adserver\Model\UserBase|null $user user
      *
      * @return self
      */
     public function setUser($user)
     {
+        if (is_null($user)) {
+            throw new \InvalidArgumentException('non-nullable user cannot be null');
+        }
         $this->container['user'] = $user;
 
         return $this;
@@ -308,6 +407,9 @@ class Transaction implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setType($type)
     {
+        if (is_null($type)) {
+            throw new \InvalidArgumentException('non-nullable type cannot be null');
+        }
         $this->container['type'] = $type;
 
         return $this;
@@ -332,6 +434,9 @@ class Transaction implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setDirection($direction)
     {
+        if (is_null($direction)) {
+            throw new \InvalidArgumentException('non-nullable direction cannot be null');
+        }
         $this->container['direction'] = $direction;
 
         return $this;
@@ -356,6 +461,9 @@ class Transaction implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setAmount($amount)
     {
+        if (is_null($amount)) {
+            throw new \InvalidArgumentException('non-nullable amount cannot be null');
+        }
         $this->container['amount'] = $amount;
 
         return $this;
@@ -380,6 +488,9 @@ class Transaction implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setDescr($descr)
     {
+        if (is_null($descr)) {
+            throw new \InvalidArgumentException('non-nullable descr cannot be null');
+        }
         $this->container['descr'] = $descr;
 
         return $this;
@@ -404,6 +515,9 @@ class Transaction implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setCreatedAt($created_at)
     {
+        if (is_null($created_at)) {
+            throw new \InvalidArgumentException('non-nullable created_at cannot be null');
+        }
         $this->container['created_at'] = $created_at;
 
         return $this;
@@ -428,6 +542,9 @@ class Transaction implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setUpdatedAt($updated_at)
     {
+        if (is_null($updated_at)) {
+            throw new \InvalidArgumentException('non-nullable updated_at cannot be null');
+        }
         $this->container['updated_at'] = $updated_at;
 
         return $this;

@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -65,6 +65,22 @@ class PubZonesApi
      */
     protected $hostIndex;
 
+    /** @var string[] $contentTypes **/
+    public const contentTypes = [
+        'pubCreateZone' => [
+            'application/json',
+        ],
+        'pubDeleteZone' => [
+            'application/json',
+        ],
+        'pubGetZone' => [
+            'application/json',
+        ],
+        'pubUpdateZone' => [
+            'application/json',
+        ],
+    ];
+
     /**
      * @param ClientInterface $client
      * @param Configuration   $config
@@ -118,14 +134,15 @@ class PubZonesApi
      *
      * @param  int $idsite idsite (required)
      * @param  \Adserver\Model\PubZoneRequest $pub_zone_request pub_zone_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubCreateZone'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Zone|\Adserver\Model\FormErrorResponse
      */
-    public function pubCreateZone($idsite, $pub_zone_request)
+    public function pubCreateZone($idsite, $pub_zone_request, string $contentType = self::contentTypes['pubCreateZone'][0])
     {
-        list($response) = $this->pubCreateZoneWithHttpInfo($idsite, $pub_zone_request);
+        list($response) = $this->pubCreateZoneWithHttpInfo($idsite, $pub_zone_request, $contentType);
         return $response;
     }
 
@@ -136,14 +153,15 @@ class PubZonesApi
      *
      * @param  int $idsite (required)
      * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubCreateZone'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Zone|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubCreateZoneWithHttpInfo($idsite, $pub_zone_request)
+    public function pubCreateZoneWithHttpInfo($idsite, $pub_zone_request, string $contentType = self::contentTypes['pubCreateZone'][0])
     {
-        $request = $this->pubCreateZoneRequest($idsite, $pub_zone_request);
+        $request = $this->pubCreateZoneRequest($idsite, $pub_zone_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -187,7 +205,19 @@ class PubZonesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Zone' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -202,7 +232,19 @@ class PubZonesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -219,7 +261,19 @@ class PubZonesApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -259,13 +313,14 @@ class PubZonesApi
      *
      * @param  int $idsite (required)
      * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubCreateZone'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubCreateZoneAsync($idsite, $pub_zone_request)
+    public function pubCreateZoneAsync($idsite, $pub_zone_request, string $contentType = self::contentTypes['pubCreateZone'][0])
     {
-        return $this->pubCreateZoneAsyncWithHttpInfo($idsite, $pub_zone_request)
+        return $this->pubCreateZoneAsyncWithHttpInfo($idsite, $pub_zone_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -280,14 +335,15 @@ class PubZonesApi
      *
      * @param  int $idsite (required)
      * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubCreateZone'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubCreateZoneAsyncWithHttpInfo($idsite, $pub_zone_request)
+    public function pubCreateZoneAsyncWithHttpInfo($idsite, $pub_zone_request, string $contentType = self::contentTypes['pubCreateZone'][0])
     {
         $returnType = '\Adserver\Model\Zone';
-        $request = $this->pubCreateZoneRequest($idsite, $pub_zone_request);
+        $request = $this->pubCreateZoneRequest($idsite, $pub_zone_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -330,24 +386,28 @@ class PubZonesApi
      *
      * @param  int $idsite (required)
      * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubCreateZone'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function pubCreateZoneRequest($idsite, $pub_zone_request)
+    public function pubCreateZoneRequest($idsite, $pub_zone_request, string $contentType = self::contentTypes['pubCreateZone'][0])
     {
+
         // verify the required parameter 'idsite' is set
         if ($idsite === null || (is_array($idsite) && count($idsite) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $idsite when calling pubCreateZone'
             );
         }
+
         // verify the required parameter 'pub_zone_request' is set
         if ($pub_zone_request === null || (is_array($pub_zone_request) && count($pub_zone_request) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $pub_zone_request when calling pubCreateZone'
             );
         }
+
 
         $resourcePath = '/publish/zone';
         $formParams = [];
@@ -369,21 +429,17 @@ class PubZonesApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (isset($pub_zone_request)) {
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($pub_zone_request));
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($pub_zone_request));
             } else {
                 $httpBody = $pub_zone_request;
             }
@@ -402,9 +458,9 @@ class PubZonesApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -427,10 +483,11 @@ class PubZonesApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -442,14 +499,15 @@ class PubZonesApi
      * Delete zone
      *
      * @param  int $id id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubDeleteZone'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function pubDeleteZone($id)
+    public function pubDeleteZone($id, string $contentType = self::contentTypes['pubDeleteZone'][0])
     {
-        $this->pubDeleteZoneWithHttpInfo($id);
+        $this->pubDeleteZoneWithHttpInfo($id, $contentType);
     }
 
     /**
@@ -458,14 +516,15 @@ class PubZonesApi
      * Delete zone
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubDeleteZone'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubDeleteZoneWithHttpInfo($id)
+    public function pubDeleteZoneWithHttpInfo($id, string $contentType = self::contentTypes['pubDeleteZone'][0])
     {
-        $request = $this->pubDeleteZoneRequest($id);
+        $request = $this->pubDeleteZoneRequest($id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -517,13 +576,14 @@ class PubZonesApi
      * Delete zone
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubDeleteZone'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubDeleteZoneAsync($id)
+    public function pubDeleteZoneAsync($id, string $contentType = self::contentTypes['pubDeleteZone'][0])
     {
-        return $this->pubDeleteZoneAsyncWithHttpInfo($id)
+        return $this->pubDeleteZoneAsyncWithHttpInfo($id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -537,14 +597,15 @@ class PubZonesApi
      * Delete zone
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubDeleteZone'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubDeleteZoneAsyncWithHttpInfo($id)
+    public function pubDeleteZoneAsyncWithHttpInfo($id, string $contentType = self::contentTypes['pubDeleteZone'][0])
     {
         $returnType = '';
-        $request = $this->pubDeleteZoneRequest($id);
+        $request = $this->pubDeleteZoneRequest($id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -573,18 +634,21 @@ class PubZonesApi
      * Create request for operation 'pubDeleteZone'
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubDeleteZone'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function pubDeleteZoneRequest($id)
+    public function pubDeleteZoneRequest($id, string $contentType = self::contentTypes['pubDeleteZone'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling pubDeleteZone'
             );
         }
+
 
         $resourcePath = '/publish/zone/{id}';
         $formParams = [];
@@ -605,16 +669,11 @@ class PubZonesApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                []
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                [],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            [],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -632,9 +691,9 @@ class PubZonesApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -657,10 +716,11 @@ class PubZonesApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'DELETE',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -672,14 +732,15 @@ class PubZonesApi
      * Get zone
      *
      * @param  int $id id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetZone'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Zone
      */
-    public function pubGetZone($id)
+    public function pubGetZone($id, string $contentType = self::contentTypes['pubGetZone'][0])
     {
-        list($response) = $this->pubGetZoneWithHttpInfo($id);
+        list($response) = $this->pubGetZoneWithHttpInfo($id, $contentType);
         return $response;
     }
 
@@ -689,14 +750,15 @@ class PubZonesApi
      * Get zone
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetZone'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Zone, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubGetZoneWithHttpInfo($id)
+    public function pubGetZoneWithHttpInfo($id, string $contentType = self::contentTypes['pubGetZone'][0])
     {
-        $request = $this->pubGetZoneRequest($id);
+        $request = $this->pubGetZoneRequest($id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -740,7 +802,19 @@ class PubZonesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Zone' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -757,7 +831,19 @@ class PubZonesApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -788,13 +874,14 @@ class PubZonesApi
      * Get zone
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetZone'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetZoneAsync($id)
+    public function pubGetZoneAsync($id, string $contentType = self::contentTypes['pubGetZone'][0])
     {
-        return $this->pubGetZoneAsyncWithHttpInfo($id)
+        return $this->pubGetZoneAsyncWithHttpInfo($id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -808,14 +895,15 @@ class PubZonesApi
      * Get zone
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetZone'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetZoneAsyncWithHttpInfo($id)
+    public function pubGetZoneAsyncWithHttpInfo($id, string $contentType = self::contentTypes['pubGetZone'][0])
     {
         $returnType = '\Adserver\Model\Zone';
-        $request = $this->pubGetZoneRequest($id);
+        $request = $this->pubGetZoneRequest($id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -857,18 +945,21 @@ class PubZonesApi
      * Create request for operation 'pubGetZone'
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetZone'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function pubGetZoneRequest($id)
+    public function pubGetZoneRequest($id, string $contentType = self::contentTypes['pubGetZone'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling pubGetZone'
             );
         }
+
 
         $resourcePath = '/publish/zone/{id}';
         $formParams = [];
@@ -889,16 +980,11 @@ class PubZonesApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -916,9 +1002,9 @@ class PubZonesApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -941,10 +1027,11 @@ class PubZonesApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -957,14 +1044,15 @@ class PubZonesApi
      *
      * @param  int $id id (required)
      * @param  \Adserver\Model\PubZoneRequest $pub_zone_request pub_zone_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubUpdateZone'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Zone|\Adserver\Model\FormErrorResponse
      */
-    public function pubUpdateZone($id, $pub_zone_request)
+    public function pubUpdateZone($id, $pub_zone_request, string $contentType = self::contentTypes['pubUpdateZone'][0])
     {
-        list($response) = $this->pubUpdateZoneWithHttpInfo($id, $pub_zone_request);
+        list($response) = $this->pubUpdateZoneWithHttpInfo($id, $pub_zone_request, $contentType);
         return $response;
     }
 
@@ -975,14 +1063,15 @@ class PubZonesApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubUpdateZone'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Zone|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubUpdateZoneWithHttpInfo($id, $pub_zone_request)
+    public function pubUpdateZoneWithHttpInfo($id, $pub_zone_request, string $contentType = self::contentTypes['pubUpdateZone'][0])
     {
-        $request = $this->pubUpdateZoneRequest($id, $pub_zone_request);
+        $request = $this->pubUpdateZoneRequest($id, $pub_zone_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1026,7 +1115,19 @@ class PubZonesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Zone' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1041,7 +1142,19 @@ class PubZonesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1058,7 +1171,19 @@ class PubZonesApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -1098,13 +1223,14 @@ class PubZonesApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubUpdateZone'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubUpdateZoneAsync($id, $pub_zone_request)
+    public function pubUpdateZoneAsync($id, $pub_zone_request, string $contentType = self::contentTypes['pubUpdateZone'][0])
     {
-        return $this->pubUpdateZoneAsyncWithHttpInfo($id, $pub_zone_request)
+        return $this->pubUpdateZoneAsyncWithHttpInfo($id, $pub_zone_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1119,14 +1245,15 @@ class PubZonesApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubUpdateZone'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubUpdateZoneAsyncWithHttpInfo($id, $pub_zone_request)
+    public function pubUpdateZoneAsyncWithHttpInfo($id, $pub_zone_request, string $contentType = self::contentTypes['pubUpdateZone'][0])
     {
         $returnType = '\Adserver\Model\Zone';
-        $request = $this->pubUpdateZoneRequest($id, $pub_zone_request);
+        $request = $this->pubUpdateZoneRequest($id, $pub_zone_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1169,24 +1296,28 @@ class PubZonesApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\PubZoneRequest $pub_zone_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubUpdateZone'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function pubUpdateZoneRequest($id, $pub_zone_request)
+    public function pubUpdateZoneRequest($id, $pub_zone_request, string $contentType = self::contentTypes['pubUpdateZone'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling pubUpdateZone'
             );
         }
+
         // verify the required parameter 'pub_zone_request' is set
         if ($pub_zone_request === null || (is_array($pub_zone_request) && count($pub_zone_request) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $pub_zone_request when calling pubUpdateZone'
             );
         }
+
 
         $resourcePath = '/publish/zone/{id}';
         $formParams = [];
@@ -1207,21 +1338,17 @@ class PubZonesApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (isset($pub_zone_request)) {
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($pub_zone_request));
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($pub_zone_request));
             } else {
                 $httpBody = $pub_zone_request;
             }
@@ -1240,9 +1367,9 @@ class PubZonesApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1265,10 +1392,11 @@ class PubZonesApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'PUT',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );

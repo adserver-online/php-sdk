@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -60,6 +60,12 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
         'is_active' => 'bool',
         'format' => 'object',
         'code' => 'object[]',
+        'revenue_model' => 'object',
+        'revenue_rate' => 'float',
+        'dimension' => 'object',
+        'width' => 'string',
+        'height' => 'string',
+        'assigned_zones' => 'object[]',
         'created_at' => 'string',
         'updated_at' => 'string'
     ];
@@ -79,9 +85,45 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
         'is_active' => null,
         'format' => null,
         'code' => null,
+        'revenue_model' => null,
+        'revenue_rate' => null,
+        'dimension' => null,
+        'width' => null,
+        'height' => null,
+        'assigned_zones' => null,
         'created_at' => null,
         'updated_at' => null
     ];
+
+    /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'id' => false,
+        'site' => false,
+        'name' => false,
+        'status' => false,
+        'is_active' => false,
+        'format' => false,
+        'code' => false,
+        'revenue_model' => false,
+        'revenue_rate' => false,
+        'dimension' => false,
+        'width' => false,
+        'height' => false,
+        'assigned_zones' => false,
+        'created_at' => false,
+        'updated_at' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -104,6 +146,58 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+    }
+
+    /**
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
@@ -117,6 +211,12 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
         'is_active' => 'is_active',
         'format' => 'format',
         'code' => 'code',
+        'revenue_model' => 'revenue_model',
+        'revenue_rate' => 'revenue_rate',
+        'dimension' => 'dimension',
+        'width' => 'width',
+        'height' => 'height',
+        'assigned_zones' => 'assigned_zones',
         'created_at' => 'created_at',
         'updated_at' => 'updated_at'
     ];
@@ -134,6 +234,12 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
         'is_active' => 'setIsActive',
         'format' => 'setFormat',
         'code' => 'setCode',
+        'revenue_model' => 'setRevenueModel',
+        'revenue_rate' => 'setRevenueRate',
+        'dimension' => 'setDimension',
+        'width' => 'setWidth',
+        'height' => 'setHeight',
+        'assigned_zones' => 'setAssignedZones',
         'created_at' => 'setCreatedAt',
         'updated_at' => 'setUpdatedAt'
     ];
@@ -151,6 +257,12 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
         'is_active' => 'getIsActive',
         'format' => 'getFormat',
         'code' => 'getCode',
+        'revenue_model' => 'getRevenueModel',
+        'revenue_rate' => 'getRevenueRate',
+        'dimension' => 'getDimension',
+        'width' => 'getWidth',
+        'height' => 'getHeight',
+        'assigned_zones' => 'getAssignedZones',
         'created_at' => 'getCreatedAt',
         'updated_at' => 'getUpdatedAt'
     ];
@@ -212,15 +324,39 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['id'] = $data['id'] ?? null;
-        $this->container['site'] = $data['site'] ?? null;
-        $this->container['name'] = $data['name'] ?? null;
-        $this->container['status'] = $data['status'] ?? null;
-        $this->container['is_active'] = $data['is_active'] ?? null;
-        $this->container['format'] = $data['format'] ?? null;
-        $this->container['code'] = $data['code'] ?? null;
-        $this->container['created_at'] = $data['created_at'] ?? null;
-        $this->container['updated_at'] = $data['updated_at'] ?? null;
+        $this->setIfExists('id', $data ?? [], null);
+        $this->setIfExists('site', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('is_active', $data ?? [], null);
+        $this->setIfExists('format', $data ?? [], null);
+        $this->setIfExists('code', $data ?? [], null);
+        $this->setIfExists('revenue_model', $data ?? [], null);
+        $this->setIfExists('revenue_rate', $data ?? [], null);
+        $this->setIfExists('dimension', $data ?? [], null);
+        $this->setIfExists('width', $data ?? [], null);
+        $this->setIfExists('height', $data ?? [], null);
+        $this->setIfExists('assigned_zones', $data ?? [], null);
+        $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('updated_at', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -266,6 +402,9 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setId($id)
     {
+        if (is_null($id)) {
+            throw new \InvalidArgumentException('non-nullable id cannot be null');
+        }
         $this->container['id'] = $id;
 
         return $this;
@@ -290,6 +429,9 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setSite($site)
     {
+        if (is_null($site)) {
+            throw new \InvalidArgumentException('non-nullable site cannot be null');
+        }
         $this->container['site'] = $site;
 
         return $this;
@@ -314,6 +456,9 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setName($name)
     {
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
+        }
         $this->container['name'] = $name;
 
         return $this;
@@ -338,6 +483,9 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setStatus($status)
     {
+        if (is_null($status)) {
+            throw new \InvalidArgumentException('non-nullable status cannot be null');
+        }
         $this->container['status'] = $status;
 
         return $this;
@@ -362,6 +510,9 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setIsActive($is_active)
     {
+        if (is_null($is_active)) {
+            throw new \InvalidArgumentException('non-nullable is_active cannot be null');
+        }
         $this->container['is_active'] = $is_active;
 
         return $this;
@@ -386,6 +537,9 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setFormat($format)
     {
+        if (is_null($format)) {
+            throw new \InvalidArgumentException('non-nullable format cannot be null');
+        }
         $this->container['format'] = $format;
 
         return $this;
@@ -410,7 +564,172 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setCode($code)
     {
+        if (is_null($code)) {
+            throw new \InvalidArgumentException('non-nullable code cannot be null');
+        }
         $this->container['code'] = $code;
+
+        return $this;
+    }
+
+    /**
+     * Gets revenue_model
+     *
+     * @return object|null
+     */
+    public function getRevenueModel()
+    {
+        return $this->container['revenue_model'];
+    }
+
+    /**
+     * Sets revenue_model
+     *
+     * @param object|null $revenue_model revenue_model
+     *
+     * @return self
+     */
+    public function setRevenueModel($revenue_model)
+    {
+        if (is_null($revenue_model)) {
+            throw new \InvalidArgumentException('non-nullable revenue_model cannot be null');
+        }
+        $this->container['revenue_model'] = $revenue_model;
+
+        return $this;
+    }
+
+    /**
+     * Gets revenue_rate
+     *
+     * @return float|null
+     */
+    public function getRevenueRate()
+    {
+        return $this->container['revenue_rate'];
+    }
+
+    /**
+     * Sets revenue_rate
+     *
+     * @param float|null $revenue_rate revenue_rate
+     *
+     * @return self
+     */
+    public function setRevenueRate($revenue_rate)
+    {
+        if (is_null($revenue_rate)) {
+            throw new \InvalidArgumentException('non-nullable revenue_rate cannot be null');
+        }
+        $this->container['revenue_rate'] = $revenue_rate;
+
+        return $this;
+    }
+
+    /**
+     * Gets dimension
+     *
+     * @return object|null
+     */
+    public function getDimension()
+    {
+        return $this->container['dimension'];
+    }
+
+    /**
+     * Sets dimension
+     *
+     * @param object|null $dimension dimension
+     *
+     * @return self
+     */
+    public function setDimension($dimension)
+    {
+        if (is_null($dimension)) {
+            throw new \InvalidArgumentException('non-nullable dimension cannot be null');
+        }
+        $this->container['dimension'] = $dimension;
+
+        return $this;
+    }
+
+    /**
+     * Gets width
+     *
+     * @return string|null
+     */
+    public function getWidth()
+    {
+        return $this->container['width'];
+    }
+
+    /**
+     * Sets width
+     *
+     * @param string|null $width width
+     *
+     * @return self
+     */
+    public function setWidth($width)
+    {
+        if (is_null($width)) {
+            throw new \InvalidArgumentException('non-nullable width cannot be null');
+        }
+        $this->container['width'] = $width;
+
+        return $this;
+    }
+
+    /**
+     * Gets height
+     *
+     * @return string|null
+     */
+    public function getHeight()
+    {
+        return $this->container['height'];
+    }
+
+    /**
+     * Sets height
+     *
+     * @param string|null $height height
+     *
+     * @return self
+     */
+    public function setHeight($height)
+    {
+        if (is_null($height)) {
+            throw new \InvalidArgumentException('non-nullable height cannot be null');
+        }
+        $this->container['height'] = $height;
+
+        return $this;
+    }
+
+    /**
+     * Gets assigned_zones
+     *
+     * @return object[]|null
+     */
+    public function getAssignedZones()
+    {
+        return $this->container['assigned_zones'];
+    }
+
+    /**
+     * Sets assigned_zones
+     *
+     * @param object[]|null $assigned_zones assigned_zones
+     *
+     * @return self
+     */
+    public function setAssignedZones($assigned_zones)
+    {
+        if (is_null($assigned_zones)) {
+            throw new \InvalidArgumentException('non-nullable assigned_zones cannot be null');
+        }
+        $this->container['assigned_zones'] = $assigned_zones;
 
         return $this;
     }
@@ -434,6 +753,9 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setCreatedAt($created_at)
     {
+        if (is_null($created_at)) {
+            throw new \InvalidArgumentException('non-nullable created_at cannot be null');
+        }
         $this->container['created_at'] = $created_at;
 
         return $this;
@@ -458,6 +780,9 @@ class Zone implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setUpdatedAt($updated_at)
     {
+        if (is_null($updated_at)) {
+            throw new \InvalidArgumentException('non-nullable updated_at cannot be null');
+        }
         $this->container['updated_at'] = $updated_at;
 
         return $this;

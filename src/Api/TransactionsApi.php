@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -65,6 +65,19 @@ class TransactionsApi
      */
     protected $hostIndex;
 
+    /** @var string[] $contentTypes **/
+    public const contentTypes = [
+        'createTransaction' => [
+            'application/json',
+        ],
+        'getTransaction' => [
+            'application/json',
+        ],
+        'getTransactions' => [
+            'application/json',
+        ],
+    ];
+
     /**
      * @param ClientInterface $client
      * @param Configuration   $config
@@ -117,14 +130,15 @@ class TransactionsApi
      * Create transaction
      *
      * @param  \Adserver\Model\TransactionRequest $transaction_request transaction_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createTransaction'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Transaction|\Adserver\Model\FormErrorResponse
      */
-    public function createTransaction($transaction_request)
+    public function createTransaction($transaction_request, string $contentType = self::contentTypes['createTransaction'][0])
     {
-        list($response) = $this->createTransactionWithHttpInfo($transaction_request);
+        list($response) = $this->createTransactionWithHttpInfo($transaction_request, $contentType);
         return $response;
     }
 
@@ -134,14 +148,15 @@ class TransactionsApi
      * Create transaction
      *
      * @param  \Adserver\Model\TransactionRequest $transaction_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createTransaction'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Transaction|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function createTransactionWithHttpInfo($transaction_request)
+    public function createTransactionWithHttpInfo($transaction_request, string $contentType = self::contentTypes['createTransaction'][0])
     {
-        $request = $this->createTransactionRequest($transaction_request);
+        $request = $this->createTransactionRequest($transaction_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -185,7 +200,19 @@ class TransactionsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Transaction' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -200,7 +227,19 @@ class TransactionsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -217,7 +256,19 @@ class TransactionsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -256,13 +307,14 @@ class TransactionsApi
      * Create transaction
      *
      * @param  \Adserver\Model\TransactionRequest $transaction_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createTransaction'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createTransactionAsync($transaction_request)
+    public function createTransactionAsync($transaction_request, string $contentType = self::contentTypes['createTransaction'][0])
     {
-        return $this->createTransactionAsyncWithHttpInfo($transaction_request)
+        return $this->createTransactionAsyncWithHttpInfo($transaction_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -276,14 +328,15 @@ class TransactionsApi
      * Create transaction
      *
      * @param  \Adserver\Model\TransactionRequest $transaction_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createTransaction'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createTransactionAsyncWithHttpInfo($transaction_request)
+    public function createTransactionAsyncWithHttpInfo($transaction_request, string $contentType = self::contentTypes['createTransaction'][0])
     {
         $returnType = '\Adserver\Model\Transaction';
-        $request = $this->createTransactionRequest($transaction_request);
+        $request = $this->createTransactionRequest($transaction_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -325,18 +378,21 @@ class TransactionsApi
      * Create request for operation 'createTransaction'
      *
      * @param  \Adserver\Model\TransactionRequest $transaction_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createTransaction'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function createTransactionRequest($transaction_request)
+    public function createTransactionRequest($transaction_request, string $contentType = self::contentTypes['createTransaction'][0])
     {
+
         // verify the required parameter 'transaction_request' is set
         if ($transaction_request === null || (is_array($transaction_request) && count($transaction_request) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $transaction_request when calling createTransaction'
             );
         }
+
 
         $resourcePath = '/transaction';
         $formParams = [];
@@ -349,21 +405,17 @@ class TransactionsApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (isset($transaction_request)) {
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($transaction_request));
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($transaction_request));
             } else {
                 $httpBody = $transaction_request;
             }
@@ -382,9 +434,9 @@ class TransactionsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -407,10 +459,11 @@ class TransactionsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -422,14 +475,15 @@ class TransactionsApi
      * Get transaction
      *
      * @param  int $id id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTransaction'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Transaction
      */
-    public function getTransaction($id)
+    public function getTransaction($id, string $contentType = self::contentTypes['getTransaction'][0])
     {
-        list($response) = $this->getTransactionWithHttpInfo($id);
+        list($response) = $this->getTransactionWithHttpInfo($id, $contentType);
         return $response;
     }
 
@@ -439,14 +493,15 @@ class TransactionsApi
      * Get transaction
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTransaction'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Transaction, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getTransactionWithHttpInfo($id)
+    public function getTransactionWithHttpInfo($id, string $contentType = self::contentTypes['getTransaction'][0])
     {
-        $request = $this->getTransactionRequest($id);
+        $request = $this->getTransactionRequest($id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -490,7 +545,19 @@ class TransactionsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Transaction' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -507,7 +574,19 @@ class TransactionsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -538,13 +617,14 @@ class TransactionsApi
      * Get transaction
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTransaction'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getTransactionAsync($id)
+    public function getTransactionAsync($id, string $contentType = self::contentTypes['getTransaction'][0])
     {
-        return $this->getTransactionAsyncWithHttpInfo($id)
+        return $this->getTransactionAsyncWithHttpInfo($id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -558,14 +638,15 @@ class TransactionsApi
      * Get transaction
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTransaction'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getTransactionAsyncWithHttpInfo($id)
+    public function getTransactionAsyncWithHttpInfo($id, string $contentType = self::contentTypes['getTransaction'][0])
     {
         $returnType = '\Adserver\Model\Transaction';
-        $request = $this->getTransactionRequest($id);
+        $request = $this->getTransactionRequest($id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -607,18 +688,21 @@ class TransactionsApi
      * Create request for operation 'getTransaction'
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTransaction'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getTransactionRequest($id)
+    public function getTransactionRequest($id, string $contentType = self::contentTypes['getTransaction'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling getTransaction'
             );
         }
+
 
         $resourcePath = '/transaction/{id}';
         $formParams = [];
@@ -639,16 +723,11 @@ class TransactionsApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -666,9 +745,9 @@ class TransactionsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -691,10 +770,11 @@ class TransactionsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -709,14 +789,15 @@ class TransactionsApi
      * @param  int $per_page per_page (optional)
      * @param  string $sort sort (optional)
      * @param  object[] $filter Example: filter[iduser]&#x3D;123&amp;filter[created_at]&#x3D;2021-01-01 - 2021-04-01 (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTransactions'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Transaction[]
      */
-    public function getTransactions($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getTransactions($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getTransactions'][0])
     {
-        list($response) = $this->getTransactionsWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getTransactionsWithHttpInfo($page, $per_page, $sort, $filter, $contentType);
         return $response;
     }
 
@@ -729,14 +810,15 @@ class TransactionsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter Example: filter[iduser]&#x3D;123&amp;filter[created_at]&#x3D;2021-01-01 - 2021-04-01 (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTransactions'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Transaction[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getTransactionsWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getTransactionsWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getTransactions'][0])
     {
-        $request = $this->getTransactionsRequest($page, $per_page, $sort, $filter);
+        $request = $this->getTransactionsRequest($page, $per_page, $sort, $filter, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -780,7 +862,19 @@ class TransactionsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Transaction[]' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -797,7 +891,19 @@ class TransactionsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -831,13 +937,14 @@ class TransactionsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter Example: filter[iduser]&#x3D;123&amp;filter[created_at]&#x3D;2021-01-01 - 2021-04-01 (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTransactions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getTransactionsAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getTransactionsAsync($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getTransactions'][0])
     {
-        return $this->getTransactionsAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getTransactionsAsyncWithHttpInfo($page, $per_page, $sort, $filter, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -854,14 +961,15 @@ class TransactionsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter Example: filter[iduser]&#x3D;123&amp;filter[created_at]&#x3D;2021-01-01 - 2021-04-01 (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTransactions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getTransactionsAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getTransactionsAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getTransactions'][0])
     {
         $returnType = '\Adserver\Model\Transaction[]';
-        $request = $this->getTransactionsRequest($page, $per_page, $sort, $filter);
+        $request = $this->getTransactionsRequest($page, $per_page, $sort, $filter, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -906,12 +1014,18 @@ class TransactionsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter Example: filter[iduser]&#x3D;123&amp;filter[created_at]&#x3D;2021-01-01 - 2021-04-01 (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getTransactions'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getTransactionsRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getTransactionsRequest($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getTransactions'][0])
     {
+
+
+
+
+
 
         $resourcePath = '/transaction';
         $formParams = [];
@@ -960,16 +1074,11 @@ class TransactionsApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -987,9 +1096,9 @@ class TransactionsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1012,10 +1121,11 @@ class TransactionsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );

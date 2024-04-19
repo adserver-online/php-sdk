@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -65,6 +65,13 @@ class OtherApi
      */
     protected $hostIndex;
 
+    /** @var string[] $contentTypes **/
+    public const contentTypes = [
+        'getDictionaries' => [
+            'application/json',
+        ],
+    ];
+
     /**
      * @param ClientInterface $client
      * @param Configuration   $config
@@ -116,14 +123,15 @@ class OtherApi
      *
      * Data dictionaries
      *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDictionaries'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Dict
      */
-    public function getDictionaries()
+    public function getDictionaries(string $contentType = self::contentTypes['getDictionaries'][0])
     {
-        list($response) = $this->getDictionariesWithHttpInfo();
+        list($response) = $this->getDictionariesWithHttpInfo($contentType);
         return $response;
     }
 
@@ -132,14 +140,15 @@ class OtherApi
      *
      * Data dictionaries
      *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDictionaries'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Dict, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getDictionariesWithHttpInfo()
+    public function getDictionariesWithHttpInfo(string $contentType = self::contentTypes['getDictionaries'][0])
     {
-        $request = $this->getDictionariesRequest();
+        $request = $this->getDictionariesRequest($contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -183,7 +192,19 @@ class OtherApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Dict' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -200,7 +221,19 @@ class OtherApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -230,13 +263,14 @@ class OtherApi
      *
      * Data dictionaries
      *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDictionaries'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getDictionariesAsync()
+    public function getDictionariesAsync(string $contentType = self::contentTypes['getDictionaries'][0])
     {
-        return $this->getDictionariesAsyncWithHttpInfo()
+        return $this->getDictionariesAsyncWithHttpInfo($contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -249,14 +283,15 @@ class OtherApi
      *
      * Data dictionaries
      *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDictionaries'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getDictionariesAsyncWithHttpInfo()
+    public function getDictionariesAsyncWithHttpInfo(string $contentType = self::contentTypes['getDictionaries'][0])
     {
         $returnType = '\Adserver\Model\Dict';
-        $request = $this->getDictionariesRequest();
+        $request = $this->getDictionariesRequest($contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -297,12 +332,14 @@ class OtherApi
     /**
      * Create request for operation 'getDictionaries'
      *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getDictionaries'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getDictionariesRequest()
+    public function getDictionariesRequest(string $contentType = self::contentTypes['getDictionaries'][0])
     {
+
 
         $resourcePath = '/dict';
         $formParams = [];
@@ -315,16 +352,11 @@ class OtherApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -342,9 +374,9 @@ class OtherApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -367,10 +399,11 @@ class OtherApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );

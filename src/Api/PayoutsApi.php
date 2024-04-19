@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -65,6 +65,16 @@ class PayoutsApi
      */
     protected $hostIndex;
 
+    /** @var string[] $contentTypes **/
+    public const contentTypes = [
+        'createPayout' => [
+            'application/json',
+        ],
+        'getPayouts' => [
+            'application/json',
+        ],
+    ];
+
     /**
      * @param ClientInterface $client
      * @param Configuration   $config
@@ -112,6 +122,366 @@ class PayoutsApi
     }
 
     /**
+     * Operation createPayout
+     *
+     * Create payout
+     *
+     * @param  \Adserver\Model\PayoutRequest $payout_request payout_request (required)
+     * @param  int $check_amount 1 by default. Enables available amount check. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createPayout'] to see the possible values for this operation
+     *
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \Adserver\Model\Payout|\Adserver\Model\FormErrorResponse
+     */
+    public function createPayout($payout_request, $check_amount = null, string $contentType = self::contentTypes['createPayout'][0])
+    {
+        list($response) = $this->createPayoutWithHttpInfo($payout_request, $check_amount, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation createPayoutWithHttpInfo
+     *
+     * Create payout
+     *
+     * @param  \Adserver\Model\PayoutRequest $payout_request (required)
+     * @param  int $check_amount 1 by default. Enables available amount check. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createPayout'] to see the possible values for this operation
+     *
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \Adserver\Model\Payout|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function createPayoutWithHttpInfo($payout_request, $check_amount = null, string $contentType = self::contentTypes['createPayout'][0])
+    {
+        $request = $this->createPayoutRequest($payout_request, $check_amount, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            switch($statusCode) {
+                case 200:
+                    if ('\Adserver\Model\Payout' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\Payout' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\Adserver\Model\Payout', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 400:
+                    if ('\Adserver\Model\FormErrorResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\FormErrorResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\Adserver\Model\FormErrorResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = '\Adserver\Model\Payout';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Adserver\Model\Payout',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Adserver\Model\FormErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation createPayoutAsync
+     *
+     * Create payout
+     *
+     * @param  \Adserver\Model\PayoutRequest $payout_request (required)
+     * @param  int $check_amount 1 by default. Enables available amount check. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createPayout'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function createPayoutAsync($payout_request, $check_amount = null, string $contentType = self::contentTypes['createPayout'][0])
+    {
+        return $this->createPayoutAsyncWithHttpInfo($payout_request, $check_amount, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation createPayoutAsyncWithHttpInfo
+     *
+     * Create payout
+     *
+     * @param  \Adserver\Model\PayoutRequest $payout_request (required)
+     * @param  int $check_amount 1 by default. Enables available amount check. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createPayout'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function createPayoutAsyncWithHttpInfo($payout_request, $check_amount = null, string $contentType = self::contentTypes['createPayout'][0])
+    {
+        $returnType = '\Adserver\Model\Payout';
+        $request = $this->createPayoutRequest($payout_request, $check_amount, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'createPayout'
+     *
+     * @param  \Adserver\Model\PayoutRequest $payout_request (required)
+     * @param  int $check_amount 1 by default. Enables available amount check. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createPayout'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function createPayoutRequest($payout_request, $check_amount = null, string $contentType = self::contentTypes['createPayout'][0])
+    {
+
+        // verify the required parameter 'payout_request' is set
+        if ($payout_request === null || (is_array($payout_request) && count($payout_request) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $payout_request when calling createPayout'
+            );
+        }
+
+
+
+        $resourcePath = '/payout';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $check_amount,
+            'check_amount', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($payout_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($payout_request));
+            } else {
+                $httpBody = $payout_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation getPayouts
      *
      * Payouts list
@@ -120,14 +490,15 @@ class PayoutsApi
      * @param  int $per_page per_page (optional)
      * @param  string $sort sort (optional)
      * @param  object[] $filter filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPayouts'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Payout[]
      */
-    public function getPayouts($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getPayouts($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getPayouts'][0])
     {
-        list($response) = $this->getPayoutsWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getPayoutsWithHttpInfo($page, $per_page, $sort, $filter, $contentType);
         return $response;
     }
 
@@ -140,14 +511,15 @@ class PayoutsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPayouts'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Payout[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getPayoutsWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getPayoutsWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getPayouts'][0])
     {
-        $request = $this->getPayoutsRequest($page, $per_page, $sort, $filter);
+        $request = $this->getPayoutsRequest($page, $per_page, $sort, $filter, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -191,7 +563,19 @@ class PayoutsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Payout[]' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -208,7 +592,19 @@ class PayoutsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -242,13 +638,14 @@ class PayoutsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPayouts'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getPayoutsAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getPayoutsAsync($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getPayouts'][0])
     {
-        return $this->getPayoutsAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getPayoutsAsyncWithHttpInfo($page, $per_page, $sort, $filter, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -265,14 +662,15 @@ class PayoutsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPayouts'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getPayoutsAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getPayoutsAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getPayouts'][0])
     {
         $returnType = '\Adserver\Model\Payout[]';
-        $request = $this->getPayoutsRequest($page, $per_page, $sort, $filter);
+        $request = $this->getPayoutsRequest($page, $per_page, $sort, $filter, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -317,12 +715,18 @@ class PayoutsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPayouts'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getPayoutsRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getPayoutsRequest($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getPayouts'][0])
     {
+
+
+
+
+
 
         $resourcePath = '/payout';
         $formParams = [];
@@ -371,16 +775,11 @@ class PayoutsApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -398,9 +797,9 @@ class PayoutsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -423,10 +822,11 @@ class PayoutsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );

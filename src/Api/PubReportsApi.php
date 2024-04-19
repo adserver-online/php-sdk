@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -65,6 +65,16 @@ class PubReportsApi
      */
     protected $hostIndex;
 
+    /** @var string[] $contentTypes **/
+    public const contentTypes = [
+        'pubGetCustomRtbReport' => [
+            'application/json',
+        ],
+        'pubGetStats' => [
+            'application/json',
+        ],
+    ];
+
     /**
      * @param ClientInterface $client
      * @param Configuration   $config
@@ -114,42 +124,44 @@ class PubReportsApi
     /**
      * Operation pubGetCustomRtbReport
      *
-     * Publisher&#39;s RTB report
+     * Publisher RTB report
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idsite Site ID (optional)
      * @param  int $idzone Zone ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetCustomRtbReport'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\StatsCustomRtbItem[]|\Adserver\Model\FormErrorResponse
      */
-    public function pubGetCustomRtbReport($date_begin, $date_end, $timezone = null, $idsite = null, $idzone = null)
+    public function pubGetCustomRtbReport($date_begin, $date_end, $timezone = null, $idsite = null, $idzone = null, string $contentType = self::contentTypes['pubGetCustomRtbReport'][0])
     {
-        list($response) = $this->pubGetCustomRtbReportWithHttpInfo($date_begin, $date_end, $timezone, $idsite, $idzone);
+        list($response) = $this->pubGetCustomRtbReportWithHttpInfo($date_begin, $date_end, $timezone, $idsite, $idzone, $contentType);
         return $response;
     }
 
     /**
      * Operation pubGetCustomRtbReportWithHttpInfo
      *
-     * Publisher&#39;s RTB report
+     * Publisher RTB report
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idsite Site ID (optional)
      * @param  int $idzone Zone ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetCustomRtbReport'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\StatsCustomRtbItem[]|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubGetCustomRtbReportWithHttpInfo($date_begin, $date_end, $timezone = null, $idsite = null, $idzone = null)
+    public function pubGetCustomRtbReportWithHttpInfo($date_begin, $date_end, $timezone = null, $idsite = null, $idzone = null, string $contentType = self::contentTypes['pubGetCustomRtbReport'][0])
     {
-        $request = $this->pubGetCustomRtbReportRequest($date_begin, $date_end, $timezone, $idsite, $idzone);
+        $request = $this->pubGetCustomRtbReportRequest($date_begin, $date_end, $timezone, $idsite, $idzone, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -193,7 +205,19 @@ class PubReportsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\StatsCustomRtbItem[]' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -208,7 +232,19 @@ class PubReportsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -225,7 +261,19 @@ class PubReportsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -261,20 +309,21 @@ class PubReportsApi
     /**
      * Operation pubGetCustomRtbReportAsync
      *
-     * Publisher&#39;s RTB report
+     * Publisher RTB report
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idsite Site ID (optional)
      * @param  int $idzone Zone ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetCustomRtbReport'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetCustomRtbReportAsync($date_begin, $date_end, $timezone = null, $idsite = null, $idzone = null)
+    public function pubGetCustomRtbReportAsync($date_begin, $date_end, $timezone = null, $idsite = null, $idzone = null, string $contentType = self::contentTypes['pubGetCustomRtbReport'][0])
     {
-        return $this->pubGetCustomRtbReportAsyncWithHttpInfo($date_begin, $date_end, $timezone, $idsite, $idzone)
+        return $this->pubGetCustomRtbReportAsyncWithHttpInfo($date_begin, $date_end, $timezone, $idsite, $idzone, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -285,21 +334,22 @@ class PubReportsApi
     /**
      * Operation pubGetCustomRtbReportAsyncWithHttpInfo
      *
-     * Publisher&#39;s RTB report
+     * Publisher RTB report
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $timezone Time zone (optional)
      * @param  int $idsite Site ID (optional)
      * @param  int $idzone Zone ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetCustomRtbReport'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetCustomRtbReportAsyncWithHttpInfo($date_begin, $date_end, $timezone = null, $idsite = null, $idzone = null)
+    public function pubGetCustomRtbReportAsyncWithHttpInfo($date_begin, $date_end, $timezone = null, $idsite = null, $idzone = null, string $contentType = self::contentTypes['pubGetCustomRtbReport'][0])
     {
         $returnType = '\Adserver\Model\StatsCustomRtbItem[]';
-        $request = $this->pubGetCustomRtbReportRequest($date_begin, $date_end, $timezone, $idsite, $idzone);
+        $request = $this->pubGetCustomRtbReportRequest($date_begin, $date_end, $timezone, $idsite, $idzone, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -345,24 +395,31 @@ class PubReportsApi
      * @param  string $timezone Time zone (optional)
      * @param  int $idsite Site ID (optional)
      * @param  int $idzone Zone ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetCustomRtbReport'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function pubGetCustomRtbReportRequest($date_begin, $date_end, $timezone = null, $idsite = null, $idzone = null)
+    public function pubGetCustomRtbReportRequest($date_begin, $date_end, $timezone = null, $idsite = null, $idzone = null, string $contentType = self::contentTypes['pubGetCustomRtbReport'][0])
     {
+
         // verify the required parameter 'date_begin' is set
         if ($date_begin === null || (is_array($date_begin) && count($date_begin) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $date_begin when calling pubGetCustomRtbReport'
             );
         }
+
         // verify the required parameter 'date_end' is set
         if ($date_end === null || (is_array($date_end) && count($date_end) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $date_end when calling pubGetCustomRtbReport'
             );
         }
+
+
+
+
 
         $resourcePath = '/publish/stats/custom-rtb';
         $formParams = [];
@@ -420,16 +477,11 @@ class PubReportsApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -447,9 +499,9 @@ class PubReportsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -472,10 +524,11 @@ class PubReportsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -484,44 +537,46 @@ class PubReportsApi
     /**
      * Operation pubGetStats
      *
-     * Publisher&#39;s stats
+     * Publisher stats
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idsite Filter by site&#39;s ID (optional)
-     * @param  int $idzone Filter by zone&#39;s ID (optional)
+     * @param  int $idsite Filter by site ID (optional)
+     * @param  int $idzone Filter by zone ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetStats'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\StatsItem[]|\Adserver\Model\FormErrorResponse
      */
-    public function pubGetStats($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null)
+    public function pubGetStats($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null, string $contentType = self::contentTypes['pubGetStats'][0])
     {
-        list($response) = $this->pubGetStatsWithHttpInfo($date_begin, $date_end, $group, $timezone, $idsite, $idzone);
+        list($response) = $this->pubGetStatsWithHttpInfo($date_begin, $date_end, $group, $timezone, $idsite, $idzone, $contentType);
         return $response;
     }
 
     /**
      * Operation pubGetStatsWithHttpInfo
      *
-     * Publisher&#39;s stats
+     * Publisher stats
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idsite Filter by site&#39;s ID (optional)
-     * @param  int $idzone Filter by zone&#39;s ID (optional)
+     * @param  int $idsite Filter by site ID (optional)
+     * @param  int $idzone Filter by zone ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetStats'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\StatsItem[]|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubGetStatsWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null)
+    public function pubGetStatsWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null, string $contentType = self::contentTypes['pubGetStats'][0])
     {
-        $request = $this->pubGetStatsRequest($date_begin, $date_end, $group, $timezone, $idsite, $idzone);
+        $request = $this->pubGetStatsRequest($date_begin, $date_end, $group, $timezone, $idsite, $idzone, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -565,7 +620,19 @@ class PubReportsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\StatsItem[]' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -580,7 +647,19 @@ class PubReportsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -597,7 +676,19 @@ class PubReportsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -633,21 +724,22 @@ class PubReportsApi
     /**
      * Operation pubGetStatsAsync
      *
-     * Publisher&#39;s stats
+     * Publisher stats
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idsite Filter by site&#39;s ID (optional)
-     * @param  int $idzone Filter by zone&#39;s ID (optional)
+     * @param  int $idsite Filter by site ID (optional)
+     * @param  int $idzone Filter by zone ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetStats'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetStatsAsync($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null)
+    public function pubGetStatsAsync($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null, string $contentType = self::contentTypes['pubGetStats'][0])
     {
-        return $this->pubGetStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone, $idsite, $idzone)
+        return $this->pubGetStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone, $idsite, $idzone, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -658,22 +750,23 @@ class PubReportsApi
     /**
      * Operation pubGetStatsAsyncWithHttpInfo
      *
-     * Publisher&#39;s stats
+     * Publisher stats
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idsite Filter by site&#39;s ID (optional)
-     * @param  int $idzone Filter by zone&#39;s ID (optional)
+     * @param  int $idsite Filter by site ID (optional)
+     * @param  int $idzone Filter by zone ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetStats'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null)
+    public function pubGetStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null, string $contentType = self::contentTypes['pubGetStats'][0])
     {
         $returnType = '\Adserver\Model\StatsItem[]';
-        $request = $this->pubGetStatsRequest($date_begin, $date_end, $group, $timezone, $idsite, $idzone);
+        $request = $this->pubGetStatsRequest($date_begin, $date_end, $group, $timezone, $idsite, $idzone, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -718,32 +811,40 @@ class PubReportsApi
      * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idsite Filter by site&#39;s ID (optional)
-     * @param  int $idzone Filter by zone&#39;s ID (optional)
+     * @param  int $idsite Filter by site ID (optional)
+     * @param  int $idzone Filter by zone ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetStats'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function pubGetStatsRequest($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null)
+    public function pubGetStatsRequest($date_begin, $date_end, $group, $timezone = null, $idsite = null, $idzone = null, string $contentType = self::contentTypes['pubGetStats'][0])
     {
+
         // verify the required parameter 'date_begin' is set
         if ($date_begin === null || (is_array($date_begin) && count($date_begin) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $date_begin when calling pubGetStats'
             );
         }
+
         // verify the required parameter 'date_end' is set
         if ($date_end === null || (is_array($date_end) && count($date_end) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $date_end when calling pubGetStats'
             );
         }
+
         // verify the required parameter 'group' is set
         if ($group === null || (is_array($group) && count($group) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $group when calling pubGetStats'
             );
         }
+
+
+
+
 
         $resourcePath = '/publish/stats';
         $formParams = [];
@@ -810,16 +911,11 @@ class PubReportsApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -837,9 +933,9 @@ class PubReportsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -862,10 +958,11 @@ class PubReportsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );

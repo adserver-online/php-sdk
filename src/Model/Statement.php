@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -53,11 +53,12 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'user' => 'object',
+        'user' => '\Adserver\Model\UserBase',
         'deposit' => 'float',
         'spend' => 'float',
         'revenue' => 'float',
         'payout' => 'float',
+        'reward' => 'float',
         'advert_other_in' => 'float',
         'advert_other_out' => 'float',
         'publish_other_in' => 'float',
@@ -81,6 +82,7 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
         'spend' => null,
         'revenue' => null,
         'payout' => null,
+        'reward' => null,
         'advert_other_in' => null,
         'advert_other_out' => null,
         'publish_other_in' => null,
@@ -90,6 +92,35 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
         'stats_spend' => null,
         'stats_revenue' => null
     ];
+
+    /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'user' => false,
+        'deposit' => false,
+        'spend' => false,
+        'revenue' => false,
+        'payout' => false,
+        'reward' => false,
+        'advert_other_in' => false,
+        'advert_other_out' => false,
+        'publish_other_in' => false,
+        'publish_other_out' => false,
+        'advert_balance' => false,
+        'publish_balance' => false,
+        'stats_spend' => false,
+        'stats_revenue' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -112,6 +143,58 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+    }
+
+    /**
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
@@ -123,6 +206,7 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
         'spend' => 'spend',
         'revenue' => 'revenue',
         'payout' => 'payout',
+        'reward' => 'reward',
         'advert_other_in' => 'advert_other_in',
         'advert_other_out' => 'advert_other_out',
         'publish_other_in' => 'publish_other_in',
@@ -144,6 +228,7 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
         'spend' => 'setSpend',
         'revenue' => 'setRevenue',
         'payout' => 'setPayout',
+        'reward' => 'setReward',
         'advert_other_in' => 'setAdvertOtherIn',
         'advert_other_out' => 'setAdvertOtherOut',
         'publish_other_in' => 'setPublishOtherIn',
@@ -165,6 +250,7 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
         'spend' => 'getSpend',
         'revenue' => 'getRevenue',
         'payout' => 'getPayout',
+        'reward' => 'getReward',
         'advert_other_in' => 'getAdvertOtherIn',
         'advert_other_out' => 'getAdvertOtherOut',
         'publish_other_in' => 'getPublishOtherIn',
@@ -232,19 +318,38 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['user'] = $data['user'] ?? null;
-        $this->container['deposit'] = $data['deposit'] ?? null;
-        $this->container['spend'] = $data['spend'] ?? null;
-        $this->container['revenue'] = $data['revenue'] ?? null;
-        $this->container['payout'] = $data['payout'] ?? null;
-        $this->container['advert_other_in'] = $data['advert_other_in'] ?? null;
-        $this->container['advert_other_out'] = $data['advert_other_out'] ?? null;
-        $this->container['publish_other_in'] = $data['publish_other_in'] ?? null;
-        $this->container['publish_other_out'] = $data['publish_other_out'] ?? null;
-        $this->container['advert_balance'] = $data['advert_balance'] ?? null;
-        $this->container['publish_balance'] = $data['publish_balance'] ?? null;
-        $this->container['stats_spend'] = $data['stats_spend'] ?? null;
-        $this->container['stats_revenue'] = $data['stats_revenue'] ?? null;
+        $this->setIfExists('user', $data ?? [], null);
+        $this->setIfExists('deposit', $data ?? [], null);
+        $this->setIfExists('spend', $data ?? [], null);
+        $this->setIfExists('revenue', $data ?? [], null);
+        $this->setIfExists('payout', $data ?? [], null);
+        $this->setIfExists('reward', $data ?? [], null);
+        $this->setIfExists('advert_other_in', $data ?? [], null);
+        $this->setIfExists('advert_other_out', $data ?? [], null);
+        $this->setIfExists('publish_other_in', $data ?? [], null);
+        $this->setIfExists('publish_other_out', $data ?? [], null);
+        $this->setIfExists('advert_balance', $data ?? [], null);
+        $this->setIfExists('publish_balance', $data ?? [], null);
+        $this->setIfExists('stats_spend', $data ?? [], null);
+        $this->setIfExists('stats_revenue', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -274,7 +379,7 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets user
      *
-     * @return object|null
+     * @return \Adserver\Model\UserBase|null
      */
     public function getUser()
     {
@@ -284,12 +389,15 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets user
      *
-     * @param object|null $user user
+     * @param \Adserver\Model\UserBase|null $user user
      *
      * @return self
      */
     public function setUser($user)
     {
+        if (is_null($user)) {
+            throw new \InvalidArgumentException('non-nullable user cannot be null');
+        }
         $this->container['user'] = $user;
 
         return $this;
@@ -314,6 +422,9 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setDeposit($deposit)
     {
+        if (is_null($deposit)) {
+            throw new \InvalidArgumentException('non-nullable deposit cannot be null');
+        }
         $this->container['deposit'] = $deposit;
 
         return $this;
@@ -338,6 +449,9 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setSpend($spend)
     {
+        if (is_null($spend)) {
+            throw new \InvalidArgumentException('non-nullable spend cannot be null');
+        }
         $this->container['spend'] = $spend;
 
         return $this;
@@ -362,6 +476,9 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setRevenue($revenue)
     {
+        if (is_null($revenue)) {
+            throw new \InvalidArgumentException('non-nullable revenue cannot be null');
+        }
         $this->container['revenue'] = $revenue;
 
         return $this;
@@ -386,7 +503,37 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setPayout($payout)
     {
+        if (is_null($payout)) {
+            throw new \InvalidArgumentException('non-nullable payout cannot be null');
+        }
         $this->container['payout'] = $payout;
+
+        return $this;
+    }
+
+    /**
+     * Gets reward
+     *
+     * @return float|null
+     */
+    public function getReward()
+    {
+        return $this->container['reward'];
+    }
+
+    /**
+     * Sets reward
+     *
+     * @param float|null $reward reward
+     *
+     * @return self
+     */
+    public function setReward($reward)
+    {
+        if (is_null($reward)) {
+            throw new \InvalidArgumentException('non-nullable reward cannot be null');
+        }
+        $this->container['reward'] = $reward;
 
         return $this;
     }
@@ -410,6 +557,9 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setAdvertOtherIn($advert_other_in)
     {
+        if (is_null($advert_other_in)) {
+            throw new \InvalidArgumentException('non-nullable advert_other_in cannot be null');
+        }
         $this->container['advert_other_in'] = $advert_other_in;
 
         return $this;
@@ -434,6 +584,9 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setAdvertOtherOut($advert_other_out)
     {
+        if (is_null($advert_other_out)) {
+            throw new \InvalidArgumentException('non-nullable advert_other_out cannot be null');
+        }
         $this->container['advert_other_out'] = $advert_other_out;
 
         return $this;
@@ -458,6 +611,9 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setPublishOtherIn($publish_other_in)
     {
+        if (is_null($publish_other_in)) {
+            throw new \InvalidArgumentException('non-nullable publish_other_in cannot be null');
+        }
         $this->container['publish_other_in'] = $publish_other_in;
 
         return $this;
@@ -482,6 +638,9 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setPublishOtherOut($publish_other_out)
     {
+        if (is_null($publish_other_out)) {
+            throw new \InvalidArgumentException('non-nullable publish_other_out cannot be null');
+        }
         $this->container['publish_other_out'] = $publish_other_out;
 
         return $this;
@@ -506,6 +665,9 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setAdvertBalance($advert_balance)
     {
+        if (is_null($advert_balance)) {
+            throw new \InvalidArgumentException('non-nullable advert_balance cannot be null');
+        }
         $this->container['advert_balance'] = $advert_balance;
 
         return $this;
@@ -530,6 +692,9 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setPublishBalance($publish_balance)
     {
+        if (is_null($publish_balance)) {
+            throw new \InvalidArgumentException('non-nullable publish_balance cannot be null');
+        }
         $this->container['publish_balance'] = $publish_balance;
 
         return $this;
@@ -554,6 +719,9 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setStatsSpend($stats_spend)
     {
+        if (is_null($stats_spend)) {
+            throw new \InvalidArgumentException('non-nullable stats_spend cannot be null');
+        }
         $this->container['stats_spend'] = $stats_spend;
 
         return $this;
@@ -578,6 +746,9 @@ class Statement implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setStatsRevenue($stats_revenue)
     {
+        if (is_null($stats_revenue)) {
+            throw new \InvalidArgumentException('non-nullable stats_revenue cannot be null');
+        }
         $this->container['stats_revenue'] = $stats_revenue;
 
         return $this;

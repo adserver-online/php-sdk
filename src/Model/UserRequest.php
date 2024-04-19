@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -58,11 +58,15 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'phone' => 'string',
         'skype' => 'string',
         'timezone' => 'string',
-        'is_active' => 'int',
-        'send_password' => 'int',
-        'allow_login' => 'int',
-        'campaigns_post_moderation' => 'int',
-        'idcloudrole' => 'int'
+        'is_active' => 'bool',
+        'send_password' => 'bool',
+        'allow_login' => 'bool',
+        'campaigns_post_moderation' => 'bool',
+        'idrole' => 'int',
+        'idpayoutmethod' => 'int',
+        'payout_account' => 'string',
+        'referral_code' => 'string',
+        'reg_ip' => 'string'
     ];
 
     /**
@@ -82,8 +86,41 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'send_password' => null,
         'allow_login' => null,
         'campaigns_post_moderation' => null,
-        'idcloudrole' => null
+        'idrole' => null,
+        'idpayoutmethod' => null,
+        'payout_account' => null,
+        'referral_code' => null,
+        'reg_ip' => null
     ];
+
+    /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'name' => false,
+        'email' => false,
+        'phone' => false,
+        'skype' => false,
+        'timezone' => false,
+        'is_active' => false,
+        'send_password' => false,
+        'allow_login' => false,
+        'campaigns_post_moderation' => false,
+        'idrole' => false,
+        'idpayoutmethod' => false,
+        'payout_account' => false,
+        'referral_code' => false,
+        'reg_ip' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -106,6 +143,58 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+    }
+
+    /**
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
@@ -121,7 +210,11 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'send_password' => 'send_password',
         'allow_login' => 'allow_login',
         'campaigns_post_moderation' => 'campaigns_post_moderation',
-        'idcloudrole' => 'idcloudrole'
+        'idrole' => 'idrole',
+        'idpayoutmethod' => 'idpayoutmethod',
+        'payout_account' => 'payout_account',
+        'referral_code' => 'referral_code',
+        'reg_ip' => 'reg_ip'
     ];
 
     /**
@@ -139,7 +232,11 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'send_password' => 'setSendPassword',
         'allow_login' => 'setAllowLogin',
         'campaigns_post_moderation' => 'setCampaignsPostModeration',
-        'idcloudrole' => 'setIdcloudrole'
+        'idrole' => 'setIdrole',
+        'idpayoutmethod' => 'setIdpayoutmethod',
+        'payout_account' => 'setPayoutAccount',
+        'referral_code' => 'setReferralCode',
+        'reg_ip' => 'setRegIp'
     ];
 
     /**
@@ -157,7 +254,11 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'send_password' => 'getSendPassword',
         'allow_login' => 'getAllowLogin',
         'campaigns_post_moderation' => 'getCampaignsPostModeration',
-        'idcloudrole' => 'getIdcloudrole'
+        'idrole' => 'getIdrole',
+        'idpayoutmethod' => 'getIdpayoutmethod',
+        'payout_account' => 'getPayoutAccount',
+        'referral_code' => 'getReferralCode',
+        'reg_ip' => 'getRegIp'
     ];
 
     /**
@@ -201,81 +302,21 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
-    public const IS_ACTIVE_0 = 0;
-    public const IS_ACTIVE_1 = 1;
-    public const SEND_PASSWORD_0 = 0;
-    public const SEND_PASSWORD_1 = 1;
-    public const ALLOW_LOGIN_0 = 0;
-    public const ALLOW_LOGIN_1 = 1;
-    public const CAMPAIGNS_POST_MODERATION_0 = 0;
-    public const CAMPAIGNS_POST_MODERATION_1 = 1;
-    public const IDCLOUDROLE_2 = 2;
-    public const IDCLOUDROLE_3 = 3;
-    public const IDCLOUDROLE_4 = 4;
+    public const IDROLE_2 = 2;
+    public const IDROLE_3 = 3;
+    public const IDROLE_4 = 4;
 
     /**
      * Gets allowable values of the enum
      *
      * @return string[]
      */
-    public function getIsActiveAllowableValues()
+    public function getIdroleAllowableValues()
     {
         return [
-            self::IS_ACTIVE_0,
-            self::IS_ACTIVE_1,
-        ];
-    }
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getSendPasswordAllowableValues()
-    {
-        return [
-            self::SEND_PASSWORD_0,
-            self::SEND_PASSWORD_1,
-        ];
-    }
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getAllowLoginAllowableValues()
-    {
-        return [
-            self::ALLOW_LOGIN_0,
-            self::ALLOW_LOGIN_1,
-        ];
-    }
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getCampaignsPostModerationAllowableValues()
-    {
-        return [
-            self::CAMPAIGNS_POST_MODERATION_0,
-            self::CAMPAIGNS_POST_MODERATION_1,
-        ];
-    }
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getIdcloudroleAllowableValues()
-    {
-        return [
-            self::IDCLOUDROLE_2,
-            self::IDCLOUDROLE_3,
-            self::IDCLOUDROLE_4,
+            self::IDROLE_2,
+            self::IDROLE_3,
+            self::IDROLE_4,
         ];
     }
 
@@ -294,16 +335,38 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['name'] = $data['name'] ?? null;
-        $this->container['email'] = $data['email'] ?? null;
-        $this->container['phone'] = $data['phone'] ?? null;
-        $this->container['skype'] = $data['skype'] ?? null;
-        $this->container['timezone'] = $data['timezone'] ?? null;
-        $this->container['is_active'] = $data['is_active'] ?? null;
-        $this->container['send_password'] = $data['send_password'] ?? null;
-        $this->container['allow_login'] = $data['allow_login'] ?? null;
-        $this->container['campaigns_post_moderation'] = $data['campaigns_post_moderation'] ?? null;
-        $this->container['idcloudrole'] = $data['idcloudrole'] ?? null;
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('email', $data ?? [], null);
+        $this->setIfExists('phone', $data ?? [], null);
+        $this->setIfExists('skype', $data ?? [], null);
+        $this->setIfExists('timezone', $data ?? [], null);
+        $this->setIfExists('is_active', $data ?? [], null);
+        $this->setIfExists('send_password', $data ?? [], null);
+        $this->setIfExists('allow_login', $data ?? [], null);
+        $this->setIfExists('campaigns_post_moderation', $data ?? [], null);
+        $this->setIfExists('idrole', $data ?? [], null);
+        $this->setIfExists('idpayoutmethod', $data ?? [], null);
+        $this->setIfExists('payout_account', $data ?? [], null);
+        $this->setIfExists('referral_code', $data ?? [], null);
+        $this->setIfExists('reg_ip', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -321,50 +384,14 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['email'] === null) {
             $invalidProperties[] = "'email' can't be null";
         }
-        $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($this->container['is_active']) && !in_array($this->container['is_active'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'is_active', must be one of '%s'",
-                $this->container['is_active'],
-                implode("', '", $allowedValues)
-            );
+        if ($this->container['idrole'] === null) {
+            $invalidProperties[] = "'idrole' can't be null";
         }
-
-        $allowedValues = $this->getSendPasswordAllowableValues();
-        if (!is_null($this->container['send_password']) && !in_array($this->container['send_password'], $allowedValues, true)) {
+        $allowedValues = $this->getIdroleAllowableValues();
+        if (!is_null($this->container['idrole']) && !in_array($this->container['idrole'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'send_password', must be one of '%s'",
-                $this->container['send_password'],
-                implode("', '", $allowedValues)
-            );
-        }
-
-        $allowedValues = $this->getAllowLoginAllowableValues();
-        if (!is_null($this->container['allow_login']) && !in_array($this->container['allow_login'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'allow_login', must be one of '%s'",
-                $this->container['allow_login'],
-                implode("', '", $allowedValues)
-            );
-        }
-
-        $allowedValues = $this->getCampaignsPostModerationAllowableValues();
-        if (!is_null($this->container['campaigns_post_moderation']) && !in_array($this->container['campaigns_post_moderation'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'campaigns_post_moderation', must be one of '%s'",
-                $this->container['campaigns_post_moderation'],
-                implode("', '", $allowedValues)
-            );
-        }
-
-        if ($this->container['idcloudrole'] === null) {
-            $invalidProperties[] = "'idcloudrole' can't be null";
-        }
-        $allowedValues = $this->getIdcloudroleAllowableValues();
-        if (!is_null($this->container['idcloudrole']) && !in_array($this->container['idcloudrole'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'idcloudrole', must be one of '%s'",
-                $this->container['idcloudrole'],
+                "invalid value '%s' for 'idrole', must be one of '%s'",
+                $this->container['idrole'],
                 implode("', '", $allowedValues)
             );
         }
@@ -403,6 +430,9 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setName($name)
     {
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
+        }
         $this->container['name'] = $name;
 
         return $this;
@@ -427,6 +457,9 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setEmail($email)
     {
+        if (is_null($email)) {
+            throw new \InvalidArgumentException('non-nullable email cannot be null');
+        }
         $this->container['email'] = $email;
 
         return $this;
@@ -451,6 +484,9 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setPhone($phone)
     {
+        if (is_null($phone)) {
+            throw new \InvalidArgumentException('non-nullable phone cannot be null');
+        }
         $this->container['phone'] = $phone;
 
         return $this;
@@ -475,6 +511,9 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setSkype($skype)
     {
+        if (is_null($skype)) {
+            throw new \InvalidArgumentException('non-nullable skype cannot be null');
+        }
         $this->container['skype'] = $skype;
 
         return $this;
@@ -499,6 +538,9 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setTimezone($timezone)
     {
+        if (is_null($timezone)) {
+            throw new \InvalidArgumentException('non-nullable timezone cannot be null');
+        }
         $this->container['timezone'] = $timezone;
 
         return $this;
@@ -507,7 +549,7 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets is_active
      *
-     * @return int|null
+     * @return bool|null
      */
     public function getIsActive()
     {
@@ -517,21 +559,14 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets is_active
      *
-     * @param int|null $is_active is_active
+     * @param bool|null $is_active is_active
      *
      * @return self
      */
     public function setIsActive($is_active)
     {
-        $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($is_active) && !in_array($is_active, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'is_active', must be one of '%s'",
-                    $is_active,
-                    implode("', '", $allowedValues)
-                )
-            );
+        if (is_null($is_active)) {
+            throw new \InvalidArgumentException('non-nullable is_active cannot be null');
         }
         $this->container['is_active'] = $is_active;
 
@@ -541,7 +576,7 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets send_password
      *
-     * @return int|null
+     * @return bool|null
      */
     public function getSendPassword()
     {
@@ -551,21 +586,14 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets send_password
      *
-     * @param int|null $send_password Generate and send password to user's email
+     * @param bool|null $send_password Generate and send password to user email
      *
      * @return self
      */
     public function setSendPassword($send_password)
     {
-        $allowedValues = $this->getSendPasswordAllowableValues();
-        if (!is_null($send_password) && !in_array($send_password, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'send_password', must be one of '%s'",
-                    $send_password,
-                    implode("', '", $allowedValues)
-                )
-            );
+        if (is_null($send_password)) {
+            throw new \InvalidArgumentException('non-nullable send_password cannot be null');
         }
         $this->container['send_password'] = $send_password;
 
@@ -575,7 +603,7 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets allow_login
      *
-     * @return int|null
+     * @return bool|null
      */
     public function getAllowLogin()
     {
@@ -585,21 +613,14 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets allow_login
      *
-     * @param int|null $allow_login allow_login
+     * @param bool|null $allow_login allow_login
      *
      * @return self
      */
     public function setAllowLogin($allow_login)
     {
-        $allowedValues = $this->getAllowLoginAllowableValues();
-        if (!is_null($allow_login) && !in_array($allow_login, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'allow_login', must be one of '%s'",
-                    $allow_login,
-                    implode("', '", $allowedValues)
-                )
-            );
+        if (is_null($allow_login)) {
+            throw new \InvalidArgumentException('non-nullable allow_login cannot be null');
         }
         $this->container['allow_login'] = $allow_login;
 
@@ -609,7 +630,7 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets campaigns_post_moderation
      *
-     * @return int|null
+     * @return bool|null
      */
     public function getCampaignsPostModeration()
     {
@@ -619,21 +640,14 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets campaigns_post_moderation
      *
-     * @param int|null $campaigns_post_moderation campaigns_post_moderation
+     * @param bool|null $campaigns_post_moderation campaigns_post_moderation
      *
      * @return self
      */
     public function setCampaignsPostModeration($campaigns_post_moderation)
     {
-        $allowedValues = $this->getCampaignsPostModerationAllowableValues();
-        if (!is_null($campaigns_post_moderation) && !in_array($campaigns_post_moderation, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'campaigns_post_moderation', must be one of '%s'",
-                    $campaigns_post_moderation,
-                    implode("', '", $allowedValues)
-                )
-            );
+        if (is_null($campaigns_post_moderation)) {
+            throw new \InvalidArgumentException('non-nullable campaigns_post_moderation cannot be null');
         }
         $this->container['campaigns_post_moderation'] = $campaigns_post_moderation;
 
@@ -641,35 +655,146 @@ class UserRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets idcloudrole
+     * Gets idrole
      *
      * @return int
      */
-    public function getIdcloudrole()
+    public function getIdrole()
     {
-        return $this->container['idcloudrole'];
+        return $this->container['idrole'];
     }
 
     /**
-     * Sets idcloudrole
+     * Sets idrole
      *
-     * @param int $idcloudrole Roles:  * 2 - manager  * 3 - advertiser  * 4 - publisher
+     * @param int $idrole Roles:  * 2 - Manager  * 3 - Advertiser  * 4 - Publisher
      *
      * @return self
      */
-    public function setIdcloudrole($idcloudrole)
+    public function setIdrole($idrole)
     {
-        $allowedValues = $this->getIdcloudroleAllowableValues();
-        if (!in_array($idcloudrole, $allowedValues, true)) {
+        if (is_null($idrole)) {
+            throw new \InvalidArgumentException('non-nullable idrole cannot be null');
+        }
+        $allowedValues = $this->getIdroleAllowableValues();
+        if (!in_array($idrole, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Invalid value '%s' for 'idcloudrole', must be one of '%s'",
-                    $idcloudrole,
+                    "Invalid value '%s' for 'idrole', must be one of '%s'",
+                    $idrole,
                     implode("', '", $allowedValues)
                 )
             );
         }
-        $this->container['idcloudrole'] = $idcloudrole;
+        $this->container['idrole'] = $idrole;
+
+        return $this;
+    }
+
+    /**
+     * Gets idpayoutmethod
+     *
+     * @return int|null
+     */
+    public function getIdpayoutmethod()
+    {
+        return $this->container['idpayoutmethod'];
+    }
+
+    /**
+     * Sets idpayoutmethod
+     *
+     * @param int|null $idpayoutmethod idpayoutmethod
+     *
+     * @return self
+     */
+    public function setIdpayoutmethod($idpayoutmethod)
+    {
+        if (is_null($idpayoutmethod)) {
+            throw new \InvalidArgumentException('non-nullable idpayoutmethod cannot be null');
+        }
+        $this->container['idpayoutmethod'] = $idpayoutmethod;
+
+        return $this;
+    }
+
+    /**
+     * Gets payout_account
+     *
+     * @return string|null
+     */
+    public function getPayoutAccount()
+    {
+        return $this->container['payout_account'];
+    }
+
+    /**
+     * Sets payout_account
+     *
+     * @param string|null $payout_account payout_account
+     *
+     * @return self
+     */
+    public function setPayoutAccount($payout_account)
+    {
+        if (is_null($payout_account)) {
+            throw new \InvalidArgumentException('non-nullable payout_account cannot be null');
+        }
+        $this->container['payout_account'] = $payout_account;
+
+        return $this;
+    }
+
+    /**
+     * Gets referral_code
+     *
+     * @return string|null
+     */
+    public function getReferralCode()
+    {
+        return $this->container['referral_code'];
+    }
+
+    /**
+     * Sets referral_code
+     *
+     * @param string|null $referral_code referral_code
+     *
+     * @return self
+     */
+    public function setReferralCode($referral_code)
+    {
+        if (is_null($referral_code)) {
+            throw new \InvalidArgumentException('non-nullable referral_code cannot be null');
+        }
+        $this->container['referral_code'] = $referral_code;
+
+        return $this;
+    }
+
+    /**
+     * Gets reg_ip
+     *
+     * @return string|null
+     */
+    public function getRegIp()
+    {
+        return $this->container['reg_ip'];
+    }
+
+    /**
+     * Sets reg_ip
+     *
+     * @param string|null $reg_ip IP address that user used for registration
+     *
+     * @return self
+     */
+    public function setRegIp($reg_ip)
+    {
+        if (is_null($reg_ip)) {
+            throw new \InvalidArgumentException('non-nullable reg_ip cannot be null');
+        }
+        $this->container['reg_ip'] = $reg_ip;
 
         return $this;
     }

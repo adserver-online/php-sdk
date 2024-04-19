@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -57,7 +57,7 @@ class SiteRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'url' => 'string',
         'idcategory' => 'int',
         'idpublisher' => 'int',
-        'is_active' => 'int',
+        'is_active' => 'bool',
         'idstatus' => 'int',
         'idblockreason' => 'string',
         'block_reason' => 'string'
@@ -82,6 +82,29 @@ class SiteRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     ];
 
     /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'name' => false,
+        'url' => false,
+        'idcategory' => false,
+        'idpublisher' => false,
+        'is_active' => false,
+        'idstatus' => false,
+        'idblockreason' => false,
+        'block_reason' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
+
+    /**
      * Array of property to type mappings. Used for (de)serialization
      *
      * @return array
@@ -99,6 +122,58 @@ class SiteRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     public static function openAPIFormats()
     {
         return self::$openAPIFormats;
+    }
+
+    /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
     }
 
     /**
@@ -191,27 +266,12 @@ class SiteRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
-    public const IS_ACTIVE_0 = 0;
-    public const IS_ACTIVE_1 = 1;
     public const IDSTATUS_3500 = 3500;
     public const IDSTATUS_3510 = 3510;
     public const IDSTATUS_3520 = 3520;
     public const IDBLOCKREASON__1 = '1';
     public const IDBLOCKREASON__2 = '2';
     public const IDBLOCKREASON__100 = '100';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getIsActiveAllowableValues()
-    {
-        return [
-            self::IS_ACTIVE_0,
-            self::IS_ACTIVE_1,
-        ];
-    }
 
     /**
      * Gets allowable values of the enum
@@ -256,14 +316,32 @@ class SiteRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['name'] = $data['name'] ?? null;
-        $this->container['url'] = $data['url'] ?? null;
-        $this->container['idcategory'] = $data['idcategory'] ?? null;
-        $this->container['idpublisher'] = $data['idpublisher'] ?? null;
-        $this->container['is_active'] = $data['is_active'] ?? null;
-        $this->container['idstatus'] = $data['idstatus'] ?? null;
-        $this->container['idblockreason'] = $data['idblockreason'] ?? null;
-        $this->container['block_reason'] = $data['block_reason'] ?? null;
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('url', $data ?? [], null);
+        $this->setIfExists('idcategory', $data ?? [], null);
+        $this->setIfExists('idpublisher', $data ?? [], null);
+        $this->setIfExists('is_active', $data ?? [], null);
+        $this->setIfExists('idstatus', $data ?? [], null);
+        $this->setIfExists('idblockreason', $data ?? [], null);
+        $this->setIfExists('block_reason', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -284,15 +362,6 @@ class SiteRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['idcategory'] === null) {
             $invalidProperties[] = "'idcategory' can't be null";
         }
-        $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($this->container['is_active']) && !in_array($this->container['is_active'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'is_active', must be one of '%s'",
-                $this->container['is_active'],
-                implode("', '", $allowedValues)
-            );
-        }
-
         if ($this->container['idstatus'] === null) {
             $invalidProperties[] = "'idstatus' can't be null";
         }
@@ -348,6 +417,9 @@ class SiteRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setName($name)
     {
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
+        }
         $this->container['name'] = $name;
 
         return $this;
@@ -372,6 +444,9 @@ class SiteRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setUrl($url)
     {
+        if (is_null($url)) {
+            throw new \InvalidArgumentException('non-nullable url cannot be null');
+        }
         $this->container['url'] = $url;
 
         return $this;
@@ -396,6 +471,9 @@ class SiteRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setIdcategory($idcategory)
     {
+        if (is_null($idcategory)) {
+            throw new \InvalidArgumentException('non-nullable idcategory cannot be null');
+        }
         $this->container['idcategory'] = $idcategory;
 
         return $this;
@@ -420,6 +498,9 @@ class SiteRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setIdpublisher($idpublisher)
     {
+        if (is_null($idpublisher)) {
+            throw new \InvalidArgumentException('non-nullable idpublisher cannot be null');
+        }
         $this->container['idpublisher'] = $idpublisher;
 
         return $this;
@@ -428,7 +509,7 @@ class SiteRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets is_active
      *
-     * @return int|null
+     * @return bool|null
      */
     public function getIsActive()
     {
@@ -438,21 +519,14 @@ class SiteRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets is_active
      *
-     * @param int|null $is_active is_active
+     * @param bool|null $is_active is_active
      *
      * @return self
      */
     public function setIsActive($is_active)
     {
-        $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($is_active) && !in_array($is_active, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'is_active', must be one of '%s'",
-                    $is_active,
-                    implode("', '", $allowedValues)
-                )
-            );
+        if (is_null($is_active)) {
+            throw new \InvalidArgumentException('non-nullable is_active cannot be null');
         }
         $this->container['is_active'] = $is_active;
 
@@ -472,12 +546,15 @@ class SiteRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets idstatus
      *
-     * @param int $idstatus Moderation statuses:  * 3520 - pending  * 3500 - approved  * 3510 - rejected
+     * @param int $idstatus Moderation statuses:  * 3520 - Pending  * 3500 - Approved  * 3510 - Rejected
      *
      * @return self
      */
     public function setIdstatus($idstatus)
     {
+        if (is_null($idstatus)) {
+            throw new \InvalidArgumentException('non-nullable idstatus cannot be null');
+        }
         $allowedValues = $this->getIdstatusAllowableValues();
         if (!in_array($idstatus, $allowedValues, true)) {
             throw new \InvalidArgumentException(
@@ -506,14 +583,17 @@ class SiteRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets idblockreason
      *
-     * @param string|null $idblockreason Block reason:  * 1 - low traffic quality  * 2 - illegal content  * 100 - custom
+     * @param string|null $idblockreason Block reason:  * 1 - Low traffic quality  * 2 - Illegal content  * 100 - Custom
      *
      * @return self
      */
     public function setIdblockreason($idblockreason)
     {
+        if (is_null($idblockreason)) {
+            throw new \InvalidArgumentException('non-nullable idblockreason cannot be null');
+        }
         $allowedValues = $this->getIdblockreasonAllowableValues();
-        if (!is_null($idblockreason) && !in_array($idblockreason, $allowedValues, true)) {
+        if (!in_array($idblockreason, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     "Invalid value '%s' for 'idblockreason', must be one of '%s'",
@@ -546,6 +626,9 @@ class SiteRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setBlockReason($block_reason)
     {
+        if (is_null($block_reason)) {
+            throw new \InvalidArgumentException('non-nullable block_reason cannot be null');
+        }
         $this->container['block_reason'] = $block_reason;
 
         return $this;

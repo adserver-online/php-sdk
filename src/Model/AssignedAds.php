@@ -1,6 +1,6 @@
 <?php
 /**
- * LoginResponse
+ * AssignedAds
  *
  * PHP version 7.4
  *
@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -28,17 +28,15 @@ use \ArrayAccess;
 use \Adserver\ObjectSerializer;
 
 /**
- * LoginResponse Class Doc Comment
+ * AssignedAds Class Doc Comment
  *
  * @category Class
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<TKey, TValue>
- * @template TKey int|null
- * @template TValue mixed|null
+ * @implements \ArrayAccess<string, mixed>
  */
-class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
+class AssignedAds implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -47,7 +45,7 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'LoginResponse';
+    protected static $openAPIModelName = 'AssignedAds';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -55,9 +53,7 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'token' => 'string',
-        'token_type' => 'string',
-        'expires_in' => 'int'
+        'assigned_ads' => 'object[]'
     ];
 
     /**
@@ -68,10 +64,24 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'token' => null,
-        'token_type' => null,
-        'expires_in' => null
+        'assigned_ads' => null
     ];
+
+    /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'assigned_ads' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -94,15 +104,65 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+    }
+
+    /**
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
      * @var string[]
      */
     protected static $attributeMap = [
-        'token' => 'token',
-        'token_type' => 'token_type',
-        'expires_in' => 'expires_in'
+        'assigned_ads' => 'assigned_ads'
     ];
 
     /**
@@ -111,9 +171,7 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'token' => 'setToken',
-        'token_type' => 'setTokenType',
-        'expires_in' => 'setExpiresIn'
+        'assigned_ads' => 'setAssignedAds'
     ];
 
     /**
@@ -122,9 +180,7 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'token' => 'getToken',
-        'token_type' => 'getTokenType',
-        'expires_in' => 'getExpiresIn'
+        'assigned_ads' => 'getAssignedAds'
     ];
 
     /**
@@ -184,9 +240,25 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['token'] = $data['token'] ?? null;
-        $this->container['token_type'] = $data['token_type'] ?? null;
-        $this->container['expires_in'] = $data['expires_in'] ?? null;
+        $this->setIfExists('assigned_ads', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -198,9 +270,6 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['token'] === null) {
-            $invalidProperties[] = "'token' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -217,73 +286,28 @@ class LoginResponse implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets token
+     * Gets assigned_ads
      *
-     * @return string
+     * @return object[]|null
      */
-    public function getToken()
+    public function getAssignedAds()
     {
-        return $this->container['token'];
+        return $this->container['assigned_ads'];
     }
 
     /**
-     * Sets token
+     * Sets assigned_ads
      *
-     * @param string $token A valid access token.
+     * @param object[]|null $assigned_ads assigned_ads
      *
      * @return self
      */
-    public function setToken($token)
+    public function setAssignedAds($assigned_ads)
     {
-        $this->container['token'] = $token;
-
-        return $this;
-    }
-
-    /**
-     * Gets token_type
-     *
-     * @return string|null
-     */
-    public function getTokenType()
-    {
-        return $this->container['token_type'];
-    }
-
-    /**
-     * Sets token_type
-     *
-     * @param string|null $token_type token_type
-     *
-     * @return self
-     */
-    public function setTokenType($token_type)
-    {
-        $this->container['token_type'] = $token_type;
-
-        return $this;
-    }
-
-    /**
-     * Gets expires_in
-     *
-     * @return int|null
-     */
-    public function getExpiresIn()
-    {
-        return $this->container['expires_in'];
-    }
-
-    /**
-     * Sets expires_in
-     *
-     * @param int|null $expires_in The length of time (in seconds) that the provided access token are valid for.
-     *
-     * @return self
-     */
-    public function setExpiresIn($expires_in)
-    {
-        $this->container['expires_in'] = $expires_in;
+        if (is_null($assigned_ads)) {
+            throw new \InvalidArgumentException('non-nullable assigned_ads cannot be null');
+        }
+        $this->container['assigned_ads'] = $assigned_ads;
 
         return $this;
     }

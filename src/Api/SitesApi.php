@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -65,6 +65,25 @@ class SitesApi
      */
     protected $hostIndex;
 
+    /** @var string[] $contentTypes **/
+    public const contentTypes = [
+        'createSite' => [
+            'application/json',
+        ],
+        'deleteSite' => [
+            'application/json',
+        ],
+        'getSite' => [
+            'application/json',
+        ],
+        'getSites' => [
+            'application/json',
+        ],
+        'updateSite' => [
+            'application/json',
+        ],
+    ];
+
     /**
      * @param ClientInterface $client
      * @param Configuration   $config
@@ -117,14 +136,15 @@ class SitesApi
      * Create site
      *
      * @param  \Adserver\Model\SiteRequest $site_request site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Site|\Adserver\Model\FormErrorResponse
      */
-    public function createSite($site_request)
+    public function createSite($site_request, string $contentType = self::contentTypes['createSite'][0])
     {
-        list($response) = $this->createSiteWithHttpInfo($site_request);
+        list($response) = $this->createSiteWithHttpInfo($site_request, $contentType);
         return $response;
     }
 
@@ -134,14 +154,15 @@ class SitesApi
      * Create site
      *
      * @param  \Adserver\Model\SiteRequest $site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Site|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function createSiteWithHttpInfo($site_request)
+    public function createSiteWithHttpInfo($site_request, string $contentType = self::contentTypes['createSite'][0])
     {
-        $request = $this->createSiteRequest($site_request);
+        $request = $this->createSiteRequest($site_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -185,7 +206,19 @@ class SitesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Site' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -200,7 +233,19 @@ class SitesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -217,7 +262,19 @@ class SitesApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -256,13 +313,14 @@ class SitesApi
      * Create site
      *
      * @param  \Adserver\Model\SiteRequest $site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createSiteAsync($site_request)
+    public function createSiteAsync($site_request, string $contentType = self::contentTypes['createSite'][0])
     {
-        return $this->createSiteAsyncWithHttpInfo($site_request)
+        return $this->createSiteAsyncWithHttpInfo($site_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -276,14 +334,15 @@ class SitesApi
      * Create site
      *
      * @param  \Adserver\Model\SiteRequest $site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createSiteAsyncWithHttpInfo($site_request)
+    public function createSiteAsyncWithHttpInfo($site_request, string $contentType = self::contentTypes['createSite'][0])
     {
         $returnType = '\Adserver\Model\Site';
-        $request = $this->createSiteRequest($site_request);
+        $request = $this->createSiteRequest($site_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -325,18 +384,21 @@ class SitesApi
      * Create request for operation 'createSite'
      *
      * @param  \Adserver\Model\SiteRequest $site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function createSiteRequest($site_request)
+    public function createSiteRequest($site_request, string $contentType = self::contentTypes['createSite'][0])
     {
+
         // verify the required parameter 'site_request' is set
         if ($site_request === null || (is_array($site_request) && count($site_request) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $site_request when calling createSite'
             );
         }
+
 
         $resourcePath = '/site';
         $formParams = [];
@@ -349,21 +411,17 @@ class SitesApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (isset($site_request)) {
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($site_request));
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($site_request));
             } else {
                 $httpBody = $site_request;
             }
@@ -382,9 +440,9 @@ class SitesApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -407,10 +465,11 @@ class SitesApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -422,14 +481,15 @@ class SitesApi
      * Delete site
      *
      * @param  int $id id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function deleteSite($id)
+    public function deleteSite($id, string $contentType = self::contentTypes['deleteSite'][0])
     {
-        $this->deleteSiteWithHttpInfo($id);
+        $this->deleteSiteWithHttpInfo($id, $contentType);
     }
 
     /**
@@ -438,14 +498,15 @@ class SitesApi
      * Delete site
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function deleteSiteWithHttpInfo($id)
+    public function deleteSiteWithHttpInfo($id, string $contentType = self::contentTypes['deleteSite'][0])
     {
-        $request = $this->deleteSiteRequest($id);
+        $request = $this->deleteSiteRequest($id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -497,13 +558,14 @@ class SitesApi
      * Delete site
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function deleteSiteAsync($id)
+    public function deleteSiteAsync($id, string $contentType = self::contentTypes['deleteSite'][0])
     {
-        return $this->deleteSiteAsyncWithHttpInfo($id)
+        return $this->deleteSiteAsyncWithHttpInfo($id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -517,14 +579,15 @@ class SitesApi
      * Delete site
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function deleteSiteAsyncWithHttpInfo($id)
+    public function deleteSiteAsyncWithHttpInfo($id, string $contentType = self::contentTypes['deleteSite'][0])
     {
         $returnType = '';
-        $request = $this->deleteSiteRequest($id);
+        $request = $this->deleteSiteRequest($id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -553,18 +616,21 @@ class SitesApi
      * Create request for operation 'deleteSite'
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function deleteSiteRequest($id)
+    public function deleteSiteRequest($id, string $contentType = self::contentTypes['deleteSite'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling deleteSite'
             );
         }
+
 
         $resourcePath = '/site/{id}';
         $formParams = [];
@@ -585,16 +651,11 @@ class SitesApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                []
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                [],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            [],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -612,9 +673,9 @@ class SitesApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -637,10 +698,11 @@ class SitesApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'DELETE',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -652,14 +714,15 @@ class SitesApi
      * Get site
      *
      * @param  int $id id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Site
      */
-    public function getSite($id)
+    public function getSite($id, string $contentType = self::contentTypes['getSite'][0])
     {
-        list($response) = $this->getSiteWithHttpInfo($id);
+        list($response) = $this->getSiteWithHttpInfo($id, $contentType);
         return $response;
     }
 
@@ -669,14 +732,15 @@ class SitesApi
      * Get site
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Site, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getSiteWithHttpInfo($id)
+    public function getSiteWithHttpInfo($id, string $contentType = self::contentTypes['getSite'][0])
     {
-        $request = $this->getSiteRequest($id);
+        $request = $this->getSiteRequest($id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -720,7 +784,19 @@ class SitesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Site' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -737,7 +813,19 @@ class SitesApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -768,13 +856,14 @@ class SitesApi
      * Get site
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getSiteAsync($id)
+    public function getSiteAsync($id, string $contentType = self::contentTypes['getSite'][0])
     {
-        return $this->getSiteAsyncWithHttpInfo($id)
+        return $this->getSiteAsyncWithHttpInfo($id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -788,14 +877,15 @@ class SitesApi
      * Get site
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getSiteAsyncWithHttpInfo($id)
+    public function getSiteAsyncWithHttpInfo($id, string $contentType = self::contentTypes['getSite'][0])
     {
         $returnType = '\Adserver\Model\Site';
-        $request = $this->getSiteRequest($id);
+        $request = $this->getSiteRequest($id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -837,18 +927,21 @@ class SitesApi
      * Create request for operation 'getSite'
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getSiteRequest($id)
+    public function getSiteRequest($id, string $contentType = self::contentTypes['getSite'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling getSite'
             );
         }
+
 
         $resourcePath = '/site/{id}';
         $formParams = [];
@@ -869,16 +962,11 @@ class SitesApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -896,9 +984,9 @@ class SitesApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -921,10 +1009,11 @@ class SitesApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -939,14 +1028,15 @@ class SitesApi
      * @param  int $per_page per_page (optional)
      * @param  string $sort sort (optional)
      * @param  object[] $filter filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSites'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Site[]
      */
-    public function getSites($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getSites($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getSites'][0])
     {
-        list($response) = $this->getSitesWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getSitesWithHttpInfo($page, $per_page, $sort, $filter, $contentType);
         return $response;
     }
 
@@ -959,14 +1049,15 @@ class SitesApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSites'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Site[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getSitesWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getSitesWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getSites'][0])
     {
-        $request = $this->getSitesRequest($page, $per_page, $sort, $filter);
+        $request = $this->getSitesRequest($page, $per_page, $sort, $filter, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1010,7 +1101,19 @@ class SitesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Site[]' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1027,7 +1130,19 @@ class SitesApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -1061,13 +1176,14 @@ class SitesApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSites'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getSitesAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getSitesAsync($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getSites'][0])
     {
-        return $this->getSitesAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getSitesAsyncWithHttpInfo($page, $per_page, $sort, $filter, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1084,14 +1200,15 @@ class SitesApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSites'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getSitesAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getSitesAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getSites'][0])
     {
         $returnType = '\Adserver\Model\Site[]';
-        $request = $this->getSitesRequest($page, $per_page, $sort, $filter);
+        $request = $this->getSitesRequest($page, $per_page, $sort, $filter, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1136,12 +1253,18 @@ class SitesApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getSites'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getSitesRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getSitesRequest($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getSites'][0])
     {
+
+
+
+
+
 
         $resourcePath = '/site';
         $formParams = [];
@@ -1190,16 +1313,11 @@ class SitesApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -1217,9 +1335,9 @@ class SitesApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1242,10 +1360,11 @@ class SitesApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -1258,14 +1377,15 @@ class SitesApi
      *
      * @param  int $id id (required)
      * @param  \Adserver\Model\SiteRequest $site_request site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Site|\Adserver\Model\FormErrorResponse
      */
-    public function updateSite($id, $site_request)
+    public function updateSite($id, $site_request, string $contentType = self::contentTypes['updateSite'][0])
     {
-        list($response) = $this->updateSiteWithHttpInfo($id, $site_request);
+        list($response) = $this->updateSiteWithHttpInfo($id, $site_request, $contentType);
         return $response;
     }
 
@@ -1276,14 +1396,15 @@ class SitesApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\SiteRequest $site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Site|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function updateSiteWithHttpInfo($id, $site_request)
+    public function updateSiteWithHttpInfo($id, $site_request, string $contentType = self::contentTypes['updateSite'][0])
     {
-        $request = $this->updateSiteRequest($id, $site_request);
+        $request = $this->updateSiteRequest($id, $site_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1327,7 +1448,19 @@ class SitesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Site' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1342,7 +1475,19 @@ class SitesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1359,7 +1504,19 @@ class SitesApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -1399,13 +1556,14 @@ class SitesApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\SiteRequest $site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function updateSiteAsync($id, $site_request)
+    public function updateSiteAsync($id, $site_request, string $contentType = self::contentTypes['updateSite'][0])
     {
-        return $this->updateSiteAsyncWithHttpInfo($id, $site_request)
+        return $this->updateSiteAsyncWithHttpInfo($id, $site_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1420,14 +1578,15 @@ class SitesApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\SiteRequest $site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function updateSiteAsyncWithHttpInfo($id, $site_request)
+    public function updateSiteAsyncWithHttpInfo($id, $site_request, string $contentType = self::contentTypes['updateSite'][0])
     {
         $returnType = '\Adserver\Model\Site';
-        $request = $this->updateSiteRequest($id, $site_request);
+        $request = $this->updateSiteRequest($id, $site_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1470,24 +1629,28 @@ class SitesApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\SiteRequest $site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function updateSiteRequest($id, $site_request)
+    public function updateSiteRequest($id, $site_request, string $contentType = self::contentTypes['updateSite'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling updateSite'
             );
         }
+
         // verify the required parameter 'site_request' is set
         if ($site_request === null || (is_array($site_request) && count($site_request) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $site_request when calling updateSite'
             );
         }
+
 
         $resourcePath = '/site/{id}';
         $formParams = [];
@@ -1508,21 +1671,17 @@ class SitesApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (isset($site_request)) {
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($site_request));
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($site_request));
             } else {
                 $httpBody = $site_request;
             }
@@ -1541,9 +1700,9 @@ class SitesApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1566,10 +1725,11 @@ class SitesApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'PUT',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );

@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -65,6 +65,13 @@ class AdvReportsApi
      */
     protected $hostIndex;
 
+    /** @var string[] $contentTypes **/
+    public const contentTypes = [
+        'advGetStats' => [
+            'application/json',
+        ],
+    ];
+
     /**
      * @param ClientInterface $client
      * @param Configuration   $config
@@ -114,46 +121,48 @@ class AdvReportsApi
     /**
      * Operation advGetStats
      *
-     * Advertiser&#39;s stats
+     * Advertiser stats
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idusergroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
+     * @param  int $idcampaign Filter by campaign ID (optional)
+     * @param  int $idusergroup Filter by campaign group ID (optional)
+     * @param  int $idad Filter by ad ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advGetStats'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\StatsItem[]|\Adserver\Model\FormErrorResponse
      */
-    public function advGetStats($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
+    public function advGetStats($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null, string $contentType = self::contentTypes['advGetStats'][0])
     {
-        list($response) = $this->advGetStatsWithHttpInfo($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad);
+        list($response) = $this->advGetStatsWithHttpInfo($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad, $contentType);
         return $response;
     }
 
     /**
      * Operation advGetStatsWithHttpInfo
      *
-     * Advertiser&#39;s stats
+     * Advertiser stats
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idusergroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
+     * @param  int $idcampaign Filter by campaign ID (optional)
+     * @param  int $idusergroup Filter by campaign group ID (optional)
+     * @param  int $idad Filter by ad ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advGetStats'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\StatsItem[]|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function advGetStatsWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
+    public function advGetStatsWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null, string $contentType = self::contentTypes['advGetStats'][0])
     {
-        $request = $this->advGetStatsRequest($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad);
+        $request = $this->advGetStatsRequest($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -197,7 +206,19 @@ class AdvReportsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\StatsItem[]' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -212,7 +233,19 @@ class AdvReportsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -229,7 +262,19 @@ class AdvReportsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -265,22 +310,23 @@ class AdvReportsApi
     /**
      * Operation advGetStatsAsync
      *
-     * Advertiser&#39;s stats
+     * Advertiser stats
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idusergroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
+     * @param  int $idcampaign Filter by campaign ID (optional)
+     * @param  int $idusergroup Filter by campaign group ID (optional)
+     * @param  int $idad Filter by ad ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advGetStats'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advGetStatsAsync($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
+    public function advGetStatsAsync($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null, string $contentType = self::contentTypes['advGetStats'][0])
     {
-        return $this->advGetStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad)
+        return $this->advGetStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -291,23 +337,24 @@ class AdvReportsApi
     /**
      * Operation advGetStatsAsyncWithHttpInfo
      *
-     * Advertiser&#39;s stats
+     * Advertiser stats
      *
      * @param  string $date_begin Beginning of date interval (required)
      * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idusergroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
+     * @param  int $idcampaign Filter by campaign ID (optional)
+     * @param  int $idusergroup Filter by campaign group ID (optional)
+     * @param  int $idad Filter by ad ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advGetStats'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advGetStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
+    public function advGetStatsAsyncWithHttpInfo($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null, string $contentType = self::contentTypes['advGetStats'][0])
     {
         $returnType = '\Adserver\Model\StatsItem[]';
-        $request = $this->advGetStatsRequest($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad);
+        $request = $this->advGetStatsRequest($date_begin, $date_end, $group, $timezone, $idcampaign, $idusergroup, $idad, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -352,33 +399,42 @@ class AdvReportsApi
      * @param  string $date_end Ending of date interval (required)
      * @param  string $group Group by (required)
      * @param  string $timezone Time zone (optional)
-     * @param  int $idcampaign Filter by campaign&#39;s ID (optional)
-     * @param  int $idusergroup Filter by campaign&#39;s group ID (optional)
-     * @param  int $idad Filter by ad&#39;s ID (optional)
+     * @param  int $idcampaign Filter by campaign ID (optional)
+     * @param  int $idusergroup Filter by campaign group ID (optional)
+     * @param  int $idad Filter by ad ID (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advGetStats'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function advGetStatsRequest($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null)
+    public function advGetStatsRequest($date_begin, $date_end, $group, $timezone = null, $idcampaign = null, $idusergroup = null, $idad = null, string $contentType = self::contentTypes['advGetStats'][0])
     {
+
         // verify the required parameter 'date_begin' is set
         if ($date_begin === null || (is_array($date_begin) && count($date_begin) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $date_begin when calling advGetStats'
             );
         }
+
         // verify the required parameter 'date_end' is set
         if ($date_end === null || (is_array($date_end) && count($date_end) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $date_end when calling advGetStats'
             );
         }
+
         // verify the required parameter 'group' is set
         if ($group === null || (is_array($group) && count($group) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $group when calling advGetStats'
             );
         }
+
+
+
+
+
 
         $resourcePath = '/advert/stats';
         $formParams = [];
@@ -454,16 +510,11 @@ class AdvReportsApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -481,9 +532,9 @@ class AdvReportsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -506,10 +557,11 @@ class AdvReportsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );

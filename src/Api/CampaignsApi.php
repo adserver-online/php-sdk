@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -65,6 +65,25 @@ class CampaignsApi
      */
     protected $hostIndex;
 
+    /** @var string[] $contentTypes **/
+    public const contentTypes = [
+        'createCampaign' => [
+            'application/json',
+        ],
+        'deleteCampaign' => [
+            'application/json',
+        ],
+        'getCampaign' => [
+            'application/json',
+        ],
+        'getCampaigns' => [
+            'application/json',
+        ],
+        'updateCampaign' => [
+            'application/json',
+        ],
+    ];
+
     /**
      * @param ClientInterface $client
      * @param Configuration   $config
@@ -117,14 +136,15 @@ class CampaignsApi
      * Create campaign
      *
      * @param  \Adserver\Model\CampaignRequest $campaign_request campaign_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createCampaign'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Campaign|\Adserver\Model\FormErrorResponse
      */
-    public function createCampaign($campaign_request)
+    public function createCampaign($campaign_request, string $contentType = self::contentTypes['createCampaign'][0])
     {
-        list($response) = $this->createCampaignWithHttpInfo($campaign_request);
+        list($response) = $this->createCampaignWithHttpInfo($campaign_request, $contentType);
         return $response;
     }
 
@@ -134,14 +154,15 @@ class CampaignsApi
      * Create campaign
      *
      * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createCampaign'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Campaign|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function createCampaignWithHttpInfo($campaign_request)
+    public function createCampaignWithHttpInfo($campaign_request, string $contentType = self::contentTypes['createCampaign'][0])
     {
-        $request = $this->createCampaignRequest($campaign_request);
+        $request = $this->createCampaignRequest($campaign_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -185,7 +206,19 @@ class CampaignsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Campaign' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -200,7 +233,19 @@ class CampaignsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -217,7 +262,19 @@ class CampaignsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -256,13 +313,14 @@ class CampaignsApi
      * Create campaign
      *
      * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createCampaign'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createCampaignAsync($campaign_request)
+    public function createCampaignAsync($campaign_request, string $contentType = self::contentTypes['createCampaign'][0])
     {
-        return $this->createCampaignAsyncWithHttpInfo($campaign_request)
+        return $this->createCampaignAsyncWithHttpInfo($campaign_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -276,14 +334,15 @@ class CampaignsApi
      * Create campaign
      *
      * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createCampaign'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createCampaignAsyncWithHttpInfo($campaign_request)
+    public function createCampaignAsyncWithHttpInfo($campaign_request, string $contentType = self::contentTypes['createCampaign'][0])
     {
         $returnType = '\Adserver\Model\Campaign';
-        $request = $this->createCampaignRequest($campaign_request);
+        $request = $this->createCampaignRequest($campaign_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -325,18 +384,21 @@ class CampaignsApi
      * Create request for operation 'createCampaign'
      *
      * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createCampaign'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function createCampaignRequest($campaign_request)
+    public function createCampaignRequest($campaign_request, string $contentType = self::contentTypes['createCampaign'][0])
     {
+
         // verify the required parameter 'campaign_request' is set
         if ($campaign_request === null || (is_array($campaign_request) && count($campaign_request) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $campaign_request when calling createCampaign'
             );
         }
+
 
         $resourcePath = '/campaign';
         $formParams = [];
@@ -349,21 +411,17 @@ class CampaignsApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (isset($campaign_request)) {
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($campaign_request));
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($campaign_request));
             } else {
                 $httpBody = $campaign_request;
             }
@@ -382,9 +440,9 @@ class CampaignsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -407,10 +465,11 @@ class CampaignsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -422,14 +481,15 @@ class CampaignsApi
      * Delete campaign
      *
      * @param  int $id id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteCampaign'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function deleteCampaign($id)
+    public function deleteCampaign($id, string $contentType = self::contentTypes['deleteCampaign'][0])
     {
-        $this->deleteCampaignWithHttpInfo($id);
+        $this->deleteCampaignWithHttpInfo($id, $contentType);
     }
 
     /**
@@ -438,14 +498,15 @@ class CampaignsApi
      * Delete campaign
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteCampaign'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function deleteCampaignWithHttpInfo($id)
+    public function deleteCampaignWithHttpInfo($id, string $contentType = self::contentTypes['deleteCampaign'][0])
     {
-        $request = $this->deleteCampaignRequest($id);
+        $request = $this->deleteCampaignRequest($id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -497,13 +558,14 @@ class CampaignsApi
      * Delete campaign
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteCampaign'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function deleteCampaignAsync($id)
+    public function deleteCampaignAsync($id, string $contentType = self::contentTypes['deleteCampaign'][0])
     {
-        return $this->deleteCampaignAsyncWithHttpInfo($id)
+        return $this->deleteCampaignAsyncWithHttpInfo($id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -517,14 +579,15 @@ class CampaignsApi
      * Delete campaign
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteCampaign'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function deleteCampaignAsyncWithHttpInfo($id)
+    public function deleteCampaignAsyncWithHttpInfo($id, string $contentType = self::contentTypes['deleteCampaign'][0])
     {
         $returnType = '';
-        $request = $this->deleteCampaignRequest($id);
+        $request = $this->deleteCampaignRequest($id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -553,18 +616,21 @@ class CampaignsApi
      * Create request for operation 'deleteCampaign'
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteCampaign'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function deleteCampaignRequest($id)
+    public function deleteCampaignRequest($id, string $contentType = self::contentTypes['deleteCampaign'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling deleteCampaign'
             );
         }
+
 
         $resourcePath = '/campaign/{id}';
         $formParams = [];
@@ -585,16 +651,11 @@ class CampaignsApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                []
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                [],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            [],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -612,9 +673,9 @@ class CampaignsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -637,10 +698,11 @@ class CampaignsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'DELETE',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -652,14 +714,16 @@ class CampaignsApi
      * Get campaign
      *
      * @param  int $id id (required)
+     * @param  int $with_pub If equal to 1, assigned publishers will be added to the response. Applies to manually assigned zones only. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCampaign'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Campaign
      */
-    public function getCampaign($id)
+    public function getCampaign($id, $with_pub = null, string $contentType = self::contentTypes['getCampaign'][0])
     {
-        list($response) = $this->getCampaignWithHttpInfo($id);
+        list($response) = $this->getCampaignWithHttpInfo($id, $with_pub, $contentType);
         return $response;
     }
 
@@ -669,14 +733,16 @@ class CampaignsApi
      * Get campaign
      *
      * @param  int $id (required)
+     * @param  int $with_pub If equal to 1, assigned publishers will be added to the response. Applies to manually assigned zones only. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCampaign'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Campaign, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getCampaignWithHttpInfo($id)
+    public function getCampaignWithHttpInfo($id, $with_pub = null, string $contentType = self::contentTypes['getCampaign'][0])
     {
-        $request = $this->getCampaignRequest($id);
+        $request = $this->getCampaignRequest($id, $with_pub, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -720,7 +786,19 @@ class CampaignsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Campaign' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -737,7 +815,19 @@ class CampaignsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -768,13 +858,15 @@ class CampaignsApi
      * Get campaign
      *
      * @param  int $id (required)
+     * @param  int $with_pub If equal to 1, assigned publishers will be added to the response. Applies to manually assigned zones only. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCampaign'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getCampaignAsync($id)
+    public function getCampaignAsync($id, $with_pub = null, string $contentType = self::contentTypes['getCampaign'][0])
     {
-        return $this->getCampaignAsyncWithHttpInfo($id)
+        return $this->getCampaignAsyncWithHttpInfo($id, $with_pub, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -788,14 +880,16 @@ class CampaignsApi
      * Get campaign
      *
      * @param  int $id (required)
+     * @param  int $with_pub If equal to 1, assigned publishers will be added to the response. Applies to manually assigned zones only. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCampaign'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getCampaignAsyncWithHttpInfo($id)
+    public function getCampaignAsyncWithHttpInfo($id, $with_pub = null, string $contentType = self::contentTypes['getCampaign'][0])
     {
         $returnType = '\Adserver\Model\Campaign';
-        $request = $this->getCampaignRequest($id);
+        $request = $this->getCampaignRequest($id, $with_pub, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -837,18 +931,23 @@ class CampaignsApi
      * Create request for operation 'getCampaign'
      *
      * @param  int $id (required)
+     * @param  int $with_pub If equal to 1, assigned publishers will be added to the response. Applies to manually assigned zones only. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCampaign'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getCampaignRequest($id)
+    public function getCampaignRequest($id, $with_pub = null, string $contentType = self::contentTypes['getCampaign'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling getCampaign'
             );
         }
+
+
 
         $resourcePath = '/campaign/{id}';
         $formParams = [];
@@ -857,6 +956,15 @@ class CampaignsApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $with_pub,
+            'with_pub', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
         // path params
@@ -869,16 +977,11 @@ class CampaignsApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -896,9 +999,9 @@ class CampaignsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -921,10 +1024,11 @@ class CampaignsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -939,14 +1043,17 @@ class CampaignsApi
      * @param  int $per_page per_page (optional)
      * @param  string $sort sort (optional)
      * @param  object[] $filter filter (optional)
+     * @param  int $idgroup Filter by group (optional)
+     * @param  int $with_pub If equal to 1, assigned publishers will be added to the response. Applies to manually assigned zones only. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCampaigns'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Campaign[]
      */
-    public function getCampaigns($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getCampaigns($page = null, $per_page = null, $sort = null, $filter = null, $idgroup = null, $with_pub = null, string $contentType = self::contentTypes['getCampaigns'][0])
     {
-        list($response) = $this->getCampaignsWithHttpInfo($page, $per_page, $sort, $filter);
+        list($response) = $this->getCampaignsWithHttpInfo($page, $per_page, $sort, $filter, $idgroup, $with_pub, $contentType);
         return $response;
     }
 
@@ -959,14 +1066,17 @@ class CampaignsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  int $idgroup Filter by group (optional)
+     * @param  int $with_pub If equal to 1, assigned publishers will be added to the response. Applies to manually assigned zones only. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCampaigns'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Campaign[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function getCampaignsWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getCampaignsWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, $idgroup = null, $with_pub = null, string $contentType = self::contentTypes['getCampaigns'][0])
     {
-        $request = $this->getCampaignsRequest($page, $per_page, $sort, $filter);
+        $request = $this->getCampaignsRequest($page, $per_page, $sort, $filter, $idgroup, $with_pub, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1010,7 +1120,19 @@ class CampaignsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Campaign[]' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1027,7 +1149,19 @@ class CampaignsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -1061,13 +1195,16 @@ class CampaignsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  int $idgroup Filter by group (optional)
+     * @param  int $with_pub If equal to 1, assigned publishers will be added to the response. Applies to manually assigned zones only. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCampaigns'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getCampaignsAsync($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getCampaignsAsync($page = null, $per_page = null, $sort = null, $filter = null, $idgroup = null, $with_pub = null, string $contentType = self::contentTypes['getCampaigns'][0])
     {
-        return $this->getCampaignsAsyncWithHttpInfo($page, $per_page, $sort, $filter)
+        return $this->getCampaignsAsyncWithHttpInfo($page, $per_page, $sort, $filter, $idgroup, $with_pub, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1084,14 +1221,17 @@ class CampaignsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  int $idgroup Filter by group (optional)
+     * @param  int $with_pub If equal to 1, assigned publishers will be added to the response. Applies to manually assigned zones only. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCampaigns'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getCampaignsAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getCampaignsAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, $idgroup = null, $with_pub = null, string $contentType = self::contentTypes['getCampaigns'][0])
     {
         $returnType = '\Adserver\Model\Campaign[]';
-        $request = $this->getCampaignsRequest($page, $per_page, $sort, $filter);
+        $request = $this->getCampaignsRequest($page, $per_page, $sort, $filter, $idgroup, $with_pub, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1136,12 +1276,22 @@ class CampaignsApi
      * @param  int $per_page (optional)
      * @param  string $sort (optional)
      * @param  object[] $filter (optional)
+     * @param  int $idgroup Filter by group (optional)
+     * @param  int $with_pub If equal to 1, assigned publishers will be added to the response. Applies to manually assigned zones only. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCampaigns'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getCampaignsRequest($page = null, $per_page = null, $sort = null, $filter = null)
+    public function getCampaignsRequest($page = null, $per_page = null, $sort = null, $filter = null, $idgroup = null, $with_pub = null, string $contentType = self::contentTypes['getCampaigns'][0])
     {
+
+
+
+
+
+
+
 
         $resourcePath = '/campaign';
         $formParams = [];
@@ -1186,20 +1336,33 @@ class CampaignsApi
             true, // explode
             false // required
         ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $idgroup,
+            'idgroup', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $with_pub,
+            'with_pub', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -1217,9 +1380,9 @@ class CampaignsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1242,10 +1405,11 @@ class CampaignsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -1258,14 +1422,15 @@ class CampaignsApi
      *
      * @param  int $id id (required)
      * @param  \Adserver\Model\CampaignRequest $campaign_request campaign_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateCampaign'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Campaign|\Adserver\Model\FormErrorResponse
      */
-    public function updateCampaign($id, $campaign_request)
+    public function updateCampaign($id, $campaign_request, string $contentType = self::contentTypes['updateCampaign'][0])
     {
-        list($response) = $this->updateCampaignWithHttpInfo($id, $campaign_request);
+        list($response) = $this->updateCampaignWithHttpInfo($id, $campaign_request, $contentType);
         return $response;
     }
 
@@ -1276,14 +1441,15 @@ class CampaignsApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateCampaign'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Campaign|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function updateCampaignWithHttpInfo($id, $campaign_request)
+    public function updateCampaignWithHttpInfo($id, $campaign_request, string $contentType = self::contentTypes['updateCampaign'][0])
     {
-        $request = $this->updateCampaignRequest($id, $campaign_request);
+        $request = $this->updateCampaignRequest($id, $campaign_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1327,7 +1493,19 @@ class CampaignsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Campaign' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1342,7 +1520,19 @@ class CampaignsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1359,7 +1549,19 @@ class CampaignsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -1399,13 +1601,14 @@ class CampaignsApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateCampaign'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function updateCampaignAsync($id, $campaign_request)
+    public function updateCampaignAsync($id, $campaign_request, string $contentType = self::contentTypes['updateCampaign'][0])
     {
-        return $this->updateCampaignAsyncWithHttpInfo($id, $campaign_request)
+        return $this->updateCampaignAsyncWithHttpInfo($id, $campaign_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1420,14 +1623,15 @@ class CampaignsApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateCampaign'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function updateCampaignAsyncWithHttpInfo($id, $campaign_request)
+    public function updateCampaignAsyncWithHttpInfo($id, $campaign_request, string $contentType = self::contentTypes['updateCampaign'][0])
     {
         $returnType = '\Adserver\Model\Campaign';
-        $request = $this->updateCampaignRequest($id, $campaign_request);
+        $request = $this->updateCampaignRequest($id, $campaign_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1470,24 +1674,28 @@ class CampaignsApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\CampaignRequest $campaign_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateCampaign'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function updateCampaignRequest($id, $campaign_request)
+    public function updateCampaignRequest($id, $campaign_request, string $contentType = self::contentTypes['updateCampaign'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling updateCampaign'
             );
         }
+
         // verify the required parameter 'campaign_request' is set
         if ($campaign_request === null || (is_array($campaign_request) && count($campaign_request) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $campaign_request when calling updateCampaign'
             );
         }
+
 
         $resourcePath = '/campaign/{id}';
         $formParams = [];
@@ -1508,21 +1716,17 @@ class CampaignsApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (isset($campaign_request)) {
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($campaign_request));
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($campaign_request));
             } else {
                 $httpBody = $campaign_request;
             }
@@ -1541,9 +1745,9 @@ class CampaignsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1566,10 +1770,11 @@ class CampaignsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'PUT',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );

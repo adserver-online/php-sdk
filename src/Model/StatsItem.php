@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -90,6 +90,33 @@ class StatsItem implements ModelInterface, ArrayAccess, \JsonSerializable
     ];
 
     /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'dimension' => false,
+        'iddimension' => true,
+        'impressions' => false,
+        'impressions_unique' => false,
+        'clicks' => false,
+        'clicks_unique' => false,
+        'conversions' => false,
+        'cpm' => false,
+        'cpc' => false,
+        'cpa' => false,
+        'amount' => false,
+        'amount_pub' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
+
+    /**
      * Array of property to type mappings. Used for (de)serialization
      *
      * @return array
@@ -107,6 +134,58 @@ class StatsItem implements ModelInterface, ArrayAccess, \JsonSerializable
     public static function openAPIFormats()
     {
         return self::$openAPIFormats;
+    }
+
+    /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
     }
 
     /**
@@ -227,18 +306,36 @@ class StatsItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['dimension'] = $data['dimension'] ?? null;
-        $this->container['iddimension'] = $data['iddimension'] ?? null;
-        $this->container['impressions'] = $data['impressions'] ?? null;
-        $this->container['impressions_unique'] = $data['impressions_unique'] ?? null;
-        $this->container['clicks'] = $data['clicks'] ?? null;
-        $this->container['clicks_unique'] = $data['clicks_unique'] ?? null;
-        $this->container['conversions'] = $data['conversions'] ?? null;
-        $this->container['cpm'] = $data['cpm'] ?? null;
-        $this->container['cpc'] = $data['cpc'] ?? null;
-        $this->container['cpa'] = $data['cpa'] ?? null;
-        $this->container['amount'] = $data['amount'] ?? null;
-        $this->container['amount_pub'] = $data['amount_pub'] ?? null;
+        $this->setIfExists('dimension', $data ?? [], null);
+        $this->setIfExists('iddimension', $data ?? [], null);
+        $this->setIfExists('impressions', $data ?? [], null);
+        $this->setIfExists('impressions_unique', $data ?? [], null);
+        $this->setIfExists('clicks', $data ?? [], null);
+        $this->setIfExists('clicks_unique', $data ?? [], null);
+        $this->setIfExists('conversions', $data ?? [], null);
+        $this->setIfExists('cpm', $data ?? [], null);
+        $this->setIfExists('cpc', $data ?? [], null);
+        $this->setIfExists('cpa', $data ?? [], null);
+        $this->setIfExists('amount', $data ?? [], null);
+        $this->setIfExists('amount_pub', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -284,6 +381,9 @@ class StatsItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setDimension($dimension)
     {
+        if (is_null($dimension)) {
+            throw new \InvalidArgumentException('non-nullable dimension cannot be null');
+        }
         $this->container['dimension'] = $dimension;
 
         return $this;
@@ -308,6 +408,16 @@ class StatsItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setIddimension($iddimension)
     {
+        if (is_null($iddimension)) {
+            array_push($this->openAPINullablesSetToNull, 'iddimension');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('iddimension', $nullablesSetToNull, true);
+            if ($index !== false) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
         $this->container['iddimension'] = $iddimension;
 
         return $this;
@@ -332,6 +442,9 @@ class StatsItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setImpressions($impressions)
     {
+        if (is_null($impressions)) {
+            throw new \InvalidArgumentException('non-nullable impressions cannot be null');
+        }
         $this->container['impressions'] = $impressions;
 
         return $this;
@@ -356,6 +469,9 @@ class StatsItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setImpressionsUnique($impressions_unique)
     {
+        if (is_null($impressions_unique)) {
+            throw new \InvalidArgumentException('non-nullable impressions_unique cannot be null');
+        }
         $this->container['impressions_unique'] = $impressions_unique;
 
         return $this;
@@ -380,6 +496,9 @@ class StatsItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setClicks($clicks)
     {
+        if (is_null($clicks)) {
+            throw new \InvalidArgumentException('non-nullable clicks cannot be null');
+        }
         $this->container['clicks'] = $clicks;
 
         return $this;
@@ -404,6 +523,9 @@ class StatsItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setClicksUnique($clicks_unique)
     {
+        if (is_null($clicks_unique)) {
+            throw new \InvalidArgumentException('non-nullable clicks_unique cannot be null');
+        }
         $this->container['clicks_unique'] = $clicks_unique;
 
         return $this;
@@ -428,6 +550,9 @@ class StatsItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setConversions($conversions)
     {
+        if (is_null($conversions)) {
+            throw new \InvalidArgumentException('non-nullable conversions cannot be null');
+        }
         $this->container['conversions'] = $conversions;
 
         return $this;
@@ -452,6 +577,9 @@ class StatsItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setCpm($cpm)
     {
+        if (is_null($cpm)) {
+            throw new \InvalidArgumentException('non-nullable cpm cannot be null');
+        }
         $this->container['cpm'] = $cpm;
 
         return $this;
@@ -476,6 +604,9 @@ class StatsItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setCpc($cpc)
     {
+        if (is_null($cpc)) {
+            throw new \InvalidArgumentException('non-nullable cpc cannot be null');
+        }
         $this->container['cpc'] = $cpc;
 
         return $this;
@@ -500,6 +631,9 @@ class StatsItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setCpa($cpa)
     {
+        if (is_null($cpa)) {
+            throw new \InvalidArgumentException('non-nullable cpa cannot be null');
+        }
         $this->container['cpa'] = $cpa;
 
         return $this;
@@ -524,6 +658,9 @@ class StatsItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setAmount($amount)
     {
+        if (is_null($amount)) {
+            throw new \InvalidArgumentException('non-nullable amount cannot be null');
+        }
         $this->container['amount'] = $amount;
 
         return $this;
@@ -548,6 +685,9 @@ class StatsItem implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setAmountPub($amount_pub)
     {
+        if (is_null($amount_pub)) {
+            throw new \InvalidArgumentException('non-nullable amount_pub cannot be null');
+        }
         $this->container['amount_pub'] = $amount_pub;
 
         return $this;

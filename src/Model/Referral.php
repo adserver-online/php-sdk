@@ -1,6 +1,6 @@
 <?php
 /**
- * Payout
+ * Referral
  *
  * PHP version 7.4
  *
@@ -28,7 +28,7 @@ use \ArrayAccess;
 use \Adserver\ObjectSerializer;
 
 /**
- * Payout Class Doc Comment
+ * Referral Class Doc Comment
  *
  * @category Class
  * @package  Adserver
@@ -36,7 +36,7 @@ use \Adserver\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
+class Referral implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -45,7 +45,7 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Payout';
+    protected static $openAPIModelName = 'Referral';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -55,13 +55,12 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPITypes = [
         'id' => 'int',
         'user' => '\Adserver\Model\UserBase',
-        'method' => 'string',
-        'account' => 'string',
-        'status' => 'object',
-        'amount' => 'float',
-        'descr' => 'string',
-        'created_at' => 'string',
-        'updated_at' => 'string'
+        'ref_user' => 'object',
+        'pub_percent' => 'float',
+        'revenue' => 'float',
+        'is_active' => 'bool',
+        'is_expired' => 'bool',
+        'created_at' => 'string'
     ];
 
     /**
@@ -74,13 +73,12 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPIFormats = [
         'id' => null,
         'user' => null,
-        'method' => null,
-        'account' => null,
-        'status' => null,
-        'amount' => null,
-        'descr' => null,
-        'created_at' => null,
-        'updated_at' => null
+        'ref_user' => null,
+        'pub_percent' => null,
+        'revenue' => null,
+        'is_active' => null,
+        'is_expired' => null,
+        'created_at' => null
     ];
 
     /**
@@ -91,13 +89,12 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static array $openAPINullables = [
         'id' => false,
         'user' => false,
-        'method' => false,
-        'account' => false,
-        'status' => false,
-        'amount' => false,
-        'descr' => false,
-        'created_at' => false,
-        'updated_at' => false
+        'ref_user' => false,
+        'pub_percent' => false,
+        'revenue' => false,
+        'is_active' => false,
+        'is_expired' => false,
+        'created_at' => false
     ];
 
     /**
@@ -188,13 +185,12 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $attributeMap = [
         'id' => 'id',
         'user' => 'user',
-        'method' => 'method',
-        'account' => 'account',
-        'status' => 'status',
-        'amount' => 'amount',
-        'descr' => 'descr',
-        'created_at' => 'created_at',
-        'updated_at' => 'updated_at'
+        'ref_user' => 'ref_user',
+        'pub_percent' => 'pub_percent',
+        'revenue' => 'revenue',
+        'is_active' => 'is_active',
+        'is_expired' => 'is_expired',
+        'created_at' => 'created_at'
     ];
 
     /**
@@ -205,13 +201,12 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $setters = [
         'id' => 'setId',
         'user' => 'setUser',
-        'method' => 'setMethod',
-        'account' => 'setAccount',
-        'status' => 'setStatus',
-        'amount' => 'setAmount',
-        'descr' => 'setDescr',
-        'created_at' => 'setCreatedAt',
-        'updated_at' => 'setUpdatedAt'
+        'ref_user' => 'setRefUser',
+        'pub_percent' => 'setPubPercent',
+        'revenue' => 'setRevenue',
+        'is_active' => 'setIsActive',
+        'is_expired' => 'setIsExpired',
+        'created_at' => 'setCreatedAt'
     ];
 
     /**
@@ -222,13 +217,12 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $getters = [
         'id' => 'getId',
         'user' => 'getUser',
-        'method' => 'getMethod',
-        'account' => 'getAccount',
-        'status' => 'getStatus',
-        'amount' => 'getAmount',
-        'descr' => 'getDescr',
-        'created_at' => 'getCreatedAt',
-        'updated_at' => 'getUpdatedAt'
+        'ref_user' => 'getRefUser',
+        'pub_percent' => 'getPubPercent',
+        'revenue' => 'getRevenue',
+        'is_active' => 'getIsActive',
+        'is_expired' => 'getIsExpired',
+        'created_at' => 'getCreatedAt'
     ];
 
     /**
@@ -290,13 +284,12 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('user', $data ?? [], null);
-        $this->setIfExists('method', $data ?? [], null);
-        $this->setIfExists('account', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
-        $this->setIfExists('amount', $data ?? [], null);
-        $this->setIfExists('descr', $data ?? [], null);
+        $this->setIfExists('ref_user', $data ?? [], null);
+        $this->setIfExists('pub_percent', $data ?? [], null);
+        $this->setIfExists('revenue', $data ?? [], null);
+        $this->setIfExists('is_active', $data ?? [], null);
+        $this->setIfExists('is_expired', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
-        $this->setIfExists('updated_at', $data ?? [], null);
     }
 
     /**
@@ -396,136 +389,136 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets method
-     *
-     * @return string|null
-     */
-    public function getMethod()
-    {
-        return $this->container['method'];
-    }
-
-    /**
-     * Sets method
-     *
-     * @param string|null $method method
-     *
-     * @return self
-     */
-    public function setMethod($method)
-    {
-        if (is_null($method)) {
-            throw new \InvalidArgumentException('non-nullable method cannot be null');
-        }
-        $this->container['method'] = $method;
-
-        return $this;
-    }
-
-    /**
-     * Gets account
-     *
-     * @return string|null
-     */
-    public function getAccount()
-    {
-        return $this->container['account'];
-    }
-
-    /**
-     * Sets account
-     *
-     * @param string|null $account account
-     *
-     * @return self
-     */
-    public function setAccount($account)
-    {
-        if (is_null($account)) {
-            throw new \InvalidArgumentException('non-nullable account cannot be null');
-        }
-        $this->container['account'] = $account;
-
-        return $this;
-    }
-
-    /**
-     * Gets status
+     * Gets ref_user
      *
      * @return object|null
      */
-    public function getStatus()
+    public function getRefUser()
     {
-        return $this->container['status'];
+        return $this->container['ref_user'];
     }
 
     /**
-     * Sets status
+     * Sets ref_user
      *
-     * @param object|null $status status
+     * @param object|null $ref_user ref_user
      *
      * @return self
      */
-    public function setStatus($status)
+    public function setRefUser($ref_user)
     {
-        if (is_null($status)) {
-            throw new \InvalidArgumentException('non-nullable status cannot be null');
+        if (is_null($ref_user)) {
+            throw new \InvalidArgumentException('non-nullable ref_user cannot be null');
         }
-        $this->container['status'] = $status;
+        $this->container['ref_user'] = $ref_user;
 
         return $this;
     }
 
     /**
-     * Gets amount
+     * Gets pub_percent
      *
      * @return float|null
      */
-    public function getAmount()
+    public function getPubPercent()
     {
-        return $this->container['amount'];
+        return $this->container['pub_percent'];
     }
 
     /**
-     * Sets amount
+     * Sets pub_percent
      *
-     * @param float|null $amount amount
+     * @param float|null $pub_percent pub_percent
      *
      * @return self
      */
-    public function setAmount($amount)
+    public function setPubPercent($pub_percent)
     {
-        if (is_null($amount)) {
-            throw new \InvalidArgumentException('non-nullable amount cannot be null');
+        if (is_null($pub_percent)) {
+            throw new \InvalidArgumentException('non-nullable pub_percent cannot be null');
         }
-        $this->container['amount'] = $amount;
+        $this->container['pub_percent'] = $pub_percent;
 
         return $this;
     }
 
     /**
-     * Gets descr
+     * Gets revenue
      *
-     * @return string|null
+     * @return float|null
      */
-    public function getDescr()
+    public function getRevenue()
     {
-        return $this->container['descr'];
+        return $this->container['revenue'];
     }
 
     /**
-     * Sets descr
+     * Sets revenue
      *
-     * @param string|null $descr descr
+     * @param float|null $revenue revenue
      *
      * @return self
      */
-    public function setDescr($descr)
+    public function setRevenue($revenue)
     {
-        if (is_null($descr)) {
-            throw new \InvalidArgumentException('non-nullable descr cannot be null');
+        if (is_null($revenue)) {
+            throw new \InvalidArgumentException('non-nullable revenue cannot be null');
         }
-        $this->container['descr'] = $descr;
+        $this->container['revenue'] = $revenue;
+
+        return $this;
+    }
+
+    /**
+     * Gets is_active
+     *
+     * @return bool|null
+     */
+    public function getIsActive()
+    {
+        return $this->container['is_active'];
+    }
+
+    /**
+     * Sets is_active
+     *
+     * @param bool|null $is_active is_active
+     *
+     * @return self
+     */
+    public function setIsActive($is_active)
+    {
+        if (is_null($is_active)) {
+            throw new \InvalidArgumentException('non-nullable is_active cannot be null');
+        }
+        $this->container['is_active'] = $is_active;
+
+        return $this;
+    }
+
+    /**
+     * Gets is_expired
+     *
+     * @return bool|null
+     */
+    public function getIsExpired()
+    {
+        return $this->container['is_expired'];
+    }
+
+    /**
+     * Sets is_expired
+     *
+     * @param bool|null $is_expired is_expired
+     *
+     * @return self
+     */
+    public function setIsExpired($is_expired)
+    {
+        if (is_null($is_expired)) {
+            throw new \InvalidArgumentException('non-nullable is_expired cannot be null');
+        }
+        $this->container['is_expired'] = $is_expired;
 
         return $this;
     }
@@ -553,33 +546,6 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable created_at cannot be null');
         }
         $this->container['created_at'] = $created_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets updated_at
-     *
-     * @return string|null
-     */
-    public function getUpdatedAt()
-    {
-        return $this->container['updated_at'];
-    }
-
-    /**
-     * Sets updated_at
-     *
-     * @param string|null $updated_at updated_at
-     *
-     * @return self
-     */
-    public function setUpdatedAt($updated_at)
-    {
-        if (is_null($updated_at)) {
-            throw new \InvalidArgumentException('non-nullable updated_at cannot be null');
-        }
-        $this->container['updated_at'] = $updated_at;
 
         return $this;
     }

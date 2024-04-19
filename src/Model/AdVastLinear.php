@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -57,9 +57,9 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
         'file' => 'string',
         'skipoffset' => 'int',
         'skipoffset_type' => 'string',
-        'allow_skip' => 'int',
-        'maintain_aspect_ratio' => 'int',
-        'video_scalable' => 'int'
+        'allow_skip' => 'bool',
+        'maintain_aspect_ratio' => 'bool',
+        'video_scalable' => 'bool'
     ];
 
     /**
@@ -79,6 +79,27 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
     ];
 
     /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'file' => false,
+        'skipoffset' => false,
+        'skipoffset_type' => false,
+        'allow_skip' => false,
+        'maintain_aspect_ratio' => false,
+        'video_scalable' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
+
+    /**
      * Array of property to type mappings. Used for (de)serialization
      *
      * @return array
@@ -96,6 +117,58 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
     public static function openAPIFormats()
     {
         return self::$openAPIFormats;
+    }
+
+    /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
     }
 
     /**
@@ -184,12 +257,6 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
 
     public const SKIPOFFSET_TYPE_TIME = 'Time';
     public const SKIPOFFSET_TYPE_PERCENT = 'Percent';
-    public const ALLOW_SKIP_0 = 0;
-    public const ALLOW_SKIP_1 = 1;
-    public const MAINTAIN_ASPECT_RATIO_0 = 0;
-    public const MAINTAIN_ASPECT_RATIO_1 = 1;
-    public const VIDEO_SCALABLE_0 = 0;
-    public const VIDEO_SCALABLE_1 = 1;
 
     /**
      * Gets allowable values of the enum
@@ -201,45 +268,6 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
         return [
             self::SKIPOFFSET_TYPE_TIME,
             self::SKIPOFFSET_TYPE_PERCENT,
-        ];
-    }
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getAllowSkipAllowableValues()
-    {
-        return [
-            self::ALLOW_SKIP_0,
-            self::ALLOW_SKIP_1,
-        ];
-    }
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getMaintainAspectRatioAllowableValues()
-    {
-        return [
-            self::MAINTAIN_ASPECT_RATIO_0,
-            self::MAINTAIN_ASPECT_RATIO_1,
-        ];
-    }
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getVideoScalableAllowableValues()
-    {
-        return [
-            self::VIDEO_SCALABLE_0,
-            self::VIDEO_SCALABLE_1,
         ];
     }
 
@@ -258,12 +286,30 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['file'] = $data['file'] ?? null;
-        $this->container['skipoffset'] = $data['skipoffset'] ?? null;
-        $this->container['skipoffset_type'] = $data['skipoffset_type'] ?? null;
-        $this->container['allow_skip'] = $data['allow_skip'] ?? null;
-        $this->container['maintain_aspect_ratio'] = $data['maintain_aspect_ratio'] ?? null;
-        $this->container['video_scalable'] = $data['video_scalable'] ?? null;
+        $this->setIfExists('file', $data ?? [], null);
+        $this->setIfExists('skipoffset', $data ?? [], null);
+        $this->setIfExists('skipoffset_type', $data ?? [], null);
+        $this->setIfExists('allow_skip', $data ?? [], null);
+        $this->setIfExists('maintain_aspect_ratio', $data ?? [], null);
+        $this->setIfExists('video_scalable', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -280,33 +326,6 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'skipoffset_type', must be one of '%s'",
                 $this->container['skipoffset_type'],
-                implode("', '", $allowedValues)
-            );
-        }
-
-        $allowedValues = $this->getAllowSkipAllowableValues();
-        if (!is_null($this->container['allow_skip']) && !in_array($this->container['allow_skip'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'allow_skip', must be one of '%s'",
-                $this->container['allow_skip'],
-                implode("', '", $allowedValues)
-            );
-        }
-
-        $allowedValues = $this->getMaintainAspectRatioAllowableValues();
-        if (!is_null($this->container['maintain_aspect_ratio']) && !in_array($this->container['maintain_aspect_ratio'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'maintain_aspect_ratio', must be one of '%s'",
-                $this->container['maintain_aspect_ratio'],
-                implode("', '", $allowedValues)
-            );
-        }
-
-        $allowedValues = $this->getVideoScalableAllowableValues();
-        if (!is_null($this->container['video_scalable']) && !in_array($this->container['video_scalable'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'video_scalable', must be one of '%s'",
-                $this->container['video_scalable'],
                 implode("', '", $allowedValues)
             );
         }
@@ -345,6 +364,9 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setFile($file)
     {
+        if (is_null($file)) {
+            throw new \InvalidArgumentException('non-nullable file cannot be null');
+        }
         $this->container['file'] = $file;
 
         return $this;
@@ -369,6 +391,9 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setSkipoffset($skipoffset)
     {
+        if (is_null($skipoffset)) {
+            throw new \InvalidArgumentException('non-nullable skipoffset cannot be null');
+        }
         $this->container['skipoffset'] = $skipoffset;
 
         return $this;
@@ -393,8 +418,11 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setSkipoffsetType($skipoffset_type)
     {
+        if (is_null($skipoffset_type)) {
+            throw new \InvalidArgumentException('non-nullable skipoffset_type cannot be null');
+        }
         $allowedValues = $this->getSkipoffsetTypeAllowableValues();
-        if (!is_null($skipoffset_type) && !in_array($skipoffset_type, $allowedValues, true)) {
+        if (!in_array($skipoffset_type, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     "Invalid value '%s' for 'skipoffset_type', must be one of '%s'",
@@ -411,7 +439,7 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets allow_skip
      *
-     * @return int|null
+     * @return bool|null
      */
     public function getAllowSkip()
     {
@@ -421,21 +449,14 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets allow_skip
      *
-     * @param int|null $allow_skip allow_skip
+     * @param bool|null $allow_skip allow_skip
      *
      * @return self
      */
     public function setAllowSkip($allow_skip)
     {
-        $allowedValues = $this->getAllowSkipAllowableValues();
-        if (!is_null($allow_skip) && !in_array($allow_skip, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'allow_skip', must be one of '%s'",
-                    $allow_skip,
-                    implode("', '", $allowedValues)
-                )
-            );
+        if (is_null($allow_skip)) {
+            throw new \InvalidArgumentException('non-nullable allow_skip cannot be null');
         }
         $this->container['allow_skip'] = $allow_skip;
 
@@ -445,7 +466,7 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets maintain_aspect_ratio
      *
-     * @return int|null
+     * @return bool|null
      */
     public function getMaintainAspectRatio()
     {
@@ -455,21 +476,14 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets maintain_aspect_ratio
      *
-     * @param int|null $maintain_aspect_ratio maintain_aspect_ratio
+     * @param bool|null $maintain_aspect_ratio maintain_aspect_ratio
      *
      * @return self
      */
     public function setMaintainAspectRatio($maintain_aspect_ratio)
     {
-        $allowedValues = $this->getMaintainAspectRatioAllowableValues();
-        if (!is_null($maintain_aspect_ratio) && !in_array($maintain_aspect_ratio, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'maintain_aspect_ratio', must be one of '%s'",
-                    $maintain_aspect_ratio,
-                    implode("', '", $allowedValues)
-                )
-            );
+        if (is_null($maintain_aspect_ratio)) {
+            throw new \InvalidArgumentException('non-nullable maintain_aspect_ratio cannot be null');
         }
         $this->container['maintain_aspect_ratio'] = $maintain_aspect_ratio;
 
@@ -479,7 +493,7 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets video_scalable
      *
-     * @return int|null
+     * @return bool|null
      */
     public function getVideoScalable()
     {
@@ -489,21 +503,14 @@ class AdVastLinear implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets video_scalable
      *
-     * @param int|null $video_scalable video_scalable
+     * @param bool|null $video_scalable video_scalable
      *
      * @return self
      */
     public function setVideoScalable($video_scalable)
     {
-        $allowedValues = $this->getVideoScalableAllowableValues();
-        if (!is_null($video_scalable) && !in_array($video_scalable, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'video_scalable', must be one of '%s'",
-                    $video_scalable,
-                    implode("', '", $allowedValues)
-                )
-            );
+        if (is_null($video_scalable)) {
+            throw new \InvalidArgumentException('non-nullable video_scalable cannot be null');
         }
         $this->container['video_scalable'] = $video_scalable;
 

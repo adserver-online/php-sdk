@@ -1,6 +1,6 @@
 <?php
 /**
- * PubOtherApi
+ * ReferralsApi
  * PHP version 7.4
  *
  * @category Class
@@ -36,14 +36,14 @@ use Adserver\HeaderSelector;
 use Adserver\ObjectSerializer;
 
 /**
- * PubOtherApi Class Doc Comment
+ * ReferralsApi Class Doc Comment
  *
  * @category Class
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class PubOtherApi
+class ReferralsApi
 {
     /**
      * @var ClientInterface
@@ -67,7 +67,7 @@ class PubOtherApi
 
     /** @var string[] $contentTypes **/
     public const contentTypes = [
-        'pubGetDictionaries' => [
+        'getReferrals' => [
             'application/json',
         ],
     ];
@@ -119,36 +119,44 @@ class PubOtherApi
     }
 
     /**
-     * Operation pubGetDictionaries
+     * Operation getReferrals
      *
-     * Return publisher data dictionaries
+     * Referrals list
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetDictionaries'] to see the possible values for this operation
+     * @param  int $page page (optional)
+     * @param  int $per_page per_page (optional)
+     * @param  string $sort sort (optional)
+     * @param  object[] $filter filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReferrals'] to see the possible values for this operation
      *
      * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Adserver\Model\DictPub
+     * @return \Adserver\Model\Referral[]
      */
-    public function pubGetDictionaries(string $contentType = self::contentTypes['pubGetDictionaries'][0])
+    public function getReferrals($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getReferrals'][0])
     {
-        list($response) = $this->pubGetDictionariesWithHttpInfo($contentType);
+        list($response) = $this->getReferralsWithHttpInfo($page, $per_page, $sort, $filter, $contentType);
         return $response;
     }
 
     /**
-     * Operation pubGetDictionariesWithHttpInfo
+     * Operation getReferralsWithHttpInfo
      *
-     * Return publisher data dictionaries
+     * Referrals list
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetDictionaries'] to see the possible values for this operation
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReferrals'] to see the possible values for this operation
      *
      * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Adserver\Model\DictPub, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Adserver\Model\Referral[], HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubGetDictionariesWithHttpInfo(string $contentType = self::contentTypes['pubGetDictionaries'][0])
+    public function getReferralsWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getReferrals'][0])
     {
-        $request = $this->pubGetDictionariesRequest($contentType);
+        $request = $this->getReferralsRequest($page, $per_page, $sort, $filter, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -187,11 +195,11 @@ class PubOtherApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\Adserver\Model\DictPub' === '\SplFileObject') {
+                    if ('\Adserver\Model\Referral[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\Adserver\Model\DictPub' !== 'string') {
+                        if ('\Adserver\Model\Referral[]' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -209,13 +217,13 @@ class PubOtherApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\Adserver\Model\DictPub', []),
+                        ObjectSerializer::deserialize($content, '\Adserver\Model\Referral[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
             }
 
-            $returnType = '\Adserver\Model\DictPub';
+            $returnType = '\Adserver\Model\Referral[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -248,7 +256,7 @@ class PubOtherApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Adserver\Model\DictPub',
+                        '\Adserver\Model\Referral[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -259,18 +267,22 @@ class PubOtherApi
     }
 
     /**
-     * Operation pubGetDictionariesAsync
+     * Operation getReferralsAsync
      *
-     * Return publisher data dictionaries
+     * Referrals list
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetDictionaries'] to see the possible values for this operation
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReferrals'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetDictionariesAsync(string $contentType = self::contentTypes['pubGetDictionaries'][0])
+    public function getReferralsAsync($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getReferrals'][0])
     {
-        return $this->pubGetDictionariesAsyncWithHttpInfo($contentType)
+        return $this->getReferralsAsyncWithHttpInfo($page, $per_page, $sort, $filter, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -279,19 +291,23 @@ class PubOtherApi
     }
 
     /**
-     * Operation pubGetDictionariesAsyncWithHttpInfo
+     * Operation getReferralsAsyncWithHttpInfo
      *
-     * Return publisher data dictionaries
+     * Referrals list
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetDictionaries'] to see the possible values for this operation
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReferrals'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetDictionariesAsyncWithHttpInfo(string $contentType = self::contentTypes['pubGetDictionaries'][0])
+    public function getReferralsAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getReferrals'][0])
     {
-        $returnType = '\Adserver\Model\DictPub';
-        $request = $this->pubGetDictionariesRequest($contentType);
+        $returnType = '\Adserver\Model\Referral[]';
+        $request = $this->getReferralsRequest($page, $per_page, $sort, $filter, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -330,24 +346,68 @@ class PubOtherApi
     }
 
     /**
-     * Create request for operation 'pubGetDictionaries'
+     * Create request for operation 'getReferrals'
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetDictionaries'] to see the possible values for this operation
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReferrals'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function pubGetDictionariesRequest(string $contentType = self::contentTypes['pubGetDictionaries'][0])
+    public function getReferralsRequest($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['getReferrals'][0])
     {
 
 
-        $resourcePath = '/publish/dict';
+
+
+
+
+        $resourcePath = '/referral';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $page,
+            'page', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $per_page,
+            'per-page', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $sort,
+            'sort', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $filter,
+            'filter', // param base name
+            'array', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
 

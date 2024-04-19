@@ -1,6 +1,6 @@
 <?php
 /**
- * Payout
+ * DictAdv
  *
  * PHP version 7.4
  *
@@ -28,7 +28,7 @@ use \ArrayAccess;
 use \Adserver\ObjectSerializer;
 
 /**
- * Payout Class Doc Comment
+ * DictAdv Class Doc Comment
  *
  * @category Class
  * @package  Adserver
@@ -36,7 +36,7 @@ use \Adserver\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
+class DictAdv implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -45,7 +45,7 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Payout';
+    protected static $openAPIModelName = 'DictAdv';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -53,15 +53,9 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'id' => 'int',
-        'user' => '\Adserver\Model\UserBase',
-        'method' => 'string',
-        'account' => 'string',
-        'status' => 'object',
-        'amount' => 'float',
-        'descr' => 'string',
-        'created_at' => 'string',
-        'updated_at' => 'string'
+        'ad_formats' => 'array<string,string>',
+        'categories' => 'array<string,string>',
+        'price_models' => 'array<string,string>'
     ];
 
     /**
@@ -72,15 +66,9 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'id' => null,
-        'user' => null,
-        'method' => null,
-        'account' => null,
-        'status' => null,
-        'amount' => null,
-        'descr' => null,
-        'created_at' => null,
-        'updated_at' => null
+        'ad_formats' => null,
+        'categories' => null,
+        'price_models' => null
     ];
 
     /**
@@ -89,15 +77,9 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'id' => false,
-        'user' => false,
-        'method' => false,
-        'account' => false,
-        'status' => false,
-        'amount' => false,
-        'descr' => false,
-        'created_at' => false,
-        'updated_at' => false
+        'ad_formats' => false,
+        'categories' => false,
+        'price_models' => false
     ];
 
     /**
@@ -186,15 +168,9 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'id' => 'id',
-        'user' => 'user',
-        'method' => 'method',
-        'account' => 'account',
-        'status' => 'status',
-        'amount' => 'amount',
-        'descr' => 'descr',
-        'created_at' => 'created_at',
-        'updated_at' => 'updated_at'
+        'ad_formats' => 'ad_formats',
+        'categories' => 'categories',
+        'price_models' => 'price_models'
     ];
 
     /**
@@ -203,15 +179,9 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'id' => 'setId',
-        'user' => 'setUser',
-        'method' => 'setMethod',
-        'account' => 'setAccount',
-        'status' => 'setStatus',
-        'amount' => 'setAmount',
-        'descr' => 'setDescr',
-        'created_at' => 'setCreatedAt',
-        'updated_at' => 'setUpdatedAt'
+        'ad_formats' => 'setAdFormats',
+        'categories' => 'setCategories',
+        'price_models' => 'setPriceModels'
     ];
 
     /**
@@ -220,15 +190,9 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'id' => 'getId',
-        'user' => 'getUser',
-        'method' => 'getMethod',
-        'account' => 'getAccount',
-        'status' => 'getStatus',
-        'amount' => 'getAmount',
-        'descr' => 'getDescr',
-        'created_at' => 'getCreatedAt',
-        'updated_at' => 'getUpdatedAt'
+        'ad_formats' => 'getAdFormats',
+        'categories' => 'getCategories',
+        'price_models' => 'getPriceModels'
     ];
 
     /**
@@ -288,15 +252,9 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('user', $data ?? [], null);
-        $this->setIfExists('method', $data ?? [], null);
-        $this->setIfExists('account', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
-        $this->setIfExists('amount', $data ?? [], null);
-        $this->setIfExists('descr', $data ?? [], null);
-        $this->setIfExists('created_at', $data ?? [], null);
-        $this->setIfExists('updated_at', $data ?? [], null);
+        $this->setIfExists('ad_formats', $data ?? [], null);
+        $this->setIfExists('categories', $data ?? [], null);
+        $this->setIfExists('price_models', $data ?? [], null);
     }
 
     /**
@@ -342,244 +300,82 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets id
+     * Gets ad_formats
      *
-     * @return int|null
+     * @return array<string,string>|null
      */
-    public function getId()
+    public function getAdFormats()
     {
-        return $this->container['id'];
+        return $this->container['ad_formats'];
     }
 
     /**
-     * Sets id
+     * Sets ad_formats
      *
-     * @param int|null $id id
+     * @param array<string,string>|null $ad_formats ad_formats
      *
      * @return self
      */
-    public function setId($id)
+    public function setAdFormats($ad_formats)
     {
-        if (is_null($id)) {
-            throw new \InvalidArgumentException('non-nullable id cannot be null');
+        if (is_null($ad_formats)) {
+            throw new \InvalidArgumentException('non-nullable ad_formats cannot be null');
         }
-        $this->container['id'] = $id;
+        $this->container['ad_formats'] = $ad_formats;
 
         return $this;
     }
 
     /**
-     * Gets user
+     * Gets categories
      *
-     * @return \Adserver\Model\UserBase|null
+     * @return array<string,string>|null
      */
-    public function getUser()
+    public function getCategories()
     {
-        return $this->container['user'];
+        return $this->container['categories'];
     }
 
     /**
-     * Sets user
+     * Sets categories
      *
-     * @param \Adserver\Model\UserBase|null $user user
+     * @param array<string,string>|null $categories categories
      *
      * @return self
      */
-    public function setUser($user)
+    public function setCategories($categories)
     {
-        if (is_null($user)) {
-            throw new \InvalidArgumentException('non-nullable user cannot be null');
+        if (is_null($categories)) {
+            throw new \InvalidArgumentException('non-nullable categories cannot be null');
         }
-        $this->container['user'] = $user;
+        $this->container['categories'] = $categories;
 
         return $this;
     }
 
     /**
-     * Gets method
+     * Gets price_models
      *
-     * @return string|null
+     * @return array<string,string>|null
      */
-    public function getMethod()
+    public function getPriceModels()
     {
-        return $this->container['method'];
+        return $this->container['price_models'];
     }
 
     /**
-     * Sets method
+     * Sets price_models
      *
-     * @param string|null $method method
+     * @param array<string,string>|null $price_models price_models
      *
      * @return self
      */
-    public function setMethod($method)
+    public function setPriceModels($price_models)
     {
-        if (is_null($method)) {
-            throw new \InvalidArgumentException('non-nullable method cannot be null');
+        if (is_null($price_models)) {
+            throw new \InvalidArgumentException('non-nullable price_models cannot be null');
         }
-        $this->container['method'] = $method;
-
-        return $this;
-    }
-
-    /**
-     * Gets account
-     *
-     * @return string|null
-     */
-    public function getAccount()
-    {
-        return $this->container['account'];
-    }
-
-    /**
-     * Sets account
-     *
-     * @param string|null $account account
-     *
-     * @return self
-     */
-    public function setAccount($account)
-    {
-        if (is_null($account)) {
-            throw new \InvalidArgumentException('non-nullable account cannot be null');
-        }
-        $this->container['account'] = $account;
-
-        return $this;
-    }
-
-    /**
-     * Gets status
-     *
-     * @return object|null
-     */
-    public function getStatus()
-    {
-        return $this->container['status'];
-    }
-
-    /**
-     * Sets status
-     *
-     * @param object|null $status status
-     *
-     * @return self
-     */
-    public function setStatus($status)
-    {
-        if (is_null($status)) {
-            throw new \InvalidArgumentException('non-nullable status cannot be null');
-        }
-        $this->container['status'] = $status;
-
-        return $this;
-    }
-
-    /**
-     * Gets amount
-     *
-     * @return float|null
-     */
-    public function getAmount()
-    {
-        return $this->container['amount'];
-    }
-
-    /**
-     * Sets amount
-     *
-     * @param float|null $amount amount
-     *
-     * @return self
-     */
-    public function setAmount($amount)
-    {
-        if (is_null($amount)) {
-            throw new \InvalidArgumentException('non-nullable amount cannot be null');
-        }
-        $this->container['amount'] = $amount;
-
-        return $this;
-    }
-
-    /**
-     * Gets descr
-     *
-     * @return string|null
-     */
-    public function getDescr()
-    {
-        return $this->container['descr'];
-    }
-
-    /**
-     * Sets descr
-     *
-     * @param string|null $descr descr
-     *
-     * @return self
-     */
-    public function setDescr($descr)
-    {
-        if (is_null($descr)) {
-            throw new \InvalidArgumentException('non-nullable descr cannot be null');
-        }
-        $this->container['descr'] = $descr;
-
-        return $this;
-    }
-
-    /**
-     * Gets created_at
-     *
-     * @return string|null
-     */
-    public function getCreatedAt()
-    {
-        return $this->container['created_at'];
-    }
-
-    /**
-     * Sets created_at
-     *
-     * @param string|null $created_at created_at
-     *
-     * @return self
-     */
-    public function setCreatedAt($created_at)
-    {
-        if (is_null($created_at)) {
-            throw new \InvalidArgumentException('non-nullable created_at cannot be null');
-        }
-        $this->container['created_at'] = $created_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets updated_at
-     *
-     * @return string|null
-     */
-    public function getUpdatedAt()
-    {
-        return $this->container['updated_at'];
-    }
-
-    /**
-     * Sets updated_at
-     *
-     * @param string|null $updated_at updated_at
-     *
-     * @return self
-     */
-    public function setUpdatedAt($updated_at)
-    {
-        if (is_null($updated_at)) {
-            throw new \InvalidArgumentException('non-nullable updated_at cannot be null');
-        }
-        $this->container['updated_at'] = $updated_at;
+        $this->container['price_models'] = $price_models;
 
         return $this;
     }

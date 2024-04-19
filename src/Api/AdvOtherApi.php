@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -65,6 +65,13 @@ class AdvOtherApi
      */
     protected $hostIndex;
 
+    /** @var string[] $contentTypes **/
+    public const contentTypes = [
+        'advGetDictionaries' => [
+            'application/json',
+        ],
+    ];
+
     /**
      * @param ClientInterface $client
      * @param Configuration   $config
@@ -114,32 +121,34 @@ class AdvOtherApi
     /**
      * Operation advGetDictionaries
      *
-     * Return advertiser&#39;s data dictionaries
+     * Return advertiser data dictionaries
      *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advGetDictionaries'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Adserver\Model\Dict
+     * @return \Adserver\Model\DictAdv
      */
-    public function advGetDictionaries()
+    public function advGetDictionaries(string $contentType = self::contentTypes['advGetDictionaries'][0])
     {
-        list($response) = $this->advGetDictionariesWithHttpInfo();
+        list($response) = $this->advGetDictionariesWithHttpInfo($contentType);
         return $response;
     }
 
     /**
      * Operation advGetDictionariesWithHttpInfo
      *
-     * Return advertiser&#39;s data dictionaries
+     * Return advertiser data dictionaries
      *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advGetDictionaries'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Adserver\Model\Dict, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Adserver\Model\DictAdv, HTTP status code, HTTP response headers (array of strings)
      */
-    public function advGetDictionariesWithHttpInfo()
+    public function advGetDictionariesWithHttpInfo(string $contentType = self::contentTypes['advGetDictionaries'][0])
     {
-        $request = $this->advGetDictionariesRequest();
+        $request = $this->advGetDictionariesRequest($contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -178,29 +187,53 @@ class AdvOtherApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\Adserver\Model\Dict' === '\SplFileObject') {
+                    if ('\Adserver\Model\DictAdv' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\Adserver\Model\Dict' !== 'string') {
-                            $content = json_decode($content);
+                        if ('\Adserver\Model\DictAdv' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\Adserver\Model\Dict', []),
+                        ObjectSerializer::deserialize($content, '\Adserver\Model\DictAdv', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
             }
 
-            $returnType = '\Adserver\Model\Dict';
+            $returnType = '\Adserver\Model\DictAdv';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -215,7 +248,7 @@ class AdvOtherApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Adserver\Model\Dict',
+                        '\Adserver\Model\DictAdv',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -228,15 +261,16 @@ class AdvOtherApi
     /**
      * Operation advGetDictionariesAsync
      *
-     * Return advertiser&#39;s data dictionaries
+     * Return advertiser data dictionaries
      *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advGetDictionaries'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advGetDictionariesAsync()
+    public function advGetDictionariesAsync(string $contentType = self::contentTypes['advGetDictionaries'][0])
     {
-        return $this->advGetDictionariesAsyncWithHttpInfo()
+        return $this->advGetDictionariesAsyncWithHttpInfo($contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -247,16 +281,17 @@ class AdvOtherApi
     /**
      * Operation advGetDictionariesAsyncWithHttpInfo
      *
-     * Return advertiser&#39;s data dictionaries
+     * Return advertiser data dictionaries
      *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advGetDictionaries'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advGetDictionariesAsyncWithHttpInfo()
+    public function advGetDictionariesAsyncWithHttpInfo(string $contentType = self::contentTypes['advGetDictionaries'][0])
     {
-        $returnType = '\Adserver\Model\Dict';
-        $request = $this->advGetDictionariesRequest();
+        $returnType = '\Adserver\Model\DictAdv';
+        $request = $this->advGetDictionariesRequest($contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -297,12 +332,14 @@ class AdvOtherApi
     /**
      * Create request for operation 'advGetDictionaries'
      *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advGetDictionaries'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function advGetDictionariesRequest()
+    public function advGetDictionariesRequest(string $contentType = self::contentTypes['advGetDictionaries'][0])
     {
+
 
         $resourcePath = '/advert/dict';
         $formParams = [];
@@ -315,16 +352,11 @@ class AdvOtherApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -342,9 +374,9 @@ class AdvOtherApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -367,10 +399,11 @@ class AdvOtherApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );

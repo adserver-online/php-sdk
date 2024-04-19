@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -60,6 +60,8 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'idrunstatus' => 'int',
         'idpricemodel' => 'int',
         'rate' => 'float',
+        'budget_total' => 'float',
+        'budget_daily' => 'float',
         'start_date' => 'string',
         'finish_date' => 'string',
         'os' => 'int[]',
@@ -88,6 +90,8 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'idrunstatus' => null,
         'idpricemodel' => null,
         'rate' => null,
+        'budget_total' => null,
+        'budget_daily' => null,
         'start_date' => null,
         'finish_date' => null,
         'os' => null,
@@ -100,6 +104,41 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'sites_category' => null,
         'timetargeting' => null
     ];
+
+    /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'name' => false,
+        'idadvertiser' => false,
+        'idcategory' => false,
+        'idstatus' => false,
+        'idrunstatus' => false,
+        'idpricemodel' => false,
+        'rate' => false,
+        'budget_total' => false,
+        'budget_daily' => false,
+        'start_date' => false,
+        'finish_date' => false,
+        'os' => false,
+        'browser' => false,
+        'device' => false,
+        'brand' => false,
+        'language' => false,
+        'geo' => false,
+        'geo_bl' => false,
+        'sites_category' => false,
+        'timetargeting' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -122,6 +161,58 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+    }
+
+    /**
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
@@ -135,6 +226,8 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'idrunstatus' => 'idrunstatus',
         'idpricemodel' => 'idpricemodel',
         'rate' => 'rate',
+        'budget_total' => 'budget_total',
+        'budget_daily' => 'budget_daily',
         'start_date' => 'start_date',
         'finish_date' => 'finish_date',
         'os' => 'os',
@@ -161,6 +254,8 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'idrunstatus' => 'setIdrunstatus',
         'idpricemodel' => 'setIdpricemodel',
         'rate' => 'setRate',
+        'budget_total' => 'setBudgetTotal',
+        'budget_daily' => 'setBudgetDaily',
         'start_date' => 'setStartDate',
         'finish_date' => 'setFinishDate',
         'os' => 'setOs',
@@ -187,6 +282,8 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'idrunstatus' => 'getIdrunstatus',
         'idpricemodel' => 'getIdpricemodel',
         'rate' => 'getRate',
+        'budget_total' => 'getBudgetTotal',
+        'budget_daily' => 'getBudgetDaily',
         'start_date' => 'getStartDate',
         'finish_date' => 'getFinishDate',
         'os' => 'getOs',
@@ -312,24 +409,44 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['name'] = $data['name'] ?? null;
-        $this->container['idadvertiser'] = $data['idadvertiser'] ?? null;
-        $this->container['idcategory'] = $data['idcategory'] ?? null;
-        $this->container['idstatus'] = $data['idstatus'] ?? null;
-        $this->container['idrunstatus'] = $data['idrunstatus'] ?? null;
-        $this->container['idpricemodel'] = $data['idpricemodel'] ?? null;
-        $this->container['rate'] = $data['rate'] ?? null;
-        $this->container['start_date'] = $data['start_date'] ?? null;
-        $this->container['finish_date'] = $data['finish_date'] ?? null;
-        $this->container['os'] = $data['os'] ?? null;
-        $this->container['browser'] = $data['browser'] ?? null;
-        $this->container['device'] = $data['device'] ?? null;
-        $this->container['brand'] = $data['brand'] ?? null;
-        $this->container['language'] = $data['language'] ?? null;
-        $this->container['geo'] = $data['geo'] ?? null;
-        $this->container['geo_bl'] = $data['geo_bl'] ?? null;
-        $this->container['sites_category'] = $data['sites_category'] ?? null;
-        $this->container['timetargeting'] = $data['timetargeting'] ?? null;
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('idadvertiser', $data ?? [], null);
+        $this->setIfExists('idcategory', $data ?? [], null);
+        $this->setIfExists('idstatus', $data ?? [], null);
+        $this->setIfExists('idrunstatus', $data ?? [], null);
+        $this->setIfExists('idpricemodel', $data ?? [], null);
+        $this->setIfExists('rate', $data ?? [], null);
+        $this->setIfExists('budget_total', $data ?? [], null);
+        $this->setIfExists('budget_daily', $data ?? [], null);
+        $this->setIfExists('start_date', $data ?? [], null);
+        $this->setIfExists('finish_date', $data ?? [], null);
+        $this->setIfExists('os', $data ?? [], null);
+        $this->setIfExists('browser', $data ?? [], null);
+        $this->setIfExists('device', $data ?? [], null);
+        $this->setIfExists('brand', $data ?? [], null);
+        $this->setIfExists('language', $data ?? [], null);
+        $this->setIfExists('geo', $data ?? [], null);
+        $this->setIfExists('geo_bl', $data ?? [], null);
+        $this->setIfExists('sites_category', $data ?? [], null);
+        $this->setIfExists('timetargeting', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -408,6 +525,9 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setName($name)
     {
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
+        }
         $this->container['name'] = $name;
 
         return $this;
@@ -432,6 +552,9 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setIdadvertiser($idadvertiser)
     {
+        if (is_null($idadvertiser)) {
+            throw new \InvalidArgumentException('non-nullable idadvertiser cannot be null');
+        }
         $this->container['idadvertiser'] = $idadvertiser;
 
         return $this;
@@ -456,6 +579,9 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setIdcategory($idcategory)
     {
+        if (is_null($idcategory)) {
+            throw new \InvalidArgumentException('non-nullable idcategory cannot be null');
+        }
         $this->container['idcategory'] = $idcategory;
 
         return $this;
@@ -474,14 +600,17 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets idstatus
      *
-     * @param int|null $idstatus Moderation statuses:  * 1510 - pending  * 1520 - approved  * 1530 - blocked
+     * @param int|null $idstatus Moderation statuses:  * 1510 - Pending  * 1520 - Approved  * 1530 - Blocked
      *
      * @return self
      */
     public function setIdstatus($idstatus)
     {
+        if (is_null($idstatus)) {
+            throw new \InvalidArgumentException('non-nullable idstatus cannot be null');
+        }
         $allowedValues = $this->getIdstatusAllowableValues();
-        if (!is_null($idstatus) && !in_array($idstatus, $allowedValues, true)) {
+        if (!in_array($idstatus, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     "Invalid value '%s' for 'idstatus', must be one of '%s'",
@@ -508,14 +637,17 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets idrunstatus
      *
-     * @param int|null $idrunstatus Run statuses:  * 4010 - running  * 4020 - paused  * 4030 - finished
+     * @param int|null $idrunstatus Run statuses:  * 4010 - Running  * 4020 - Paused  * 4030 - Finished
      *
      * @return self
      */
     public function setIdrunstatus($idrunstatus)
     {
+        if (is_null($idrunstatus)) {
+            throw new \InvalidArgumentException('non-nullable idrunstatus cannot be null');
+        }
         $allowedValues = $this->getIdrunstatusAllowableValues();
-        if (!is_null($idrunstatus) && !in_array($idrunstatus, $allowedValues, true)) {
+        if (!in_array($idrunstatus, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     "Invalid value '%s' for 'idrunstatus', must be one of '%s'",
@@ -548,8 +680,11 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setIdpricemodel($idpricemodel)
     {
+        if (is_null($idpricemodel)) {
+            throw new \InvalidArgumentException('non-nullable idpricemodel cannot be null');
+        }
         $allowedValues = $this->getIdpricemodelAllowableValues();
-        if (!is_null($idpricemodel) && !in_array($idpricemodel, $allowedValues, true)) {
+        if (!in_array($idpricemodel, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     "Invalid value '%s' for 'idpricemodel', must be one of '%s'",
@@ -582,7 +717,64 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setRate($rate)
     {
+        if (is_null($rate)) {
+            throw new \InvalidArgumentException('non-nullable rate cannot be null');
+        }
         $this->container['rate'] = $rate;
+
+        return $this;
+    }
+
+    /**
+     * Gets budget_total
+     *
+     * @return float|null
+     */
+    public function getBudgetTotal()
+    {
+        return $this->container['budget_total'];
+    }
+
+    /**
+     * Sets budget_total
+     *
+     * @param float|null $budget_total budget_total
+     *
+     * @return self
+     */
+    public function setBudgetTotal($budget_total)
+    {
+        if (is_null($budget_total)) {
+            throw new \InvalidArgumentException('non-nullable budget_total cannot be null');
+        }
+        $this->container['budget_total'] = $budget_total;
+
+        return $this;
+    }
+
+    /**
+     * Gets budget_daily
+     *
+     * @return float|null
+     */
+    public function getBudgetDaily()
+    {
+        return $this->container['budget_daily'];
+    }
+
+    /**
+     * Sets budget_daily
+     *
+     * @param float|null $budget_daily budget_daily
+     *
+     * @return self
+     */
+    public function setBudgetDaily($budget_daily)
+    {
+        if (is_null($budget_daily)) {
+            throw new \InvalidArgumentException('non-nullable budget_daily cannot be null');
+        }
+        $this->container['budget_daily'] = $budget_daily;
 
         return $this;
     }
@@ -606,6 +798,9 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setStartDate($start_date)
     {
+        if (is_null($start_date)) {
+            throw new \InvalidArgumentException('non-nullable start_date cannot be null');
+        }
         $this->container['start_date'] = $start_date;
 
         return $this;
@@ -630,6 +825,9 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setFinishDate($finish_date)
     {
+        if (is_null($finish_date)) {
+            throw new \InvalidArgumentException('non-nullable finish_date cannot be null');
+        }
         $this->container['finish_date'] = $finish_date;
 
         return $this;
@@ -654,6 +852,9 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setOs($os)
     {
+        if (is_null($os)) {
+            throw new \InvalidArgumentException('non-nullable os cannot be null');
+        }
         $this->container['os'] = $os;
 
         return $this;
@@ -678,6 +879,9 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setBrowser($browser)
     {
+        if (is_null($browser)) {
+            throw new \InvalidArgumentException('non-nullable browser cannot be null');
+        }
         $this->container['browser'] = $browser;
 
         return $this;
@@ -702,6 +906,9 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setDevice($device)
     {
+        if (is_null($device)) {
+            throw new \InvalidArgumentException('non-nullable device cannot be null');
+        }
         $this->container['device'] = $device;
 
         return $this;
@@ -726,6 +933,9 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setBrand($brand)
     {
+        if (is_null($brand)) {
+            throw new \InvalidArgumentException('non-nullable brand cannot be null');
+        }
         $this->container['brand'] = $brand;
 
         return $this;
@@ -750,6 +960,9 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setLanguage($language)
     {
+        if (is_null($language)) {
+            throw new \InvalidArgumentException('non-nullable language cannot be null');
+        }
         $this->container['language'] = $language;
 
         return $this;
@@ -768,12 +981,15 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets geo
      *
-     * @param int[]|null $geo geo
+     * @param int[]|null $geo Array of GeoNames IDs.
      *
      * @return self
      */
     public function setGeo($geo)
     {
+        if (is_null($geo)) {
+            throw new \InvalidArgumentException('non-nullable geo cannot be null');
+        }
         $this->container['geo'] = $geo;
 
         return $this;
@@ -792,12 +1008,15 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets geo_bl
      *
-     * @param int[]|null $geo_bl geo_bl
+     * @param int[]|null $geo_bl Array of GeoNames IDs.
      *
      * @return self
      */
     public function setGeoBl($geo_bl)
     {
+        if (is_null($geo_bl)) {
+            throw new \InvalidArgumentException('non-nullable geo_bl cannot be null');
+        }
         $this->container['geo_bl'] = $geo_bl;
 
         return $this;
@@ -822,6 +1041,9 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setSitesCategory($sites_category)
     {
+        if (is_null($sites_category)) {
+            throw new \InvalidArgumentException('non-nullable sites_category cannot be null');
+        }
         $this->container['sites_category'] = $sites_category;
 
         return $this;
@@ -846,6 +1068,9 @@ class CampaignRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setTimetargeting($timetargeting)
     {
+        if (is_null($timetargeting)) {
+            throw new \InvalidArgumentException('non-nullable timetargeting cannot be null');
+        }
         $this->container['timetargeting'] = $timetargeting;
 
         return $this;

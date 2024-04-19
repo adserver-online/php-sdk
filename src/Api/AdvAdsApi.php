@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -64,6 +64,22 @@ class AdvAdsApi
      * @var int Host index
      */
     protected $hostIndex;
+
+    /** @var string[] $contentTypes **/
+    public const contentTypes = [
+        'advCreateAd' => [
+            'application/json',
+        ],
+        'advDeleteAd' => [
+            'application/json',
+        ],
+        'advGetAd' => [
+            'application/json',
+        ],
+        'advUpdateAd' => [
+            'application/json',
+        ],
+    ];
 
     /**
      * @param ClientInterface $client
@@ -119,14 +135,15 @@ class AdvAdsApi
      * @param  int $idcampaign idcampaign (required)
      * @param  int $idformat idformat (required)
      * @param  \Adserver\Model\AdvAdRequest $adv_ad_request adv_ad_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advCreateAd'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Ad|\Adserver\Model\FormErrorResponse
      */
-    public function advCreateAd($idcampaign, $idformat, $adv_ad_request)
+    public function advCreateAd($idcampaign, $idformat, $adv_ad_request, string $contentType = self::contentTypes['advCreateAd'][0])
     {
-        list($response) = $this->advCreateAdWithHttpInfo($idcampaign, $idformat, $adv_ad_request);
+        list($response) = $this->advCreateAdWithHttpInfo($idcampaign, $idformat, $adv_ad_request, $contentType);
         return $response;
     }
 
@@ -138,14 +155,15 @@ class AdvAdsApi
      * @param  int $idcampaign (required)
      * @param  int $idformat (required)
      * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advCreateAd'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Ad|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function advCreateAdWithHttpInfo($idcampaign, $idformat, $adv_ad_request)
+    public function advCreateAdWithHttpInfo($idcampaign, $idformat, $adv_ad_request, string $contentType = self::contentTypes['advCreateAd'][0])
     {
-        $request = $this->advCreateAdRequest($idcampaign, $idformat, $adv_ad_request);
+        $request = $this->advCreateAdRequest($idcampaign, $idformat, $adv_ad_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -189,7 +207,19 @@ class AdvAdsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Ad' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -204,7 +234,19 @@ class AdvAdsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -221,7 +263,19 @@ class AdvAdsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -262,13 +316,14 @@ class AdvAdsApi
      * @param  int $idcampaign (required)
      * @param  int $idformat (required)
      * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advCreateAd'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advCreateAdAsync($idcampaign, $idformat, $adv_ad_request)
+    public function advCreateAdAsync($idcampaign, $idformat, $adv_ad_request, string $contentType = self::contentTypes['advCreateAd'][0])
     {
-        return $this->advCreateAdAsyncWithHttpInfo($idcampaign, $idformat, $adv_ad_request)
+        return $this->advCreateAdAsyncWithHttpInfo($idcampaign, $idformat, $adv_ad_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -284,14 +339,15 @@ class AdvAdsApi
      * @param  int $idcampaign (required)
      * @param  int $idformat (required)
      * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advCreateAd'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advCreateAdAsyncWithHttpInfo($idcampaign, $idformat, $adv_ad_request)
+    public function advCreateAdAsyncWithHttpInfo($idcampaign, $idformat, $adv_ad_request, string $contentType = self::contentTypes['advCreateAd'][0])
     {
         $returnType = '\Adserver\Model\Ad';
-        $request = $this->advCreateAdRequest($idcampaign, $idformat, $adv_ad_request);
+        $request = $this->advCreateAdRequest($idcampaign, $idformat, $adv_ad_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -335,30 +391,35 @@ class AdvAdsApi
      * @param  int $idcampaign (required)
      * @param  int $idformat (required)
      * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advCreateAd'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function advCreateAdRequest($idcampaign, $idformat, $adv_ad_request)
+    public function advCreateAdRequest($idcampaign, $idformat, $adv_ad_request, string $contentType = self::contentTypes['advCreateAd'][0])
     {
+
         // verify the required parameter 'idcampaign' is set
         if ($idcampaign === null || (is_array($idcampaign) && count($idcampaign) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $idcampaign when calling advCreateAd'
             );
         }
+
         // verify the required parameter 'idformat' is set
         if ($idformat === null || (is_array($idformat) && count($idformat) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $idformat when calling advCreateAd'
             );
         }
+
         // verify the required parameter 'adv_ad_request' is set
         if ($adv_ad_request === null || (is_array($adv_ad_request) && count($adv_ad_request) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $adv_ad_request when calling advCreateAd'
             );
         }
+
 
         $resourcePath = '/advert/ad';
         $formParams = [];
@@ -389,21 +450,17 @@ class AdvAdsApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (isset($adv_ad_request)) {
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($adv_ad_request));
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($adv_ad_request));
             } else {
                 $httpBody = $adv_ad_request;
             }
@@ -422,9 +479,9 @@ class AdvAdsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -447,10 +504,11 @@ class AdvAdsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -462,14 +520,15 @@ class AdvAdsApi
      * Delete ad
      *
      * @param  int $id id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advDeleteAd'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function advDeleteAd($id)
+    public function advDeleteAd($id, string $contentType = self::contentTypes['advDeleteAd'][0])
     {
-        $this->advDeleteAdWithHttpInfo($id);
+        $this->advDeleteAdWithHttpInfo($id, $contentType);
     }
 
     /**
@@ -478,14 +537,15 @@ class AdvAdsApi
      * Delete ad
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advDeleteAd'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function advDeleteAdWithHttpInfo($id)
+    public function advDeleteAdWithHttpInfo($id, string $contentType = self::contentTypes['advDeleteAd'][0])
     {
-        $request = $this->advDeleteAdRequest($id);
+        $request = $this->advDeleteAdRequest($id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -537,13 +597,14 @@ class AdvAdsApi
      * Delete ad
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advDeleteAd'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advDeleteAdAsync($id)
+    public function advDeleteAdAsync($id, string $contentType = self::contentTypes['advDeleteAd'][0])
     {
-        return $this->advDeleteAdAsyncWithHttpInfo($id)
+        return $this->advDeleteAdAsyncWithHttpInfo($id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -557,14 +618,15 @@ class AdvAdsApi
      * Delete ad
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advDeleteAd'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advDeleteAdAsyncWithHttpInfo($id)
+    public function advDeleteAdAsyncWithHttpInfo($id, string $contentType = self::contentTypes['advDeleteAd'][0])
     {
         $returnType = '';
-        $request = $this->advDeleteAdRequest($id);
+        $request = $this->advDeleteAdRequest($id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -593,18 +655,21 @@ class AdvAdsApi
      * Create request for operation 'advDeleteAd'
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advDeleteAd'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function advDeleteAdRequest($id)
+    public function advDeleteAdRequest($id, string $contentType = self::contentTypes['advDeleteAd'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling advDeleteAd'
             );
         }
+
 
         $resourcePath = '/advert/ad/{id}';
         $formParams = [];
@@ -625,16 +690,11 @@ class AdvAdsApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                []
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                [],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            [],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -652,9 +712,9 @@ class AdvAdsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -677,10 +737,11 @@ class AdvAdsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'DELETE',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -692,14 +753,15 @@ class AdvAdsApi
      * Get ad
      *
      * @param  int $id id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advGetAd'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Ad
      */
-    public function advGetAd($id)
+    public function advGetAd($id, string $contentType = self::contentTypes['advGetAd'][0])
     {
-        list($response) = $this->advGetAdWithHttpInfo($id);
+        list($response) = $this->advGetAdWithHttpInfo($id, $contentType);
         return $response;
     }
 
@@ -709,14 +771,15 @@ class AdvAdsApi
      * Get ad
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advGetAd'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Ad, HTTP status code, HTTP response headers (array of strings)
      */
-    public function advGetAdWithHttpInfo($id)
+    public function advGetAdWithHttpInfo($id, string $contentType = self::contentTypes['advGetAd'][0])
     {
-        $request = $this->advGetAdRequest($id);
+        $request = $this->advGetAdRequest($id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -760,7 +823,19 @@ class AdvAdsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Ad' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -777,7 +852,19 @@ class AdvAdsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -808,13 +895,14 @@ class AdvAdsApi
      * Get ad
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advGetAd'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advGetAdAsync($id)
+    public function advGetAdAsync($id, string $contentType = self::contentTypes['advGetAd'][0])
     {
-        return $this->advGetAdAsyncWithHttpInfo($id)
+        return $this->advGetAdAsyncWithHttpInfo($id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -828,14 +916,15 @@ class AdvAdsApi
      * Get ad
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advGetAd'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advGetAdAsyncWithHttpInfo($id)
+    public function advGetAdAsyncWithHttpInfo($id, string $contentType = self::contentTypes['advGetAd'][0])
     {
         $returnType = '\Adserver\Model\Ad';
-        $request = $this->advGetAdRequest($id);
+        $request = $this->advGetAdRequest($id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -877,18 +966,21 @@ class AdvAdsApi
      * Create request for operation 'advGetAd'
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advGetAd'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function advGetAdRequest($id)
+    public function advGetAdRequest($id, string $contentType = self::contentTypes['advGetAd'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling advGetAd'
             );
         }
+
 
         $resourcePath = '/advert/ad/{id}';
         $formParams = [];
@@ -909,16 +1001,11 @@ class AdvAdsApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -936,9 +1023,9 @@ class AdvAdsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -961,10 +1048,11 @@ class AdvAdsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -977,14 +1065,15 @@ class AdvAdsApi
      *
      * @param  int $id id (required)
      * @param  \Adserver\Model\AdvAdRequest $adv_ad_request adv_ad_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advUpdateAd'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Ad|\Adserver\Model\FormErrorResponse
      */
-    public function advUpdateAd($id, $adv_ad_request)
+    public function advUpdateAd($id, $adv_ad_request, string $contentType = self::contentTypes['advUpdateAd'][0])
     {
-        list($response) = $this->advUpdateAdWithHttpInfo($id, $adv_ad_request);
+        list($response) = $this->advUpdateAdWithHttpInfo($id, $adv_ad_request, $contentType);
         return $response;
     }
 
@@ -995,14 +1084,15 @@ class AdvAdsApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advUpdateAd'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Ad|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function advUpdateAdWithHttpInfo($id, $adv_ad_request)
+    public function advUpdateAdWithHttpInfo($id, $adv_ad_request, string $contentType = self::contentTypes['advUpdateAd'][0])
     {
-        $request = $this->advUpdateAdRequest($id, $adv_ad_request);
+        $request = $this->advUpdateAdRequest($id, $adv_ad_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1046,7 +1136,19 @@ class AdvAdsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Ad' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1061,7 +1163,19 @@ class AdvAdsApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1078,7 +1192,19 @@ class AdvAdsApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -1118,13 +1244,14 @@ class AdvAdsApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advUpdateAd'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advUpdateAdAsync($id, $adv_ad_request)
+    public function advUpdateAdAsync($id, $adv_ad_request, string $contentType = self::contentTypes['advUpdateAd'][0])
     {
-        return $this->advUpdateAdAsyncWithHttpInfo($id, $adv_ad_request)
+        return $this->advUpdateAdAsyncWithHttpInfo($id, $adv_ad_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1139,14 +1266,15 @@ class AdvAdsApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advUpdateAd'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function advUpdateAdAsyncWithHttpInfo($id, $adv_ad_request)
+    public function advUpdateAdAsyncWithHttpInfo($id, $adv_ad_request, string $contentType = self::contentTypes['advUpdateAd'][0])
     {
         $returnType = '\Adserver\Model\Ad';
-        $request = $this->advUpdateAdRequest($id, $adv_ad_request);
+        $request = $this->advUpdateAdRequest($id, $adv_ad_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1189,24 +1317,28 @@ class AdvAdsApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\AdvAdRequest $adv_ad_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['advUpdateAd'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function advUpdateAdRequest($id, $adv_ad_request)
+    public function advUpdateAdRequest($id, $adv_ad_request, string $contentType = self::contentTypes['advUpdateAd'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling advUpdateAd'
             );
         }
+
         // verify the required parameter 'adv_ad_request' is set
         if ($adv_ad_request === null || (is_array($adv_ad_request) && count($adv_ad_request) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $adv_ad_request when calling advUpdateAd'
             );
         }
+
 
         $resourcePath = '/advert/ad/{id}';
         $formParams = [];
@@ -1227,21 +1359,17 @@ class AdvAdsApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (isset($adv_ad_request)) {
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($adv_ad_request));
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($adv_ad_request));
             } else {
                 $httpBody = $adv_ad_request;
             }
@@ -1260,9 +1388,9 @@ class AdvAdsApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1285,10 +1413,11 @@ class AdvAdsApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'PUT',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );

@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -88,6 +88,32 @@ class Site implements ModelInterface, ArrayAccess, \JsonSerializable
     ];
 
     /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'id' => false,
+        'publisher' => false,
+        'name' => false,
+        'url' => false,
+        'status' => false,
+        'category' => false,
+        'block_reason' => false,
+        'is_active' => false,
+        'zones' => false,
+        'created_at' => false,
+        'updated_at' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
+
+    /**
      * Array of property to type mappings. Used for (de)serialization
      *
      * @return array
@@ -105,6 +131,58 @@ class Site implements ModelInterface, ArrayAccess, \JsonSerializable
     public static function openAPIFormats()
     {
         return self::$openAPIFormats;
+    }
+
+    /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
     }
 
     /**
@@ -222,17 +300,35 @@ class Site implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['id'] = $data['id'] ?? null;
-        $this->container['publisher'] = $data['publisher'] ?? null;
-        $this->container['name'] = $data['name'] ?? null;
-        $this->container['url'] = $data['url'] ?? null;
-        $this->container['status'] = $data['status'] ?? null;
-        $this->container['category'] = $data['category'] ?? null;
-        $this->container['block_reason'] = $data['block_reason'] ?? null;
-        $this->container['is_active'] = $data['is_active'] ?? null;
-        $this->container['zones'] = $data['zones'] ?? null;
-        $this->container['created_at'] = $data['created_at'] ?? null;
-        $this->container['updated_at'] = $data['updated_at'] ?? null;
+        $this->setIfExists('id', $data ?? [], null);
+        $this->setIfExists('publisher', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('url', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('category', $data ?? [], null);
+        $this->setIfExists('block_reason', $data ?? [], null);
+        $this->setIfExists('is_active', $data ?? [], null);
+        $this->setIfExists('zones', $data ?? [], null);
+        $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('updated_at', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -278,6 +374,9 @@ class Site implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setId($id)
     {
+        if (is_null($id)) {
+            throw new \InvalidArgumentException('non-nullable id cannot be null');
+        }
         $this->container['id'] = $id;
 
         return $this;
@@ -302,6 +401,9 @@ class Site implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setPublisher($publisher)
     {
+        if (is_null($publisher)) {
+            throw new \InvalidArgumentException('non-nullable publisher cannot be null');
+        }
         $this->container['publisher'] = $publisher;
 
         return $this;
@@ -326,6 +428,9 @@ class Site implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setName($name)
     {
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
+        }
         $this->container['name'] = $name;
 
         return $this;
@@ -350,6 +455,9 @@ class Site implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setUrl($url)
     {
+        if (is_null($url)) {
+            throw new \InvalidArgumentException('non-nullable url cannot be null');
+        }
         $this->container['url'] = $url;
 
         return $this;
@@ -374,6 +482,9 @@ class Site implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setStatus($status)
     {
+        if (is_null($status)) {
+            throw new \InvalidArgumentException('non-nullable status cannot be null');
+        }
         $this->container['status'] = $status;
 
         return $this;
@@ -398,6 +509,9 @@ class Site implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setCategory($category)
     {
+        if (is_null($category)) {
+            throw new \InvalidArgumentException('non-nullable category cannot be null');
+        }
         $this->container['category'] = $category;
 
         return $this;
@@ -422,6 +536,9 @@ class Site implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setBlockReason($block_reason)
     {
+        if (is_null($block_reason)) {
+            throw new \InvalidArgumentException('non-nullable block_reason cannot be null');
+        }
         $this->container['block_reason'] = $block_reason;
 
         return $this;
@@ -446,6 +563,9 @@ class Site implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setIsActive($is_active)
     {
+        if (is_null($is_active)) {
+            throw new \InvalidArgumentException('non-nullable is_active cannot be null');
+        }
         $this->container['is_active'] = $is_active;
 
         return $this;
@@ -470,6 +590,9 @@ class Site implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setZones($zones)
     {
+        if (is_null($zones)) {
+            throw new \InvalidArgumentException('non-nullable zones cannot be null');
+        }
         $this->container['zones'] = $zones;
 
         return $this;
@@ -494,6 +617,9 @@ class Site implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setCreatedAt($created_at)
     {
+        if (is_null($created_at)) {
+            throw new \InvalidArgumentException('non-nullable created_at cannot be null');
+        }
         $this->container['created_at'] = $created_at;
 
         return $this;
@@ -518,6 +644,9 @@ class Site implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setUpdatedAt($updated_at)
     {
+        if (is_null($updated_at)) {
+            throw new \InvalidArgumentException('non-nullable updated_at cannot be null');
+        }
         $this->container['updated_at'] = $updated_at;
 
         return $this;

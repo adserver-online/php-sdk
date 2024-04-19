@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -83,7 +83,7 @@ class ObjectSerializer
                 foreach ($data::openAPITypes() as $property => $openAPIType) {
                     $getter = $data::getters()[$property];
                     $value = $data->$getter();
-                    if ($value !== null && !in_array($openAPIType, ['\DateTime', '\SplFileObject', 'array', 'bool', 'boolean', 'byte', 'double', 'float', 'int', 'integer', 'mixed', 'number', 'object', 'string', 'void'], true)) {
+                    if ($value !== null && !in_array($openAPIType, ['\DateTime', '\SplFileObject', 'array', 'bool', 'boolean', 'byte', 'float', 'int', 'integer', 'mixed', 'number', 'object', 'string', 'void'], true)) {
                         $callable = [$openAPIType, 'getAllowableEnumValues'];
                         if (is_callable($callable)) {
                             /** array $callable */
@@ -94,7 +94,7 @@ class ObjectSerializer
                             }
                         }
                     }
-                    if ($value !== null) {
+                    if (($data::isNullable($property) && $data->isNullableSetToNull($property)) || $value !== null) {
                         $values[$data::attributeMap()[$property]] = self::sanitizeForSerialization($value, $openAPIType, $formats[$property]);
                     }
                 }
@@ -154,6 +154,49 @@ class ObjectSerializer
     }
 
     /**
+     * Checks if a value is empty, based on its OpenAPI type.
+     *
+     * @param mixed  $value
+     * @param string $openApiType
+     *
+     * @return bool true if $value is empty
+     */
+    private static function isEmptyValue($value, string $openApiType): bool
+    {
+        # If empty() returns false, it is not empty regardless of its type.
+        if (!empty($value)) {
+            return false;
+        }
+
+        # Null is always empty, as we cannot send a real "null" value in a query parameter.
+        if ($value === null) {
+            return true;
+        }
+
+        switch ($openApiType) {
+            # For numeric values, false and '' are considered empty.
+            # This comparison is safe for floating point values, since the previous call to empty() will
+            # filter out values that don't match 0.
+            case 'int':
+            case 'integer':
+                return $value !== 0;
+
+            case 'number':
+            case 'float':
+                return $value !== 0 && $value !== 0.0;
+
+            # For boolean values, '' is considered empty
+            case 'bool':
+            case 'boolean':
+                return !in_array($value, [false, 0], true);
+
+            # For all the other types, any value at this point can be considered empty.
+            default:
+                return true;
+        }
+    }
+
+    /**
      * Take query parameter properties and turn it into an array suitable for
      * native http_build_query or GuzzleHttp\Psr7\Query::build.
      *
@@ -174,15 +217,22 @@ class ObjectSerializer
         bool $explode = true,
         bool $required = true
     ): array {
-        if (
-            empty($value)
-            && ($value !== false || $openApiType !== 'boolean') // if $value === false and $openApiType ==='boolean' it isn't empty
-        ) {
+
+        # Check if we should omit this parameter from the query. This should only happen when:
+        #  - Parameter is NOT required; AND
+        #  - its value is set to a value that is equivalent to "empty", depending on its OpenAPI type. For
+        #    example, 0 as "int" or "boolean" is NOT an empty value.
+        if (self::isEmptyValue($value, $openApiType)) {
             if ($required) {
                 return ["{$paramName}" => ''];
             } else {
                 return [];
             }
+        }
+
+        # Handle DateTime objects in query
+        if($openApiType === "\\DateTime" && $value instanceof \DateTime) {
+            return ["{$paramName}" => $value->format(self::$dateTimeFormat)];
         }
 
         $query = [];
@@ -284,7 +334,7 @@ class ObjectSerializer
      * If it's a datetime object, format it in ISO8601
      * If it's a boolean, convert it to "true" or "false".
      *
-     * @param string|bool|\DateTime $value the value of the parameter
+     * @param float|int|bool|\DateTime $value the value of the parameter
      *
      * @return string the header string
      */
@@ -342,7 +392,6 @@ class ObjectSerializer
      * @param mixed    $data          object or primitive to be deserialized
      * @param string   $class         class name is passed as a string
      * @param string[] $httpHeaders   HTTP headers
-     * @param string   $discriminator discriminator if polymorphism is used
      *
      * @return object|array|null a single or an array of $class instances
      */
@@ -391,7 +440,7 @@ class ObjectSerializer
         }
 
         if ($class === '\DateTime') {
-            // Some API's return an invalid, empty string as a
+            // Some APIs return an invalid, empty string as a
             // date-time property. DateTime::__construct() will return
             // the current time for empty input which is probably not
             // what is meant. The invalid empty string is probably to
@@ -401,7 +450,7 @@ class ObjectSerializer
                 try {
                     return new \DateTime($data);
                 } catch (\Exception $exception) {
-                    // Some API's return a date-time with too high nanosecond
+                    // Some APIs return a date-time with too high nanosecond
                     // precision for php's DateTime to handle.
                     // With provided regexp 6 digits of microseconds saved
                     return new \DateTime(self::sanitizeTimestamp($data));
@@ -437,7 +486,7 @@ class ObjectSerializer
         }
 
         /** @psalm-suppress ParadoxicalCondition */
-        if (in_array($class, ['\DateTime', '\SplFileObject', 'array', 'bool', 'boolean', 'byte', 'double', 'float', 'int', 'integer', 'mixed', 'number', 'object', 'string', 'void'], true)) {
+        if (in_array($class, ['\DateTime', '\SplFileObject', 'array', 'bool', 'boolean', 'byte', 'float', 'int', 'integer', 'mixed', 'number', 'object', 'string', 'void'], true)) {
             settype($data, $class);
             return $data;
         }
@@ -451,6 +500,11 @@ class ObjectSerializer
             return $data;
         } else {
             $data = is_string($data) ? json_decode($data) : $data;
+
+            if (is_array($data)) {
+                $data = (object)$data;
+            }
+
             // If a discriminator is defined and points to a valid subclass, use it.
             $discriminator = $class::DISCRIMINATOR;
             if (!empty($discriminator) && isset($data->{$discriminator}) && is_string($data->{$discriminator})) {
@@ -465,7 +519,15 @@ class ObjectSerializer
             foreach ($instance::openAPITypes() as $property => $type) {
                 $propertySetter = $instance::setters()[$property];
 
-                if (!isset($propertySetter) || !isset($data->{$instance::attributeMap()[$property]})) {
+                if (!isset($propertySetter)) {
+                    continue;
+                }
+
+                if (!isset($data->{$instance::attributeMap()[$property]})) {
+                    if ($instance::isNullable($property)) {
+                        $instance->$propertySetter(null);
+                    }
+
                     continue;
                 }
 

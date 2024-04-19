@@ -1,6 +1,6 @@
 <?php
 /**
- * LoginRequest
+ * DictPub
  *
  * PHP version 7.4
  *
@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -28,17 +28,15 @@ use \ArrayAccess;
 use \Adserver\ObjectSerializer;
 
 /**
- * LoginRequest Class Doc Comment
+ * DictPub Class Doc Comment
  *
  * @category Class
  * @package  Adserver
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
- * @implements \ArrayAccess<TKey, TValue>
- * @template TKey int|null
- * @template TValue mixed|null
+ * @implements \ArrayAccess<string, mixed>
  */
-class LoginRequest implements ModelInterface, ArrayAccess, \JsonSerializable
+class DictPub implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -47,7 +45,7 @@ class LoginRequest implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'LoginRequest';
+    protected static $openAPIModelName = 'DictPub';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -55,10 +53,9 @@ class LoginRequest implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'server' => 'string',
-        'email' => 'string',
-        'password' => 'string',
-        'ttl' => 'int'
+        'zone_formats' => 'array<string,string>',
+        'categories' => 'array<string,string>',
+        'payout_methods' => 'array<string,string>'
     ];
 
     /**
@@ -69,11 +66,28 @@ class LoginRequest implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'server' => null,
-        'email' => null,
-        'password' => null,
-        'ttl' => null
+        'zone_formats' => null,
+        'categories' => null,
+        'payout_methods' => null
     ];
+
+    /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'zone_formats' => false,
+        'categories' => false,
+        'payout_methods' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -96,16 +110,67 @@ class LoginRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+    }
+
+    /**
      * Array of attributes where the key is the local name,
      * and the value is the original name
      *
      * @var string[]
      */
     protected static $attributeMap = [
-        'server' => 'server',
-        'email' => 'email',
-        'password' => 'password',
-        'ttl' => 'ttl'
+        'zone_formats' => 'zone_formats',
+        'categories' => 'categories',
+        'payout_methods' => 'payout_methods'
     ];
 
     /**
@@ -114,10 +179,9 @@ class LoginRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'server' => 'setServer',
-        'email' => 'setEmail',
-        'password' => 'setPassword',
-        'ttl' => 'setTtl'
+        'zone_formats' => 'setZoneFormats',
+        'categories' => 'setCategories',
+        'payout_methods' => 'setPayoutMethods'
     ];
 
     /**
@@ -126,10 +190,9 @@ class LoginRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'server' => 'getServer',
-        'email' => 'getEmail',
-        'password' => 'getPassword',
-        'ttl' => 'getTtl'
+        'zone_formats' => 'getZoneFormats',
+        'categories' => 'getCategories',
+        'payout_methods' => 'getPayoutMethods'
     ];
 
     /**
@@ -189,10 +252,27 @@ class LoginRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['server'] = $data['server'] ?? null;
-        $this->container['email'] = $data['email'] ?? null;
-        $this->container['password'] = $data['password'] ?? null;
-        $this->container['ttl'] = $data['ttl'] ?? 1;
+        $this->setIfExists('zone_formats', $data ?? [], null);
+        $this->setIfExists('categories', $data ?? [], null);
+        $this->setIfExists('payout_methods', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -203,23 +283,6 @@ class LoginRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     public function listInvalidProperties()
     {
         $invalidProperties = [];
-
-        if ($this->container['server'] === null) {
-            $invalidProperties[] = "'server' can't be null";
-        }
-        if ($this->container['email'] === null) {
-            $invalidProperties[] = "'email' can't be null";
-        }
-        if ($this->container['password'] === null) {
-            $invalidProperties[] = "'password' can't be null";
-        }
-        if (!is_null($this->container['ttl']) && ($this->container['ttl'] > 365)) {
-            $invalidProperties[] = "invalid value for 'ttl', must be smaller than or equal to 365.";
-        }
-
-        if (!is_null($this->container['ttl']) && ($this->container['ttl'] < 1)) {
-            $invalidProperties[] = "invalid value for 'ttl', must be bigger than or equal to 1.";
-        }
 
         return $invalidProperties;
     }
@@ -237,105 +300,82 @@ class LoginRequest implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets server
+     * Gets zone_formats
      *
-     * @return string
+     * @return array<string,string>|null
      */
-    public function getServer()
+    public function getZoneFormats()
     {
-        return $this->container['server'];
+        return $this->container['zone_formats'];
     }
 
     /**
-     * Sets server
+     * Sets zone_formats
      *
-     * @param string $server Your adserver subdomain. For example, if your server URL is http://_**test**.adsrv.org then you have to use \"**test**\" as value
+     * @param array<string,string>|null $zone_formats zone_formats
      *
      * @return self
      */
-    public function setServer($server)
+    public function setZoneFormats($zone_formats)
     {
-        $this->container['server'] = $server;
-
-        return $this;
-    }
-
-    /**
-     * Gets email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->container['email'];
-    }
-
-    /**
-     * Sets email
-     *
-     * @param string $email email
-     *
-     * @return self
-     */
-    public function setEmail($email)
-    {
-        $this->container['email'] = $email;
-
-        return $this;
-    }
-
-    /**
-     * Gets password
-     *
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->container['password'];
-    }
-
-    /**
-     * Sets password
-     *
-     * @param string $password password
-     *
-     * @return self
-     */
-    public function setPassword($password)
-    {
-        $this->container['password'] = $password;
-
-        return $this;
-    }
-
-    /**
-     * Gets ttl
-     *
-     * @return int|null
-     */
-    public function getTtl()
-    {
-        return $this->container['ttl'];
-    }
-
-    /**
-     * Sets ttl
-     *
-     * @param int|null $ttl How many **days** the token will be active.
-     *
-     * @return self
-     */
-    public function setTtl($ttl)
-    {
-
-        if (!is_null($ttl) && ($ttl > 365)) {
-            throw new \InvalidArgumentException('invalid value for $ttl when calling LoginRequest., must be smaller than or equal to 365.');
+        if (is_null($zone_formats)) {
+            throw new \InvalidArgumentException('non-nullable zone_formats cannot be null');
         }
-        if (!is_null($ttl) && ($ttl < 1)) {
-            throw new \InvalidArgumentException('invalid value for $ttl when calling LoginRequest., must be bigger than or equal to 1.');
-        }
+        $this->container['zone_formats'] = $zone_formats;
 
-        $this->container['ttl'] = $ttl;
+        return $this;
+    }
+
+    /**
+     * Gets categories
+     *
+     * @return array<string,string>|null
+     */
+    public function getCategories()
+    {
+        return $this->container['categories'];
+    }
+
+    /**
+     * Sets categories
+     *
+     * @param array<string,string>|null $categories categories
+     *
+     * @return self
+     */
+    public function setCategories($categories)
+    {
+        if (is_null($categories)) {
+            throw new \InvalidArgumentException('non-nullable categories cannot be null');
+        }
+        $this->container['categories'] = $categories;
+
+        return $this;
+    }
+
+    /**
+     * Gets payout_methods
+     *
+     * @return array<string,string>|null
+     */
+    public function getPayoutMethods()
+    {
+        return $this->container['payout_methods'];
+    }
+
+    /**
+     * Sets payout_methods
+     *
+     * @param array<string,string>|null $payout_methods payout_methods
+     *
+     * @return self
+     */
+    public function setPayoutMethods($payout_methods)
+    {
+        if (is_null($payout_methods)) {
+            throw new \InvalidArgumentException('non-nullable payout_methods cannot be null');
+        }
+        $this->container['payout_methods'] = $payout_methods;
 
         return $this;
     }

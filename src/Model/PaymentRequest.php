@@ -1,6 +1,6 @@
 <?php
 /**
- * Payout
+ * PaymentRequest
  *
  * PHP version 7.4
  *
@@ -28,7 +28,7 @@ use \ArrayAccess;
 use \Adserver\ObjectSerializer;
 
 /**
- * Payout Class Doc Comment
+ * PaymentRequest Class Doc Comment
  *
  * @category Class
  * @package  Adserver
@@ -36,7 +36,7 @@ use \Adserver\ObjectSerializer;
  * @link     https://openapi-generator.tech
  * @implements \ArrayAccess<string, mixed>
  */
-class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
+class PaymentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -45,7 +45,7 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
       *
       * @var string
       */
-    protected static $openAPIModelName = 'Payout';
+    protected static $openAPIModelName = 'PaymentRequest';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -53,15 +53,11 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'id' => 'int',
-        'user' => '\Adserver\Model\UserBase',
-        'method' => 'string',
-        'account' => 'string',
-        'status' => 'object',
+        'iduser' => 'int',
+        'idstatus' => 'int',
         'amount' => 'float',
         'descr' => 'string',
-        'created_at' => 'string',
-        'updated_at' => 'string'
+        'created_datetime' => 'string'
     ];
 
     /**
@@ -72,15 +68,11 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'id' => null,
-        'user' => null,
-        'method' => null,
-        'account' => null,
-        'status' => null,
+        'iduser' => null,
+        'idstatus' => null,
         'amount' => null,
         'descr' => null,
-        'created_at' => null,
-        'updated_at' => null
+        'created_datetime' => null
     ];
 
     /**
@@ -89,15 +81,11 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'id' => false,
-        'user' => false,
-        'method' => false,
-        'account' => false,
-        'status' => false,
+        'iduser' => false,
+        'idstatus' => false,
         'amount' => false,
         'descr' => false,
-        'created_at' => false,
-        'updated_at' => false
+        'created_datetime' => false
     ];
 
     /**
@@ -186,15 +174,11 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'id' => 'id',
-        'user' => 'user',
-        'method' => 'method',
-        'account' => 'account',
-        'status' => 'status',
+        'iduser' => 'iduser',
+        'idstatus' => 'idstatus',
         'amount' => 'amount',
         'descr' => 'descr',
-        'created_at' => 'created_at',
-        'updated_at' => 'updated_at'
+        'created_datetime' => 'created_datetime'
     ];
 
     /**
@@ -203,15 +187,11 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'id' => 'setId',
-        'user' => 'setUser',
-        'method' => 'setMethod',
-        'account' => 'setAccount',
-        'status' => 'setStatus',
+        'iduser' => 'setIduser',
+        'idstatus' => 'setIdstatus',
         'amount' => 'setAmount',
         'descr' => 'setDescr',
-        'created_at' => 'setCreatedAt',
-        'updated_at' => 'setUpdatedAt'
+        'created_datetime' => 'setCreatedDatetime'
     ];
 
     /**
@@ -220,15 +200,11 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'id' => 'getId',
-        'user' => 'getUser',
-        'method' => 'getMethod',
-        'account' => 'getAccount',
-        'status' => 'getStatus',
+        'iduser' => 'getIduser',
+        'idstatus' => 'getIdstatus',
         'amount' => 'getAmount',
         'descr' => 'getDescr',
-        'created_at' => 'getCreatedAt',
-        'updated_at' => 'getUpdatedAt'
+        'created_datetime' => 'getCreatedDatetime'
     ];
 
     /**
@@ -272,6 +248,23 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
+    public const IDSTATUS_1000 = 1000;
+    public const IDSTATUS_1010 = 1010;
+    public const IDSTATUS_1020 = 1020;
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public function getIdstatusAllowableValues()
+    {
+        return [
+            self::IDSTATUS_1000,
+            self::IDSTATUS_1010,
+            self::IDSTATUS_1020,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -288,15 +281,11 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('user', $data ?? [], null);
-        $this->setIfExists('method', $data ?? [], null);
-        $this->setIfExists('account', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('iduser', $data ?? [], null);
+        $this->setIfExists('idstatus', $data ?? [], null);
         $this->setIfExists('amount', $data ?? [], null);
         $this->setIfExists('descr', $data ?? [], null);
-        $this->setIfExists('created_at', $data ?? [], null);
-        $this->setIfExists('updated_at', $data ?? [], null);
+        $this->setIfExists('created_datetime', $data ?? [], null);
     }
 
     /**
@@ -326,6 +315,21 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         $invalidProperties = [];
 
+        if ($this->container['iduser'] === null) {
+            $invalidProperties[] = "'iduser' can't be null";
+        }
+        $allowedValues = $this->getIdstatusAllowableValues();
+        if (!is_null($this->container['idstatus']) && !in_array($this->container['idstatus'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'idstatus', must be one of '%s'",
+                $this->container['idstatus'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        if ($this->container['amount'] === null) {
+            $invalidProperties[] = "'amount' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -342,136 +346,65 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets id
+     * Gets iduser
+     *
+     * @return int
+     */
+    public function getIduser()
+    {
+        return $this->container['iduser'];
+    }
+
+    /**
+     * Sets iduser
+     *
+     * @param int $iduser iduser
+     *
+     * @return self
+     */
+    public function setIduser($iduser)
+    {
+        if (is_null($iduser)) {
+            throw new \InvalidArgumentException('non-nullable iduser cannot be null');
+        }
+        $this->container['iduser'] = $iduser;
+
+        return $this;
+    }
+
+    /**
+     * Gets idstatus
      *
      * @return int|null
      */
-    public function getId()
+    public function getIdstatus()
     {
-        return $this->container['id'];
+        return $this->container['idstatus'];
     }
 
     /**
-     * Sets id
+     * Sets idstatus
      *
-     * @param int|null $id id
+     * @param int|null $idstatus Statuses:  * 1000 - Pending  * 1010 - Completed  * 1020 - Cancelled
      *
      * @return self
      */
-    public function setId($id)
+    public function setIdstatus($idstatus)
     {
-        if (is_null($id)) {
-            throw new \InvalidArgumentException('non-nullable id cannot be null');
+        if (is_null($idstatus)) {
+            throw new \InvalidArgumentException('non-nullable idstatus cannot be null');
         }
-        $this->container['id'] = $id;
-
-        return $this;
-    }
-
-    /**
-     * Gets user
-     *
-     * @return \Adserver\Model\UserBase|null
-     */
-    public function getUser()
-    {
-        return $this->container['user'];
-    }
-
-    /**
-     * Sets user
-     *
-     * @param \Adserver\Model\UserBase|null $user user
-     *
-     * @return self
-     */
-    public function setUser($user)
-    {
-        if (is_null($user)) {
-            throw new \InvalidArgumentException('non-nullable user cannot be null');
+        $allowedValues = $this->getIdstatusAllowableValues();
+        if (!in_array($idstatus, $allowedValues, true)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Invalid value '%s' for 'idstatus', must be one of '%s'",
+                    $idstatus,
+                    implode("', '", $allowedValues)
+                )
+            );
         }
-        $this->container['user'] = $user;
-
-        return $this;
-    }
-
-    /**
-     * Gets method
-     *
-     * @return string|null
-     */
-    public function getMethod()
-    {
-        return $this->container['method'];
-    }
-
-    /**
-     * Sets method
-     *
-     * @param string|null $method method
-     *
-     * @return self
-     */
-    public function setMethod($method)
-    {
-        if (is_null($method)) {
-            throw new \InvalidArgumentException('non-nullable method cannot be null');
-        }
-        $this->container['method'] = $method;
-
-        return $this;
-    }
-
-    /**
-     * Gets account
-     *
-     * @return string|null
-     */
-    public function getAccount()
-    {
-        return $this->container['account'];
-    }
-
-    /**
-     * Sets account
-     *
-     * @param string|null $account account
-     *
-     * @return self
-     */
-    public function setAccount($account)
-    {
-        if (is_null($account)) {
-            throw new \InvalidArgumentException('non-nullable account cannot be null');
-        }
-        $this->container['account'] = $account;
-
-        return $this;
-    }
-
-    /**
-     * Gets status
-     *
-     * @return object|null
-     */
-    public function getStatus()
-    {
-        return $this->container['status'];
-    }
-
-    /**
-     * Sets status
-     *
-     * @param object|null $status status
-     *
-     * @return self
-     */
-    public function setStatus($status)
-    {
-        if (is_null($status)) {
-            throw new \InvalidArgumentException('non-nullable status cannot be null');
-        }
-        $this->container['status'] = $status;
+        $this->container['idstatus'] = $idstatus;
 
         return $this;
     }
@@ -479,7 +412,7 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets amount
      *
-     * @return float|null
+     * @return float
      */
     public function getAmount()
     {
@@ -489,7 +422,7 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets amount
      *
-     * @param float|null $amount amount
+     * @param float $amount amount
      *
      * @return self
      */
@@ -531,55 +464,28 @@ class Payout implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets created_at
+     * Gets created_datetime
      *
      * @return string|null
      */
-    public function getCreatedAt()
+    public function getCreatedDatetime()
     {
-        return $this->container['created_at'];
+        return $this->container['created_datetime'];
     }
 
     /**
-     * Sets created_at
+     * Sets created_datetime
      *
-     * @param string|null $created_at created_at
+     * @param string|null $created_datetime Format: YYYY-MM-DD HH:MM:SS
      *
      * @return self
      */
-    public function setCreatedAt($created_at)
+    public function setCreatedDatetime($created_datetime)
     {
-        if (is_null($created_at)) {
-            throw new \InvalidArgumentException('non-nullable created_at cannot be null');
+        if (is_null($created_datetime)) {
+            throw new \InvalidArgumentException('non-nullable created_datetime cannot be null');
         }
-        $this->container['created_at'] = $created_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets updated_at
-     *
-     * @return string|null
-     */
-    public function getUpdatedAt()
-    {
-        return $this->container['updated_at'];
-    }
-
-    /**
-     * Sets updated_at
-     *
-     * @param string|null $updated_at updated_at
-     *
-     * @return self
-     */
-    public function setUpdatedAt($updated_at)
-    {
-        if (is_null($updated_at)) {
-            throw new \InvalidArgumentException('non-nullable updated_at cannot be null');
-        }
-        $this->container['updated_at'] = $updated_at;
+        $this->container['created_datetime'] = $created_datetime;
 
         return $this;
     }

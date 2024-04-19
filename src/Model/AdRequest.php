@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -56,7 +56,7 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'name' => 'string',
         'url' => 'string',
         'idcampaign' => 'int',
-        'is_active' => 'int',
+        'is_active' => 'bool',
         'idstatus' => 'int',
         'details' => '\Adserver\Model\AdRequestDetails'
     ];
@@ -78,6 +78,27 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     ];
 
     /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'name' => false,
+        'url' => false,
+        'idcampaign' => false,
+        'is_active' => false,
+        'idstatus' => false,
+        'details' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
+
+    /**
      * Array of property to type mappings. Used for (de)serialization
      *
      * @return array
@@ -95,6 +116,58 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     public static function openAPIFormats()
     {
         return self::$openAPIFormats;
+    }
+
+    /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
     }
 
     /**
@@ -181,24 +254,9 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
-    public const IS_ACTIVE_0 = 0;
-    public const IS_ACTIVE_1 = 1;
     public const IDSTATUS_3000 = 3000;
     public const IDSTATUS_3010 = 3010;
     public const IDSTATUS_3030 = 3030;
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getIsActiveAllowableValues()
-    {
-        return [
-            self::IS_ACTIVE_0,
-            self::IS_ACTIVE_1,
-        ];
-    }
 
     /**
      * Gets allowable values of the enum
@@ -229,12 +287,30 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['name'] = $data['name'] ?? null;
-        $this->container['url'] = $data['url'] ?? null;
-        $this->container['idcampaign'] = $data['idcampaign'] ?? null;
-        $this->container['is_active'] = $data['is_active'] ?? null;
-        $this->container['idstatus'] = $data['idstatus'] ?? null;
-        $this->container['details'] = $data['details'] ?? null;
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('url', $data ?? [], null);
+        $this->setIfExists('idcampaign', $data ?? [], null);
+        $this->setIfExists('is_active', $data ?? [], null);
+        $this->setIfExists('idstatus', $data ?? [], null);
+        $this->setIfExists('details', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -249,15 +325,6 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['idcampaign'] === null) {
             $invalidProperties[] = "'idcampaign' can't be null";
         }
-        $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($this->container['is_active']) && !in_array($this->container['is_active'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'is_active', must be one of '%s'",
-                $this->container['is_active'],
-                implode("', '", $allowedValues)
-            );
-        }
-
         $allowedValues = $this->getIdstatusAllowableValues();
         if (!is_null($this->container['idstatus']) && !in_array($this->container['idstatus'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -301,6 +368,9 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setName($name)
     {
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
+        }
         $this->container['name'] = $name;
 
         return $this;
@@ -325,6 +395,9 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setUrl($url)
     {
+        if (is_null($url)) {
+            throw new \InvalidArgumentException('non-nullable url cannot be null');
+        }
         $this->container['url'] = $url;
 
         return $this;
@@ -349,6 +422,9 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setIdcampaign($idcampaign)
     {
+        if (is_null($idcampaign)) {
+            throw new \InvalidArgumentException('non-nullable idcampaign cannot be null');
+        }
         $this->container['idcampaign'] = $idcampaign;
 
         return $this;
@@ -357,7 +433,7 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets is_active
      *
-     * @return int|null
+     * @return bool|null
      */
     public function getIsActive()
     {
@@ -367,21 +443,14 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets is_active
      *
-     * @param int|null $is_active is_active
+     * @param bool|null $is_active is_active
      *
      * @return self
      */
     public function setIsActive($is_active)
     {
-        $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($is_active) && !in_array($is_active, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'is_active', must be one of '%s'",
-                    $is_active,
-                    implode("', '", $allowedValues)
-                )
-            );
+        if (is_null($is_active)) {
+            throw new \InvalidArgumentException('non-nullable is_active cannot be null');
         }
         $this->container['is_active'] = $is_active;
 
@@ -401,14 +470,17 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets idstatus
      *
-     * @param int|null $idstatus Moderation statuses:  * 3000 - pending  * 3010 - approved  * 3030 - blocked
+     * @param int|null $idstatus Moderation statuses:  * 3000 - Pending  * 3010 - Approved  * 3030 - Blocked
      *
      * @return self
      */
     public function setIdstatus($idstatus)
     {
+        if (is_null($idstatus)) {
+            throw new \InvalidArgumentException('non-nullable idstatus cannot be null');
+        }
         $allowedValues = $this->getIdstatusAllowableValues();
-        if (!is_null($idstatus) && !in_array($idstatus, $allowedValues, true)) {
+        if (!in_array($idstatus, $allowedValues, true)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     "Invalid value '%s' for 'idstatus', must be one of '%s'",
@@ -441,6 +513,9 @@ class AdRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setDetails($details)
     {
+        if (is_null($details)) {
+            throw new \InvalidArgumentException('non-nullable details cannot be null');
+        }
         $this->container['details'] = $details;
 
         return $this;

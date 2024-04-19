@@ -11,7 +11,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -54,7 +54,7 @@ class PubZoneRequest implements ModelInterface, ArrayAccess, \JsonSerializable
       */
     protected static $openAPITypes = [
         'name' => 'string',
-        'is_active' => 'int',
+        'is_active' => 'bool',
         'idzoneformat' => 'int',
         'iddimension' => 'int'
     ];
@@ -74,6 +74,25 @@ class PubZoneRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     ];
 
     /**
+      * Array of nullable properties. Used for (de)serialization
+      *
+      * @var boolean[]
+      */
+    protected static array $openAPINullables = [
+        'name' => false,
+        'is_active' => false,
+        'idzoneformat' => false,
+        'iddimension' => false
+    ];
+
+    /**
+      * If a nullable field gets set to null, insert it here
+      *
+      * @var boolean[]
+      */
+    protected array $openAPINullablesSetToNull = [];
+
+    /**
      * Array of property to type mappings. Used for (de)serialization
      *
      * @return array
@@ -91,6 +110,58 @@ class PubZoneRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     public static function openAPIFormats()
     {
         return self::$openAPIFormats;
+    }
+
+    /**
+     * Array of nullable properties
+     *
+     * @return array
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return boolean[]
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param boolean[] $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * Checks if a property is nullable
+     *
+     * @param string $property
+     * @return bool
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * Checks if a nullable property is set to null.
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
     }
 
     /**
@@ -171,21 +242,6 @@ class PubZoneRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         return self::$openAPIModelName;
     }
 
-    public const IS_ACTIVE_0 = 0;
-    public const IS_ACTIVE_1 = 1;
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public function getIsActiveAllowableValues()
-    {
-        return [
-            self::IS_ACTIVE_0,
-            self::IS_ACTIVE_1,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -202,10 +258,28 @@ class PubZoneRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(array $data = null)
     {
-        $this->container['name'] = $data['name'] ?? null;
-        $this->container['is_active'] = $data['is_active'] ?? null;
-        $this->container['idzoneformat'] = $data['idzoneformat'] ?? null;
-        $this->container['iddimension'] = $data['iddimension'] ?? null;
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('is_active', $data ?? [], null);
+        $this->setIfExists('idzoneformat', $data ?? [], null);
+        $this->setIfExists('iddimension', $data ?? [], null);
+    }
+
+    /**
+    * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+    * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+    * $this->openAPINullablesSetToNull array
+    *
+    * @param string $variableName
+    * @param array  $fields
+    * @param mixed  $defaultValue
+    */
+    private function setIfExists(string $variableName, array $fields, $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
     }
 
     /**
@@ -216,15 +290,6 @@ class PubZoneRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     public function listInvalidProperties()
     {
         $invalidProperties = [];
-
-        $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($this->container['is_active']) && !in_array($this->container['is_active'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'is_active', must be one of '%s'",
-                $this->container['is_active'],
-                implode("', '", $allowedValues)
-            );
-        }
 
         if ($this->container['idzoneformat'] === null) {
             $invalidProperties[] = "'idzoneformat' can't be null";
@@ -263,6 +328,9 @@ class PubZoneRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setName($name)
     {
+        if (is_null($name)) {
+            throw new \InvalidArgumentException('non-nullable name cannot be null');
+        }
         $this->container['name'] = $name;
 
         return $this;
@@ -271,7 +339,7 @@ class PubZoneRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets is_active
      *
-     * @return int|null
+     * @return bool|null
      */
     public function getIsActive()
     {
@@ -281,21 +349,14 @@ class PubZoneRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets is_active
      *
-     * @param int|null $is_active is_active
+     * @param bool|null $is_active is_active
      *
      * @return self
      */
     public function setIsActive($is_active)
     {
-        $allowedValues = $this->getIsActiveAllowableValues();
-        if (!is_null($is_active) && !in_array($is_active, $allowedValues, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'is_active', must be one of '%s'",
-                    $is_active,
-                    implode("', '", $allowedValues)
-                )
-            );
+        if (is_null($is_active)) {
+            throw new \InvalidArgumentException('non-nullable is_active cannot be null');
         }
         $this->container['is_active'] = $is_active;
 
@@ -321,6 +382,9 @@ class PubZoneRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setIdzoneformat($idzoneformat)
     {
+        if (is_null($idzoneformat)) {
+            throw new \InvalidArgumentException('non-nullable idzoneformat cannot be null');
+        }
         $this->container['idzoneformat'] = $idzoneformat;
 
         return $this;
@@ -345,6 +409,9 @@ class PubZoneRequest implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function setIddimension($iddimension)
     {
+        if (is_null($iddimension)) {
+            throw new \InvalidArgumentException('non-nullable iddimension cannot be null');
+        }
         $this->container['iddimension'] = $iddimension;
 
         return $this;

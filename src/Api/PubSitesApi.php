@@ -10,7 +10,7 @@
  */
 
 /**
- * Copyright (c) 2020-2022 Adserver.Online
+ * Copyright (c) 2020-2024 Adserver.Online
  * @link: https://adserver.online
  * Contact: support@adsrv.org
  */
@@ -65,6 +65,31 @@ class PubSitesApi
      */
     protected $hostIndex;
 
+    /** @var string[] $contentTypes **/
+    public const contentTypes = [
+        'pubCheckSiteVerification' => [
+            'application/json',
+        ],
+        'pubCreateSite' => [
+            'application/json',
+        ],
+        'pubDeleteSite' => [
+            'application/json',
+        ],
+        'pubGetSite' => [
+            'application/json',
+        ],
+        'pubGetSiteVerificationMethods' => [
+            'application/json',
+        ],
+        'pubGetSites' => [
+            'application/json',
+        ],
+        'pubUpdateSite' => [
+            'application/json',
+        ],
+    ];
+
     /**
      * @param ClientInterface $client
      * @param Configuration   $config
@@ -112,19 +137,387 @@ class PubSitesApi
     }
 
     /**
+     * Operation pubCheckSiteVerification
+     *
+     * Check verification
+     *
+     * @param  int $id id (required)
+     * @param  string $method method (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubCheckSiteVerification'] to see the possible values for this operation
+     *
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return object|\Adserver\Model\FormErrorResponse
+     */
+    public function pubCheckSiteVerification($id, $method, string $contentType = self::contentTypes['pubCheckSiteVerification'][0])
+    {
+        list($response) = $this->pubCheckSiteVerificationWithHttpInfo($id, $method, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation pubCheckSiteVerificationWithHttpInfo
+     *
+     * Check verification
+     *
+     * @param  int $id (required)
+     * @param  string $method (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubCheckSiteVerification'] to see the possible values for this operation
+     *
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of object|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function pubCheckSiteVerificationWithHttpInfo($id, $method, string $contentType = self::contentTypes['pubCheckSiteVerification'][0])
+    {
+        $request = $this->pubCheckSiteVerificationRequest($id, $method, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            switch($statusCode) {
+                case 200:
+                    if ('object' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('object' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, 'object', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 400:
+                    if ('\Adserver\Model\FormErrorResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\FormErrorResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\Adserver\Model\FormErrorResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = 'object';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        'object',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Adserver\Model\FormErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation pubCheckSiteVerificationAsync
+     *
+     * Check verification
+     *
+     * @param  int $id (required)
+     * @param  string $method (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubCheckSiteVerification'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function pubCheckSiteVerificationAsync($id, $method, string $contentType = self::contentTypes['pubCheckSiteVerification'][0])
+    {
+        return $this->pubCheckSiteVerificationAsyncWithHttpInfo($id, $method, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation pubCheckSiteVerificationAsyncWithHttpInfo
+     *
+     * Check verification
+     *
+     * @param  int $id (required)
+     * @param  string $method (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubCheckSiteVerification'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function pubCheckSiteVerificationAsyncWithHttpInfo($id, $method, string $contentType = self::contentTypes['pubCheckSiteVerification'][0])
+    {
+        $returnType = 'object';
+        $request = $this->pubCheckSiteVerificationRequest($id, $method, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'pubCheckSiteVerification'
+     *
+     * @param  int $id (required)
+     * @param  string $method (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubCheckSiteVerification'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function pubCheckSiteVerificationRequest($id, $method, string $contentType = self::contentTypes['pubCheckSiteVerification'][0])
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $id when calling pubCheckSiteVerification'
+            );
+        }
+
+        // verify the required parameter 'method' is set
+        if ($method === null || (is_array($method) && count($method) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $method when calling pubCheckSiteVerification'
+            );
+        }
+
+
+        $resourcePath = '/publish/verify/{id}';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $method,
+            'method', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'id' . '}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PUT',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation pubCreateSite
      *
      * Create site
      *
      * @param  \Adserver\Model\PubSiteRequest $pub_site_request pub_site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubCreateSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Site|\Adserver\Model\FormErrorResponse
      */
-    public function pubCreateSite($pub_site_request)
+    public function pubCreateSite($pub_site_request, string $contentType = self::contentTypes['pubCreateSite'][0])
     {
-        list($response) = $this->pubCreateSiteWithHttpInfo($pub_site_request);
+        list($response) = $this->pubCreateSiteWithHttpInfo($pub_site_request, $contentType);
         return $response;
     }
 
@@ -134,14 +527,15 @@ class PubSitesApi
      * Create site
      *
      * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubCreateSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Site|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubCreateSiteWithHttpInfo($pub_site_request)
+    public function pubCreateSiteWithHttpInfo($pub_site_request, string $contentType = self::contentTypes['pubCreateSite'][0])
     {
-        $request = $this->pubCreateSiteRequest($pub_site_request);
+        $request = $this->pubCreateSiteRequest($pub_site_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -185,7 +579,19 @@ class PubSitesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Site' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -200,7 +606,19 @@ class PubSitesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -217,7 +635,19 @@ class PubSitesApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -256,13 +686,14 @@ class PubSitesApi
      * Create site
      *
      * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubCreateSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubCreateSiteAsync($pub_site_request)
+    public function pubCreateSiteAsync($pub_site_request, string $contentType = self::contentTypes['pubCreateSite'][0])
     {
-        return $this->pubCreateSiteAsyncWithHttpInfo($pub_site_request)
+        return $this->pubCreateSiteAsyncWithHttpInfo($pub_site_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -276,14 +707,15 @@ class PubSitesApi
      * Create site
      *
      * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubCreateSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubCreateSiteAsyncWithHttpInfo($pub_site_request)
+    public function pubCreateSiteAsyncWithHttpInfo($pub_site_request, string $contentType = self::contentTypes['pubCreateSite'][0])
     {
         $returnType = '\Adserver\Model\Site';
-        $request = $this->pubCreateSiteRequest($pub_site_request);
+        $request = $this->pubCreateSiteRequest($pub_site_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -325,18 +757,21 @@ class PubSitesApi
      * Create request for operation 'pubCreateSite'
      *
      * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubCreateSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function pubCreateSiteRequest($pub_site_request)
+    public function pubCreateSiteRequest($pub_site_request, string $contentType = self::contentTypes['pubCreateSite'][0])
     {
+
         // verify the required parameter 'pub_site_request' is set
         if ($pub_site_request === null || (is_array($pub_site_request) && count($pub_site_request) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $pub_site_request when calling pubCreateSite'
             );
         }
+
 
         $resourcePath = '/publish/site';
         $formParams = [];
@@ -349,21 +784,17 @@ class PubSitesApi
 
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (isset($pub_site_request)) {
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($pub_site_request));
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($pub_site_request));
             } else {
                 $httpBody = $pub_site_request;
             }
@@ -382,9 +813,9 @@ class PubSitesApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -407,10 +838,11 @@ class PubSitesApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -422,14 +854,15 @@ class PubSitesApi
      * Delete site
      *
      * @param  int $id id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubDeleteSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function pubDeleteSite($id)
+    public function pubDeleteSite($id, string $contentType = self::contentTypes['pubDeleteSite'][0])
     {
-        $this->pubDeleteSiteWithHttpInfo($id);
+        $this->pubDeleteSiteWithHttpInfo($id, $contentType);
     }
 
     /**
@@ -438,14 +871,15 @@ class PubSitesApi
      * Delete site
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubDeleteSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubDeleteSiteWithHttpInfo($id)
+    public function pubDeleteSiteWithHttpInfo($id, string $contentType = self::contentTypes['pubDeleteSite'][0])
     {
-        $request = $this->pubDeleteSiteRequest($id);
+        $request = $this->pubDeleteSiteRequest($id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -497,13 +931,14 @@ class PubSitesApi
      * Delete site
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubDeleteSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubDeleteSiteAsync($id)
+    public function pubDeleteSiteAsync($id, string $contentType = self::contentTypes['pubDeleteSite'][0])
     {
-        return $this->pubDeleteSiteAsyncWithHttpInfo($id)
+        return $this->pubDeleteSiteAsyncWithHttpInfo($id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -517,14 +952,15 @@ class PubSitesApi
      * Delete site
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubDeleteSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubDeleteSiteAsyncWithHttpInfo($id)
+    public function pubDeleteSiteAsyncWithHttpInfo($id, string $contentType = self::contentTypes['pubDeleteSite'][0])
     {
         $returnType = '';
-        $request = $this->pubDeleteSiteRequest($id);
+        $request = $this->pubDeleteSiteRequest($id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -553,18 +989,21 @@ class PubSitesApi
      * Create request for operation 'pubDeleteSite'
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubDeleteSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function pubDeleteSiteRequest($id)
+    public function pubDeleteSiteRequest($id, string $contentType = self::contentTypes['pubDeleteSite'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling pubDeleteSite'
             );
         }
+
 
         $resourcePath = '/publish/site/{id}';
         $formParams = [];
@@ -585,16 +1024,11 @@ class PubSitesApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                []
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                [],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            [],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -612,9 +1046,9 @@ class PubSitesApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -637,10 +1071,11 @@ class PubSitesApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'DELETE',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -652,14 +1087,15 @@ class PubSitesApi
      * Get site
      *
      * @param  int $id id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Site
      */
-    public function pubGetSite($id)
+    public function pubGetSite($id, string $contentType = self::contentTypes['pubGetSite'][0])
     {
-        list($response) = $this->pubGetSiteWithHttpInfo($id);
+        list($response) = $this->pubGetSiteWithHttpInfo($id, $contentType);
         return $response;
     }
 
@@ -669,14 +1105,15 @@ class PubSitesApi
      * Get site
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Site, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubGetSiteWithHttpInfo($id)
+    public function pubGetSiteWithHttpInfo($id, string $contentType = self::contentTypes['pubGetSite'][0])
     {
-        $request = $this->pubGetSiteRequest($id);
+        $request = $this->pubGetSiteRequest($id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -720,7 +1157,19 @@ class PubSitesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Site' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -737,7 +1186,19 @@ class PubSitesApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -768,13 +1229,14 @@ class PubSitesApi
      * Get site
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetSiteAsync($id)
+    public function pubGetSiteAsync($id, string $contentType = self::contentTypes['pubGetSite'][0])
     {
-        return $this->pubGetSiteAsyncWithHttpInfo($id)
+        return $this->pubGetSiteAsyncWithHttpInfo($id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -788,14 +1250,15 @@ class PubSitesApi
      * Get site
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubGetSiteAsyncWithHttpInfo($id)
+    public function pubGetSiteAsyncWithHttpInfo($id, string $contentType = self::contentTypes['pubGetSite'][0])
     {
         $returnType = '\Adserver\Model\Site';
-        $request = $this->pubGetSiteRequest($id);
+        $request = $this->pubGetSiteRequest($id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -837,18 +1300,21 @@ class PubSitesApi
      * Create request for operation 'pubGetSite'
      *
      * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function pubGetSiteRequest($id)
+    public function pubGetSiteRequest($id, string $contentType = self::contentTypes['pubGetSite'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling pubGetSite'
             );
         }
+
 
         $resourcePath = '/publish/site/{id}';
         $formParams = [];
@@ -869,16 +1335,11 @@ class PubSitesApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                []
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (count($formParams) > 0) {
@@ -896,9 +1357,9 @@ class PubSitesApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -921,10 +1382,673 @@ class PubSitesApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation pubGetSiteVerificationMethods
+     *
+     * Get verification methods
+     *
+     * @param  int $id id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetSiteVerificationMethods'] to see the possible values for this operation
+     *
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return object
+     */
+    public function pubGetSiteVerificationMethods($id, string $contentType = self::contentTypes['pubGetSiteVerificationMethods'][0])
+    {
+        list($response) = $this->pubGetSiteVerificationMethodsWithHttpInfo($id, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation pubGetSiteVerificationMethodsWithHttpInfo
+     *
+     * Get verification methods
+     *
+     * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetSiteVerificationMethods'] to see the possible values for this operation
+     *
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of object, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function pubGetSiteVerificationMethodsWithHttpInfo($id, string $contentType = self::contentTypes['pubGetSiteVerificationMethods'][0])
+    {
+        $request = $this->pubGetSiteVerificationMethodsRequest($id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            switch($statusCode) {
+                case 200:
+                    if ('object' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('object' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, 'object', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = 'object';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        'object',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation pubGetSiteVerificationMethodsAsync
+     *
+     * Get verification methods
+     *
+     * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetSiteVerificationMethods'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function pubGetSiteVerificationMethodsAsync($id, string $contentType = self::contentTypes['pubGetSiteVerificationMethods'][0])
+    {
+        return $this->pubGetSiteVerificationMethodsAsyncWithHttpInfo($id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation pubGetSiteVerificationMethodsAsyncWithHttpInfo
+     *
+     * Get verification methods
+     *
+     * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetSiteVerificationMethods'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function pubGetSiteVerificationMethodsAsyncWithHttpInfo($id, string $contentType = self::contentTypes['pubGetSiteVerificationMethods'][0])
+    {
+        $returnType = 'object';
+        $request = $this->pubGetSiteVerificationMethodsRequest($id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'pubGetSiteVerificationMethods'
+     *
+     * @param  int $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetSiteVerificationMethods'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function pubGetSiteVerificationMethodsRequest($id, string $contentType = self::contentTypes['pubGetSiteVerificationMethods'][0])
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $id when calling pubGetSiteVerificationMethods'
+            );
+        }
+
+
+        $resourcePath = '/publish/verify/{id}';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{' . 'id' . '}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation pubGetSites
+     *
+     * Sites list
+     *
+     * @param  int $page page (optional)
+     * @param  int $per_page per_page (optional)
+     * @param  string $sort sort (optional)
+     * @param  object[] $filter filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetSites'] to see the possible values for this operation
+     *
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \Adserver\Model\Site[]
+     */
+    public function pubGetSites($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['pubGetSites'][0])
+    {
+        list($response) = $this->pubGetSitesWithHttpInfo($page, $per_page, $sort, $filter, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation pubGetSitesWithHttpInfo
+     *
+     * Sites list
+     *
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetSites'] to see the possible values for this operation
+     *
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \Adserver\Model\Site[], HTTP status code, HTTP response headers (array of strings)
+     */
+    public function pubGetSitesWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['pubGetSites'][0])
+    {
+        $request = $this->pubGetSitesRequest($page, $per_page, $sort, $filter, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            switch($statusCode) {
+                case 200:
+                    if ('\Adserver\Model\Site[]' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\Adserver\Model\Site[]' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\Adserver\Model\Site[]', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = '\Adserver\Model\Site[]';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Adserver\Model\Site[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation pubGetSitesAsync
+     *
+     * Sites list
+     *
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetSites'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function pubGetSitesAsync($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['pubGetSites'][0])
+    {
+        return $this->pubGetSitesAsyncWithHttpInfo($page, $per_page, $sort, $filter, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation pubGetSitesAsyncWithHttpInfo
+     *
+     * Sites list
+     *
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetSites'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function pubGetSitesAsyncWithHttpInfo($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['pubGetSites'][0])
+    {
+        $returnType = '\Adserver\Model\Site[]';
+        $request = $this->pubGetSitesRequest($page, $per_page, $sort, $filter, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'pubGetSites'
+     *
+     * @param  int $page (optional)
+     * @param  int $per_page (optional)
+     * @param  string $sort (optional)
+     * @param  object[] $filter (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubGetSites'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function pubGetSitesRequest($page = null, $per_page = null, $sort = null, $filter = null, string $contentType = self::contentTypes['pubGetSites'][0])
+    {
+
+
+
+
+
+
+        $resourcePath = '/publish/site';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $page,
+            'page', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $per_page,
+            'per-page', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $sort,
+            'sort', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $filter,
+            'filter', // param base name
+            'array', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
@@ -937,14 +2061,15 @@ class PubSitesApi
      *
      * @param  int $id id (required)
      * @param  \Adserver\Model\PubSiteRequest $pub_site_request pub_site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubUpdateSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Adserver\Model\Site|\Adserver\Model\FormErrorResponse
      */
-    public function pubUpdateSite($id, $pub_site_request)
+    public function pubUpdateSite($id, $pub_site_request, string $contentType = self::contentTypes['pubUpdateSite'][0])
     {
-        list($response) = $this->pubUpdateSiteWithHttpInfo($id, $pub_site_request);
+        list($response) = $this->pubUpdateSiteWithHttpInfo($id, $pub_site_request, $contentType);
         return $response;
     }
 
@@ -955,14 +2080,15 @@ class PubSitesApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubUpdateSite'] to see the possible values for this operation
      *
-     * @throws \Adserver\ApiException on non-2xx response
+     * @throws \Adserver\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Adserver\Model\Site|\Adserver\Model\FormErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function pubUpdateSiteWithHttpInfo($id, $pub_site_request)
+    public function pubUpdateSiteWithHttpInfo($id, $pub_site_request, string $contentType = self::contentTypes['pubUpdateSite'][0])
     {
-        $request = $this->pubUpdateSiteRequest($id, $pub_site_request);
+        $request = $this->pubUpdateSiteRequest($id, $pub_site_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1006,7 +2132,19 @@ class PubSitesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\Site' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1021,7 +2159,19 @@ class PubSitesApi
                     } else {
                         $content = (string) $response->getBody();
                         if ('\Adserver\Model\FormErrorResponse' !== 'string') {
-                            $content = json_decode($content);
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
                         }
                     }
 
@@ -1038,7 +2188,19 @@ class PubSitesApi
             } else {
                 $content = (string) $response->getBody();
                 if ($returnType !== 'string') {
-                    $content = json_decode($content);
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
                 }
             }
 
@@ -1078,13 +2240,14 @@ class PubSitesApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubUpdateSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubUpdateSiteAsync($id, $pub_site_request)
+    public function pubUpdateSiteAsync($id, $pub_site_request, string $contentType = self::contentTypes['pubUpdateSite'][0])
     {
-        return $this->pubUpdateSiteAsyncWithHttpInfo($id, $pub_site_request)
+        return $this->pubUpdateSiteAsyncWithHttpInfo($id, $pub_site_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1099,14 +2262,15 @@ class PubSitesApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubUpdateSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function pubUpdateSiteAsyncWithHttpInfo($id, $pub_site_request)
+    public function pubUpdateSiteAsyncWithHttpInfo($id, $pub_site_request, string $contentType = self::contentTypes['pubUpdateSite'][0])
     {
         $returnType = '\Adserver\Model\Site';
-        $request = $this->pubUpdateSiteRequest($id, $pub_site_request);
+        $request = $this->pubUpdateSiteRequest($id, $pub_site_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1149,24 +2313,28 @@ class PubSitesApi
      *
      * @param  int $id (required)
      * @param  \Adserver\Model\PubSiteRequest $pub_site_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pubUpdateSite'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function pubUpdateSiteRequest($id, $pub_site_request)
+    public function pubUpdateSiteRequest($id, $pub_site_request, string $contentType = self::contentTypes['pubUpdateSite'][0])
     {
+
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $id when calling pubUpdateSite'
             );
         }
+
         // verify the required parameter 'pub_site_request' is set
         if ($pub_site_request === null || (is_array($pub_site_request) && count($pub_site_request) === 0)) {
             throw new \InvalidArgumentException(
                 'Missing the required parameter $pub_site_request when calling pubUpdateSite'
             );
         }
+
 
         $resourcePath = '/publish/site/{id}';
         $formParams = [];
@@ -1187,21 +2355,17 @@ class PubSitesApi
         }
 
 
-        if ($multipart) {
-            $headers = $this->headerSelector->selectHeadersForMultipart(
-                ['application/json']
-            );
-        } else {
-            $headers = $this->headerSelector->selectHeaders(
-                ['application/json'],
-                ['application/json']
-            );
-        }
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
 
         // for model (json/xml)
         if (isset($pub_site_request)) {
-            if ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode(ObjectSerializer::sanitizeForSerialization($pub_site_request));
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($pub_site_request));
             } else {
                 $httpBody = $pub_site_request;
             }
@@ -1220,9 +2384,9 @@ class PubSitesApi
                 // for HTTP post (form)
                 $httpBody = new MultipartStream($multipartContents);
 
-            } elseif ($headers['Content-Type'] === 'application/json') {
-                $httpBody = \GuzzleHttp\json_encode($formParams);
-
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -1245,10 +2409,11 @@ class PubSitesApi
             $headers
         );
 
+        $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'PUT',
-            $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
         );
